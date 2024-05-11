@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -250,6 +250,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ae1314557a896c4d9bc321f03499011, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m:
+  - {fileID: 355304597197000677}
   b: 0
 --- !u!4 &588444753
 Transform:
@@ -556,8 +558,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 355304598554189400, guid: aa332e064c5879a4488d77e7200b92b3, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300002, guid: 09ab23981809ccb4eb233443c33f4e68, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa332e064c5879a4488d77e7200b92b3, type: 3}
+--- !u!33 &355304597197000677 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: 355304598554189400, guid: aa332e064c5879a4488d77e7200b92b3, type: 3}
+  m_PrefabInstance: {fileID: 355304597197000676}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1663602171778871800
 PrefabInstance:
   m_ObjectHideFlags: 0

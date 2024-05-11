@@ -6,22 +6,35 @@ public abstract class Turret : MonoBehaviour
 {
     private float searchTime = 0.5f;
     private float checkSearchTime;
+    private float attackTime;
+
+    [SerializeField]
+    private Mesh[] turretHeadMesh;
+    [SerializeField]
+    private Mesh[] turretBodyMesh;
+    private MeshFilter headMeshFilter;
+    private MeshFilter bodyMeshFilter;
+
+    [SerializeField]
+    private GameObject turretHead;
+    [SerializeField]
+    private GameObject turretBody;
 
     protected Transform targetTransform;
     protected LayerMask monsterLayer = 6;
 
+    protected int hp;
+    protected int hpRise;
     protected float makingTime;
     protected float makingCost;
     protected float attackDamge;
     protected float attackSpeed;
     protected float attackRange;
-    protected float hp;
     protected float upgradeCost;
     protected float upgradeTime;
     protected float repairTime;
     protected float repairCost;
     protected float attackRise;
-    protected float hpRise;
     protected float attackSpeedRise;
     protected float upgradCostRise;
     protected float maxUpgradeCount;
@@ -30,7 +43,32 @@ public abstract class Turret : MonoBehaviour
     protected bool isRepair;
     protected bool isTarget;
 
+    private void Awake()
+    {
+        bodyMeshFilter = turretBody.GetComponent<MeshFilter>();
+        headMeshFilter = turretHead.GetComponent<MeshFilter>();
+    }
+    private void Start()
+    {
+        
+    }
+    private void Update()
+    {
+        if (targetTransform != null)
+        {
+            attackTime += Time.time;
+            if (attackTime >= attackSpeed)
+            {
+                Attack();
+            }
+        }
+        else
+        {
+            attackTime = 0;
+        }
+    }
     protected abstract void Attack();
+    //protected abstract void SetTurret(float mainkgTime, float makingCost, float attackDamge, float attackSpeed, float attackRange, int hp, int hpRise, float upgradeCost);
 
     //코루틴은 가비지컬렉터가 많이 불린다
     //메모리를 많이 먹는다는 뜻이다
@@ -67,5 +105,8 @@ public abstract class Turret : MonoBehaviour
 
     }
 
-
+    public void Hurt()
+    {
+        hp--;
+    }
 }
