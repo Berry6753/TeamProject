@@ -23,7 +23,9 @@ public abstract class Turret : MonoBehaviour
     protected Transform targetTransform;
     protected LayerMask monsterLayer = 6;
 
-    protected int hp;
+    protected int nowUpgradeCount;
+    protected int nowHp;
+    protected int maxHp;
     protected int hpRise;
     protected float makingTime;
     protected float makingCost;
@@ -39,9 +41,9 @@ public abstract class Turret : MonoBehaviour
     protected float upgradCostRise;
     protected float maxUpgradeCount;
 
-    protected bool isUpgrade;
-    protected bool isRepair;
-    protected bool isTarget;
+    public bool isUpgrade;
+    public bool isRepair;
+    public bool isTarget;
 
     private void Awake()
     {
@@ -68,13 +70,30 @@ public abstract class Turret : MonoBehaviour
         }
     }
     protected abstract void Attack();
-    //protected abstract void SetTurret(float mainkgTime, float makingCost, float attackDamge, float attackSpeed, float attackRange, int hp, int hpRise, float upgradeCost);
-
-    //코루틴은 가비지컬렉터가 많이 불린다
-    //메모리를 많이 먹는다는 뜻이다
-    //포탑이 많아질 예정이니 코루틴 없이 구현해보자
-    //하지만 함수를 업데이트에서 호출해 비교하면서 하는것보단 좋다
-    //공격은 이벤트를 이용해 만들어 보자
+    protected void SetTurret(float mainkgTime, float makingCost, float attackDamge, float attackSpeed, float attackRange, int maxHp, int hpRise, float upgradeCost, float upgradeTime, float repairTime, float repairCost, float attackRise, float attackSpeedRise, float upgradCostRise, float maxUpgradeCount)
+    {
+        this.maxHp = maxHp;
+        this.nowHp = maxHp;
+        this.hpRise = hpRise;
+        this.makingCost = makingCost;
+        this.attackDamge = attackDamge;
+        this.attackSpeed = attackSpeed;
+        this.attackRange = attackRange;
+        this.upgradeCost = upgradeCost;
+        this.upgradeTime = upgradeTime;
+        this.repairTime = repairTime;
+        this.repairCost = repairCost;
+        this.attackRise = attackRise;
+        this.attackSpeedRise = attackSpeedRise;
+        this.upgradCostRise= upgradCostRise;
+        this.maxUpgradeCount = maxUpgradeCount;
+    }
+                                                                                                                                                                
+    //코루틴은 가비지컬렉터가 많이 불린다                                                                                                                       
+    //메모리를 많이 먹는다는 뜻이다                                                                                                                             
+    //포탑이 많아질 예정이니 코루틴 없이 구현해보자                                                                                                             
+    //하지만 함수를 업데이트에서 호출해 비교하면서 하는것보단 좋다                                                                                              
+    //공격은 이벤트를 이용해 만들어 보자                                                                                                                        
     protected IEnumerator SearchEnemy()
     {
         while (true)
@@ -105,8 +124,27 @@ public abstract class Turret : MonoBehaviour
 
     }
 
-    public void Hurt()
+    public void Hurt(int damge)
     {
-        hp--;
+        nowHp -= damge;
+    }
+
+    public virtual void Upgrade()
+    {
+        nowUpgradeCount++;
+        upgradeCost *= upgradCostRise;
+        attackDamge *= attackRise;
+        attackSpeed += attackSpeedRise;
+        maxHp += hpRise;
+        nowHp += hpRise;
+
+        //업그레이드시 외형변경
+        headMeshFilter.mesh = turretHeadMesh[nowUpgradeCount];
+        bodyMeshFilter.mesh = turretBodyMesh[nowUpgradeCount];
+    }
+
+    public void Repair()
+    {
+        nowHp = maxHp;
     }
 }
