@@ -93,7 +93,8 @@ public abstract class Turret : MonoBehaviour
     //메모리를 많이 먹는다는 뜻이다                                                                                                                             
     //포탑이 많아질 예정이니 코루틴 없이 구현해보자                                                                                                             
     //하지만 함수를 업데이트에서 호출해 비교하면서 하는것보단 좋다                                                                                              
-    //공격은 이벤트를 이용해 만들어 보자                                                                                                                        
+    //공격은 이벤트를 이용해 만들어 보자
+    //상태 패턴을 이용해서 삭제하는거랑 공격이런거 정리해보자
     protected IEnumerator SearchEnemy()
     {
         while (true)
