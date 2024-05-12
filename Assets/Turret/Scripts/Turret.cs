@@ -20,6 +20,11 @@ public abstract class Turret : MonoBehaviour
     [SerializeField]
     private GameObject turretBody;
 
+    [SerializeField]
+    protected GameObject firePos;
+    [SerializeField]
+    private GameObject spinPos;
+
     protected Transform targetTransform;
     protected LayerMask monsterLayer = 6;
 
@@ -37,15 +42,19 @@ public abstract class Turret : MonoBehaviour
     private float attackSpeedRise;
     private float upgradCostRise;
     private float maxUpgradeCount;
+    private float repairCost;
+    private float upgradeCost;
+    private float makingCost;
+
 
     public bool isUpgrade;
     public bool isRepair;
     public bool isTarget;
 
-    public float repairCost;
-    public float upgradeCost;
-    public float makingCost;
-
+    
+    public float turretRepairCost { get { return repairCost; } }
+    public float turretUpgradCost { get { return upgradeCost; } }
+    public float turretMakingCost { get { return makingCost; } }
 
 
     private void Awake()
@@ -62,6 +71,7 @@ public abstract class Turret : MonoBehaviour
         if (targetTransform != null)
         {
             attackTime += Time.time;
+            spinPos.transform.LookAt(targetTransform);
             if (attackTime >= attackSpeed)
             {
                 Attack();

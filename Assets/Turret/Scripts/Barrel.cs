@@ -34,6 +34,8 @@ public class Barrel : MonoBehaviour
     private LayerMask monsterLayer;
     private MeshRenderer meshRenderer;
 
+    public int maikngCost = 5;
+
     //현재 태그와 레이어 설정안함 0512기준
 
     private void Awake()
