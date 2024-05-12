@@ -17,6 +17,7 @@ public class Player_Aiming : MonoBehaviour
     private readonly int hashAiming = Animator.StringToHash("Aiming");
     private readonly int hashZoomOn = Animator.StringToHash("ZoomOn");
     private readonly int hashFire = Animator.StringToHash("Fire");
+    private readonly int hashReload = Animator.StringToHash("Reload");
 
     [Header("Aiming 카메라")]
     [SerializeField]
@@ -56,6 +57,16 @@ public class Player_Aiming : MonoBehaviour
 
     private Player_BuildSystem buildSystem;
 
+    private float equipedBulletCount;
+    [Header("최대 탄 수")]
+    [SerializeField]
+    private float maxEquipedBulletCount;
+
+    private float magazineCount;
+    [Header("최대 탄창 수")]
+    [SerializeField]
+    private float maxMagazineCount;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -63,6 +74,9 @@ public class Player_Aiming : MonoBehaviour
         notAimingTimer = notAimingDelayTime;
 
         buildSystem = GetComponent<Player_BuildSystem>();
+
+        equipedBulletCount = maxEquipedBulletCount;
+        magazineCount = maxMagazineCount;
     }
 
     public void OnAiming(InputAction.CallbackContext context)
@@ -73,6 +87,23 @@ public class Player_Aiming : MonoBehaviour
     public void OnGameStop(InputAction.CallbackContext context)
     {
         isGameStop *= -1;
+    }
+
+    public void OnReload(InputAction.CallbackContext context)
+    {
+        if (buildSystem.BuildModeOn > 0f) return;
+
+        if (context.performed)
+        {
+            if(magazineCount > 0)
+            {
+                //재장전 모션 실행
+                animator.SetBool(hashReload, true);
+
+                Debug.Log("장전 시작");
+                Debug.Log($"탄 수 : {equipedBulletCount}, 탄창 수 : {magazineCount}");
+            }            
+        }
     }
 
     public void OnFire(InputAction.CallbackContext context)
@@ -186,6 +217,7 @@ public class Player_Aiming : MonoBehaviour
     private void FireGun()
     {
         if (buildSystem.BuildModeOn > 0f) return;
+        if (animator.GetBool(hashReload)) return;
         if (isFire && AttackAble)
         {
             AttackAble = false;
@@ -201,8 +233,37 @@ public class Player_Aiming : MonoBehaviour
 
     public void Fire()
     {        
-        ShootRay();
-        ParticleSystem.GetComponent<ParticleSystem>().Play();
+        if(equipedBulletCount > 0)
+        {
+            ShootRay();
+            //섬광 파티클 재생
+            ParticleSystem.GetComponent<ParticleSystem>().Play();
+            //격발 소리 재생
+
+            //탄의 수 감소
+            equipedBulletCount--;
+        }
+        else
+        {
+            //빈 탄창 소리 재생
+        }
+    }
+
+    public void ReloadEnd()
+    {
+        animator.SetBool(hashReload, false);
+        notAimingTimer = 0;
+        Debug.Log("장전 종료...");
+        Debug.Log($"탄 수 : {equipedBulletCount}, 탄창 수 : {magazineCount}");
+    }
+
+    public void Reload()
+    {
+        if(magazineCount > 0)
+        {
+            magazineCount--;
+            equipedBulletCount = maxEquipedBulletCount;
+        }
     }
 
     private void AttackDelay()
