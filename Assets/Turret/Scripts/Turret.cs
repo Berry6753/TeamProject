@@ -23,27 +23,30 @@ public abstract class Turret : MonoBehaviour
     protected Transform targetTransform;
     protected LayerMask monsterLayer = 6;
 
-    protected int nowUpgradeCount;
-    protected int nowHp;
-    protected int maxHp;
-    protected int hpRise;
-    protected float makingTime;
-    protected float makingCost;
-    protected float attackDamge;
-    protected float attackSpeed;
-    protected float attackRange;
-    protected float upgradeCost;
-    protected float upgradeTime;
-    protected float repairTime;
-    protected float repairCost;
-    protected float attackRise;
-    protected float attackSpeedRise;
-    protected float upgradCostRise;
-    protected float maxUpgradeCount;
+    private int nowUpgradeCount;
+    private int nowHp;
+    private int maxHp;
+    private int hpRise;
+    private float makingTime;
+    private float attackDamge;
+    private float attackSpeed;
+    private float attackRange;
+    private float upgradeTime;
+    private float repairTime;
+    private float attackRise;
+    private float attackSpeedRise;
+    private float upgradCostRise;
+    private float maxUpgradeCount;
 
     public bool isUpgrade;
     public bool isRepair;
     public bool isTarget;
+
+    public float repairCost;
+    public float upgradeCost;
+    public float makingCost;
+
+
 
     private void Awake()
     {
