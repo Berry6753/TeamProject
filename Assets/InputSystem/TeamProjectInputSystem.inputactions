@@ -47,6 +47,24 @@
                     "id": "0e67701f-93db-4238-bdf2-3f2dea67f165",
                     "expectedControlType": "Button",
                     "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SelectTurret",
+                    "type": "Value",
+                    "id": "15e38253-70dd-4ab0-b9ec-9deb71f749af",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "ChangeBuildMode",
+                    "type": "Button",
+                    "id": "733ccd6a-1e4e-4a03-bca0-2ef9b3056579",
+                    "expectedControlType": "Button",
+                    "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 }
@@ -144,10 +162,32 @@
                     "name": "",
                     "id": "af466a89-a8e6-4ba5-9704-6b5a1a322bb6",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "Press(behavior=2)",
+                    "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "897f8220-744e-4748-9064-769e5acefbfc",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectTurret",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d40b5342-a077-45d0-a262-9e6fd61b8c6a",
+                    "path": "<Keyboard>/b",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeBuildMode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

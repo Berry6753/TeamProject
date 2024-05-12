@@ -79,14 +79,14 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // InputSystem 무브먼트
-    private void OnMovement(InputValue inputValue)
+    public void OnMovement(InputAction.CallbackContext context)
     {
-        InputDir = inputValue.Get<Vector2>();
+        InputDir = context.ReadValue<Vector2>();
     }
 
-    private void OnRun(InputValue input)
+    public void OnRun(InputAction.CallbackContext context)
     {
-        InputBool = input.isPressed;
+        InputBool = context.ReadValue<float>() > 0.5f;
     }
 
     private void Movement()

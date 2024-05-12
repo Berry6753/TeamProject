@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 public class Player_Aiming : MonoBehaviour
 {
     private Animator animator;
     private bool isAiming;
 
-    private bool isFire;
+    public bool isFire {  get; private set; }
 
     private float isGameStop = -1f;
 
@@ -53,26 +54,48 @@ public class Player_Aiming : MonoBehaviour
     [SerializeField]
     private Transform ParticleSystem;
 
+    private Player_BuildSystem buildSystem;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
         AttackTimer = AttackDelayTime;
         notAimingTimer = notAimingDelayTime;
+
+        buildSystem = GetComponent<Player_BuildSystem>();
     }
 
-    private void OnAiming(InputValue input)
+    public void OnAiming(InputAction.CallbackContext context)
     {
-        isAiming = input.isPressed;
+        isAiming = context.ReadValue<float>() > 0.5f;
     }
 
-    private void OnGameStop()
+    public void OnGameStop(InputAction.CallbackContext context)
     {
         isGameStop *= -1;
     }
 
-    private void OnFire(InputValue input)
+    public void OnFire(InputAction.CallbackContext context)
     {
-        isFire = input.isPressed;
+        if (buildSystem.BuildModeOn > 0f)
+        {
+            if (context.performed)
+            {
+                isFire = true;
+                buildSystem.BuildTurret();
+            }            
+        }
+        else
+        {
+            if (context.performed)
+            {
+                isFire = true;
+            }
+            if (context.canceled)
+            {
+                isFire = false;
+            }
+        }                  
     }
 
     private void Update()
@@ -82,16 +105,14 @@ public class Player_Aiming : MonoBehaviour
         AimingCamera();
         AimingOnOff();
 
+        FireGun();
         //ShootRay();
-
-        Debug.Log(AttackAble);
     }
 
     private void FixedUpdate()
     {
         AttackDelay();
-        ChangeNotAimingDelay();
-        FireGun();
+        ChangeNotAimingDelay();        
     }
 
     private void CameraRotation()
@@ -153,6 +174,7 @@ public class Player_Aiming : MonoBehaviour
             {
                 debugTransform.position = hits.point;
                 Debug.DrawLine(GunFireStartPoint.position, hits.point, Color.red);
+                Debug.Log("АјАн!!!");
             }
                 //if (hit.transform.CompareTag("Monster"))
                 //{
@@ -163,6 +185,7 @@ public class Player_Aiming : MonoBehaviour
 
     private void FireGun()
     {
+        if (buildSystem.BuildModeOn > 0f) return;
         if (isFire && AttackAble)
         {
             AttackAble = false;
