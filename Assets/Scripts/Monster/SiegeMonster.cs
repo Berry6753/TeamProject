@@ -1,16 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class SiegeMonster : MonoBehaviour
+public class SiegeMonster : Monster
 {
-    void Start()
+    private void Update()
     {
-        
+        ChaseTarget();
     }
 
-    void Update()
+    protected override void ChaseTarget()
     {
-        
+        distance = Vector3.Distance(transform.position, defaltTarget.position);
+        if (distance <= nav.stoppingDistance)
+        {
+            FreezeVelocity();
+        }
+        else
+        {
+            nav.SetDestination(defaltTarget.position);
+        }
     }
 }

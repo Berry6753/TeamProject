@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class SuicideMonster : Monster
 {
+    private void Update()
+    {
+        ChaseTarget();
+    }
 
     protected override void ChaseTarget()
     {

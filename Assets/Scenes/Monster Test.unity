@@ -230,7 +230,7 @@ GameObject:
   - component: {fileID: 315956099}
   - component: {fileID: 315956098}
   - component: {fileID: 315956097}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Turret1
   m_TagString: Turret
   m_Icon: {fileID: 0}
@@ -555,7 +555,7 @@ GameObject:
   - component: {fileID: 1153670923}
   - component: {fileID: 1153670926}
   - component: {fileID: 1153670922}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Turret
   m_TagString: Turret
   m_Icon: {fileID: 0}
@@ -796,7 +796,7 @@ GameObject:
   - component: {fileID: 1893478222}
   - component: {fileID: 1893478225}
   - component: {fileID: 1893478221}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -9348,8 +9348,8 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1805944345075940}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 104b705aed5d64aa4ae44dff6d4dea1d, type: 3}
-  m_Controller: {fileID: 9100000, guid: 2d704d782a4ce478f942c2a22902b5a9, type: 2}
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fabb67579c663f14d9be885c41fab027, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -9461,7 +9461,7 @@ MonoBehaviour:
   startSpwanNum: 0
   upScaleSpwanNum: 0
   spawnTiming: 0
-  defaltTarget: {fileID: 0}
+  defaltTarget: {fileID: 1893478224}
 --- !u!195 &95276014748205114
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -9560,6 +9560,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03570354b3742c34d81e093c3d366fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterName: 
+  attactSpeed: 0
+  hp: 0
+  damage: 0
+  hitNum: 0
+  upScaleHp: 0
+  upScaleDamage: 0
+  startSpwanNum: 0
+  upScaleSpwanNum: 0
+  spawnTiming: 0
+  defaltTarget: {fileID: 1893478224}
 --- !u!195 &95346474640433441
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -25,15 +25,17 @@ public abstract class Monster : MonoBehaviour
     //[SerializeField] protected float sensingRange;    //°¨Áö ¹üÀ§
 
     [SerializeField] protected Transform defaltTarget;  //±âº» Å¸°Ù
-    protected List<Transform> turretTarget = new List<Transform>();       //ÅÍ·¿ Å¸°Ù
-    
+    //protected List<Transform> turretTarget = new List<Transform>();       //ÅÍ·¿ Å¸°Ù
+    protected Collider[] turret;
+    protected int turretIndex = 0;
+
+
     protected int wave;                   
     
     protected Rigidbody rb;
     protected NavMeshAgent nav;
 
     protected bool isDead = false;                      //»ýÁ¸ ¿©ºÎ
-    protected bool isChase = false;
 
     protected void Start()
     {
@@ -43,19 +45,33 @@ public abstract class Monster : MonoBehaviour
 
     protected abstract void ChaseTarget();              //Å¸°Ù ÃßÀû
 
-    protected void PriorityTarget()                     //Å¸°Ù ¿ì¼±¼øÀ§ ÃßÀû
+    //protected void PriorityTarget()                     //Å¸°Ù ¿ì¼±¼øÀ§ ÃßÀû
+    //{
+    //    if (turretTarget.Count > 0)
+    //    {
+    //        for (int i = 0; i < turretTarget.Count; i++)
+    //        {
+    //            nav.SetDestination(turretTarget[i].transform.position);
+    //            break;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        nav.SetDestination(defaltTarget.position);
+    //    }
+    //}
+
+    protected void PriorityTarget()
     {
-        if (turretTarget != null)
-        {
-            for (int i = 0; i < turretTarget.Count; i++)
-            {
-                nav.SetDestination(turretTarget[i].transform.position);
-                break;
-            }
+        turret = Physics.OverlapSphere(transform.position, 100f, 8);
+        Debug.Log(turret);
+        if (turret.Length > 0)
+        {           
+            nav.SetDestination(turret[turretIndex].transform.position);
         }
-        else if (turretTarget == null)
+        else
         {
-            nav.SetDestination(defaltTarget.position);
+            nav.SetDestination(defaltTarget.transform.position);
         }
     }
 
@@ -94,21 +110,23 @@ public abstract class Monster : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    protected void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Turret"))
-        {
-            turretTarget.Add(other.gameObject.transform);
-            isChase = true;
-        }
-    }
+    //protected void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.CompareTag("Turret"))
+    //    {
+    //        turretTarget.Add(other.gameObject.transform);
+    //        if (other.gameObject.activeSelf == false)
+    //        {
+    //            turretTarget.Remove(other.gameObject.transform);
+    //        }
+    //    }
+    //}
 
-    protected void OnTriggerExit(Collider other)
-    {
-        if(other.gameObject.CompareTag("Turret"))
-        {
-            turretTarget.Remove(other.gameObject.transform);
-            isChase = false;
-        }
-    }
+    //protected void OnTriggerExit(Collider other)
+    //{
+    //    if(other.gameObject.CompareTag("Turret"))
+    //    {
+    //        turretTarget.Remove(other.gameObject.transform);
+    //    }
+    //}
 }
