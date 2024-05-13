@@ -4,8 +4,6 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - PlayerCamera
-  - debug
   - Turret
   layers:
   - Default
@@ -14,9 +12,9 @@ TagManager:
   - 
   - Water
   - UI
-  - debug
-  - Player
-  - Turret
+  - 
+  - 
+  - 
   - 
   - 
   - 
