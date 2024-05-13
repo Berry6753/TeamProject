@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Test : Turret
+public class Ttest : Turret
 {
     public bool b;
     // Start is called before the first frame update
