@@ -125,7 +125,12 @@ public class Player_BuildSystem : MonoBehaviour
                     deleteBuild = null;
                     build = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], GetMouseWorldPosition());
                 }
-            }            
+            }
+        }
+        else
+        {
+            if (build != null) build.SetActive(false);
+            build = null;
         }
     }
 

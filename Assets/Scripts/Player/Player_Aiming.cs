@@ -81,6 +81,7 @@ public class Player_Aiming : MonoBehaviour
 
     public void OnAiming(InputAction.CallbackContext context)
     {
+        if (buildSystem.BuildModeOn > 0f) return;
         isAiming = context.ReadValue<float>() > 0.5f;
     }
 
