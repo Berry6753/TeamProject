@@ -19,11 +19,13 @@ public abstract class Monster : MonoBehaviour
     [SerializeField] protected float startSpwanNum;     //초기 스폰 수
     [SerializeField] protected float upScaleSpwanNum;   //스폰 증가 수 
     [SerializeField] protected float spawnTiming;       //스폰 기점
-    
-    //[SerializeField] protected float sensingRange;      //감지 범위
 
-    [SerializeField] protected Transform defaltTarget;          //기본 타겟
-    [SerializeField] protected Transform[] priorityTarget;      //타겟 우선순위
+    protected float distance;                           //플레이어와의 거리 
+    
+    //[SerializeField] protected float sensingRange;    //감지 범위
+
+    [SerializeField] protected Transform defaltTarget;  //기본 타겟
+    protected List<Transform> turretTarget;             //터렛 타겟
     
     protected int wave;                   
     
@@ -43,13 +45,17 @@ public abstract class Monster : MonoBehaviour
 
     protected void PriorityTarget()                     //타겟 우선순위 추적
     {
-        for (int i = 0; i < priorityTarget.Length; i++)
+        for (int i = 0; i < turretTarget.Count; i++)
         {
-            if (priorityTarget[i] != null)
+            if (turretTarget[i] != null)
             {
-                nav.SetDestination(priorityTarget[i].position);
+                nav.SetDestination(turretTarget[i].position);
                 break;
             }
+        }
+        if(turretTarget == null)
+        {
+            nav.SetDestination(defaltTarget.position);
         }
     }
 
@@ -91,7 +97,9 @@ public abstract class Monster : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Turret"))
-        { 
+        {
+            Debug.Log(other.gameObject.name + " In");
+            turretTarget.Add(other.gameObject.transform);
             isChase = true;
         }
     }
@@ -99,7 +107,8 @@ public abstract class Monster : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if(other.gameObject.CompareTag("Turret"))
-        { 
+        {
+            turretTarget.Remove(other.gameObject.transform);
             isChase = false;
         }
     }

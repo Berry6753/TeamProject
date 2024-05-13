@@ -13,30 +13,32 @@ public class AerialMonster : Monster
     }
     protected override void ChaseTarget()
     {
-        float distance = Vector3.Distance(transform.position, defaltTarget.position);
+        distance = Vector3.Distance(transform.position, defaltTarget.position);
         if (distance <= atttackRange)
         {
             rb.velocity = Vector3.zero;
         }
         else
         {
-            transform.LookAt(defaltTarget);
-            transform.position = Vector3.MoveTowards(transform.position, defaltTarget.position, speed * Time.deltaTime);
-            if (isChase)
-                PrioTarget();
+            PrioTarget();
         }
     }
 
     private void PrioTarget()
     {
-        for (int i = 0; i < priorityTarget.Length; i++)
+        for (int i = 0; i < turretTarget.Count; i++)
         {
-            if (priorityTarget[i] != null)
+            if (turretTarget[i] != null)
             {
-                transform.LookAt(priorityTarget[i]);
-                transform.position = Vector3.MoveTowards(transform.position, priorityTarget[i].position, speed * Time.deltaTime);
+                transform.LookAt(turretTarget[i]);
+                transform.position = Vector3.MoveTowards(transform.position, turretTarget[i].position, speed * Time.deltaTime);
                 break;
             }
+        }
+        if (turretTarget == null)
+        {
+            transform.LookAt(defaltTarget);
+            transform.position = Vector3.MoveTowards(transform.position, defaltTarget.position, speed * Time.deltaTime);
         }
     }
 }
