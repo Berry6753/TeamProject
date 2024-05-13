@@ -71,11 +71,15 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         ChangeSpeed();
-        Rotation();
-        Movement();
+        Rotation();       
 
         //Debug.Log(cameraTransform.rotation);
         //Debug.Log(transform.forward);
+    }
+
+    private void FixedUpdate()
+    {
+        Movement();
     }
 
     // InputSystem 무브먼트
@@ -104,8 +108,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         MoveAnimation();
-        animator.SetFloat(hashMoveX, Mathf.Lerp(animator.GetFloat(hashMoveX), InputDir.y * animationFloat, Time.deltaTime * 100f));
-        animator.SetFloat(hashMoveZ, Mathf.Lerp(animator.GetFloat(hashMoveZ), InputDir.x * animationFloat, Time.deltaTime * 100f));
+        animator.SetFloat(hashMoveX, Mathf.Clamp(Mathf.Lerp(animator.GetFloat(hashMoveX), InputDir.y * animationFloat, Time.fixedDeltaTime * 50f), -3f, 3f));
+        animator.SetFloat(hashMoveZ, Mathf.Clamp(Mathf.Lerp(animator.GetFloat(hashMoveZ), InputDir.x * animationFloat, Time.fixedDeltaTime * 50f), -3f, 3f));
+
         //animator.SetBool("Move", inputMoveDir.magnitude >= 0.1f);
     }
 
@@ -125,15 +130,15 @@ public class PlayerMovement : MonoBehaviour
     {
         if(inputMoveDir.magnitude < 0.1f)
         {
-            animationFloat = 0f;
+            animationFloat = 0;
         }
         else if(InputBool)
         {
-            animationFloat = 5f;
+            animationFloat = 3;
         }
         else
         {
-            animationFloat = 3f;
+            animationFloat = 1;
         }
     }
 

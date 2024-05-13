@@ -8,7 +8,6 @@ public class Player_BuildSystem : MonoBehaviour
 {
     private float SelectBuildTurretIndex;
     [SerializeField] private LayerMask mask;
-    [SerializeField] private Transform ScreenCenter;
 
     private List<string> poolDicTag = new List<string>();
 
@@ -20,6 +19,8 @@ public class Player_BuildSystem : MonoBehaviour
     private Vector3 buildPos;
     private Ray ray;
 
+    private Vector2 screenCenterPoint;
+
     private void Awake()
     {
         BuildModeOn = -1f;
@@ -28,10 +29,9 @@ public class Player_BuildSystem : MonoBehaviour
 
     private Vector3 GetMouseWorldPosition()
     {
-        Vector2 screenCenterPoint = new Vector2(Screen.width / 2, Screen.height / 2);
+        screenCenterPoint = new Vector2(Screen.width / 2, Screen.height / 2);
         ray = Camera.main.ScreenPointToRay(screenCenterPoint);
-
-        if(Physics.Raycast(ray, out RaycastHit hit, 8f, mask))
+        if (Physics.Raycast(ray, out RaycastHit hit, 8f, mask))
         {
             buildPos = hit.point;
         }
@@ -103,15 +103,17 @@ public class Player_BuildSystem : MonoBehaviour
     {
         if (BuildModeOn > 0f)
         {
-            if (Physics.Raycast(Camera.main.transform.position, (GetMouseWorldPosition() - Camera.main.transform.position).normalized, out RaycastHit hit, 8f, mask))
+            screenCenterPoint = new Vector2(Screen.width / 2, Screen.height / 2);
+            ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+            if (Physics.Raycast(ray, out RaycastHit hit, 8f, mask))
             {
-                Debug.DrawLine(ray.origin, hit.point, Color.green);
+                Debug.DrawLine(Camera.main.transform.position, hit.point, Color.green);
                 Debug.Log(hit.transform.name);
 
                 if (hit.transform.CompareTag("Turret"))
                 {
                     Debug.Log("설치된 터렛 찾음");
-                    deleteBuild = hit.transform.parent.gameObject;
+                    deleteBuild = hit.transform.gameObject;
 
                     if (build != null)
                     {
@@ -121,6 +123,7 @@ public class Player_BuildSystem : MonoBehaviour
                 }
                 else if (build != null)
                 {
+                    deleteBuild = null;
                     build.transform.position = GetMouseWorldPosition();
                     build.transform.rotation = transform.rotation;
                 }
@@ -157,18 +160,31 @@ public class Player_BuildSystem : MonoBehaviour
         {
             if(deleteBuild != null)
             {
+                //선택된 터렛의 상태를 destory로 변경
+
+                //디버그 전용
                 deleteBuild.SetActive(false);
                 deleteBuild = null;
             }
             else
             {
-                GameObject BuilingTurret = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], build.transform.position, transform.rotation);
-                var childs = BuilingTurret.GetComponentsInChildren<Collider>();
-                foreach (var turretCollider in childs)
+                if (build.GetComponent<_Test1>().isBuildAble)
                 {
-                    turretCollider.gameObject.layer = LayerMask.NameToLayer("Turret");
-                    turretCollider.tag = "Turret";
-                    turretCollider.isTrigger = false;
+                    GameObject BuilingTurret = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], build.transform.position, transform.rotation);
+
+                    //터렛의 상태를 Build or Making이라고 변경
+
+                    //삭제 예정
+                    //생성된 터렛 태그와 레이어 변경
+                    var childs = BuilingTurret.GetComponentsInChildren<Collider>();
+                    foreach (var turretCollider in childs)
+                    {
+                        turretCollider.gameObject.layer = LayerMask.NameToLayer("Turret");
+                        turretCollider.tag = "Turret";
+                        turretCollider.isTrigger = false;
+                    }
+
+                    BuilingTurret.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
                 }
 
                 //BuilingTurret.layer = LayerMask.NameToLayer("Turret");
