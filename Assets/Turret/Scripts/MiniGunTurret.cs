@@ -23,7 +23,8 @@ public class MiniGunTurret : Turret
     private float upgradeCost = 10;
     private float makingCost = 15;
 
-    private void Awake()
+
+    private void OnEnable()
     {
         SetTurret(makingTime, makingCost, attackDamge, attackSpeed, attackRange, maxHp, hpRise, upgradeCost, upgradeTime, repairTime, repairCost, attackRise, attackSpeedRise, upgradCostRise, maxUpgradeCount);
     }
@@ -34,7 +35,6 @@ public class MiniGunTurret : Turret
         {
             if (!hit.collider.CompareTag("Monster"))
             {
-                //ÀÌÆåÆ® »ý¼º
                 return;
             }
             else if (hit.collider.CompareTag("Monster"))

@@ -27,12 +27,13 @@ public abstract class Turret : MonoBehaviour
     private GameObject spinPos;
 
     protected Transform targetTransform;
-    protected LayerMask monsterLayer = 6;
+    protected LayerMask monsterLayer = 9;
 
     private int nowUpgradeCount;
     private int nowHp;
     private int maxHp;
     private int hpRise;
+    private int nowMaxHp;
     private float makingTime;
     private float attackDamge;
     private float attackSpeed;
@@ -46,6 +47,12 @@ public abstract class Turret : MonoBehaviour
     private float repairCost;
     private float upgradeCost;
     private float makingCost;
+
+
+    private float nowUpgradeCost;
+    private float nowAttackDamge;
+    private float nowAttackSpeed;
+
 
 
     public bool isUpgrade;
@@ -73,7 +80,7 @@ public abstract class Turret : MonoBehaviour
         {
             attackTime += Time.time;
             spinPos.transform.LookAt(targetTransform);
-            if (attackTime >= attackSpeed)
+            if (attackTime >= 60 / nowAttackSpeed) 
             {
                 Attack();
             }
@@ -101,6 +108,15 @@ public abstract class Turret : MonoBehaviour
         this.attackSpeedRise = attackSpeedRise;
         this.upgradCostRise= upgradCostRise;
         this.maxUpgradeCount = maxUpgradeCount;
+
+        nowUpgradeCount = 0;
+        nowUpgradeCost = upgradeCost;
+        nowAttackDamge = attackDamge;
+        nowAttackSpeed = attackSpeed;
+        nowMaxHp = maxHp;
+
+        headMeshFilter.mesh = turretHeadMesh[nowUpgradeCount];
+        bodyMeshFilter.mesh = turretBodyMesh[nowUpgradeCount];
     }
                                                                                                                                                                 
     //코루틴은 가비지컬렉터가 많이 불린다                                                                                                                       
@@ -125,13 +141,14 @@ public abstract class Turret : MonoBehaviour
                 {
                     float distance = Vector3.SqrMagnitude(transform.position - collider.transform.position);
 
-                    if (/*collider.GetComponent<Monster>().isDead!=null&&*/distance < nierTargetDistance)
+                    if (/*!collider.GetComponent<Monster>().isDead&&*/distance < nierTargetDistance)
                     {
                         nierTargetDistance = distance;
                         nierTargetTransform = collider.transform;
                     }
                 }
             }
+
 
             targetTransform = nierTargetTransform;
 
@@ -147,10 +164,10 @@ public abstract class Turret : MonoBehaviour
     public virtual void Upgrade()
     {
         nowUpgradeCount++;
-        upgradeCost *= upgradCostRise;
-        attackDamge *= attackRise;
-        attackSpeed += attackSpeedRise;
-        maxHp += hpRise;
+        nowUpgradeCost *= upgradCostRise;
+        nowAttackDamge *= attackRise;
+        nowAttackSpeed += attackSpeedRise;
+        nowMaxHp += hpRise;
         nowHp += hpRise;
 
         //업그레이드시 외형변경
@@ -160,6 +177,9 @@ public abstract class Turret : MonoBehaviour
 
     public void Repair()
     {
-        nowHp = maxHp;
+        nowHp = nowMaxHp;
     }
+
+   
+
 }
