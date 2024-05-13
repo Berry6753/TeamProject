@@ -32,9 +32,22 @@ public class MiniGunTurret : Turret
     {
         if (Physics.Raycast(firePos.transform.position, Vector3.forward, out RaycastHit hit, attackRange))
         {
-            //이펙트 생성
+            if (!hit.collider.CompareTag("Monster"))
+            {
+                //이펙트 생성
+                return;
+            }
+            else if (hit.collider.CompareTag("Monster"))
+            {
             //몬스터 데미지 주는 부분
             //몬스터 함수 불러온단 소리
+
+            }
+            //else if ()
+            //{
+            ////드럼통 폭발시키기도 있어야함
+
+            //}
         } 
     }
 

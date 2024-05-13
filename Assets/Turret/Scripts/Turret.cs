@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class Turret : MonoBehaviour
@@ -124,7 +125,7 @@ public abstract class Turret : MonoBehaviour
                 {
                     float distance = Vector3.SqrMagnitude(transform.position - collider.transform.position);
 
-                    if (distance < nierTargetDistance)
+                    if (/*collider.GetComponent<Monster>().isDead!=null&&*/distance < nierTargetDistance)
                     {
                         nierTargetDistance = distance;
                         nierTargetTransform = collider.transform;
