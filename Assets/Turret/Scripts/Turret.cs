@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
+public enum TurretStateName
+{
+    BLUESCREEN,MAKING,SEARCH,ATTACK,UPGRADE,REPAIR,DESTROIY
+}
+
+
 public abstract class Turret : MonoBehaviour
 {
-    private float searchTime = 0.5f;
-    private float checkSearchTime;
+    
     private float attackTime;
 
     [SerializeField]
@@ -15,6 +21,10 @@ public abstract class Turret : MonoBehaviour
     private Mesh[] turretBodyMesh;
     private MeshFilter headMeshFilter;
     private MeshFilter bodyMeshFilter;
+    private MeshRenderer headRenderer;
+    private MeshRenderer bodyRenderer;
+
+
 
     [SerializeField]
     private GameObject turretHead;
@@ -23,8 +33,6 @@ public abstract class Turret : MonoBehaviour
 
     [SerializeField]
     protected GameObject firePos;
-    [SerializeField]
-    private GameObject spinPos;
 
     protected Transform targetTransform;
     protected LayerMask monsterLayer = 9;
@@ -53,13 +61,19 @@ public abstract class Turret : MonoBehaviour
     private float nowAttackDamge;
     private float nowAttackSpeed;
 
+    public GameObject spinPos;
 
 
     public bool isUpgrade;
     public bool isRepair;
     public bool isTarget;
+    public bool isMake;
 
-    
+    public TurretStateName turretStateName;
+
+    public Transform turretTargetTransform { get { return targetTransform; } }
+    public float turretAttackSpeed { get { return nowAttackSpeed; } }
+    public float turretMakingTime { get { return makingTime; } }
     public float turretRepairCost { get { return repairCost; } }
     public float turretUpgradCost { get { return upgradeCost; } }
     public float turretMakingCost { get { return makingCost; } }
@@ -69,30 +83,30 @@ public abstract class Turret : MonoBehaviour
     {
         bodyMeshFilter = turretBody.GetComponent<MeshFilter>();
         headMeshFilter = turretHead.GetComponent<MeshFilter>();
-    }
-    private void Start()
-    {
-        
+        bodyRenderer = turretBody.GetComponent<MeshRenderer>();
+        headRenderer = turretHead.GetComponent<MeshRenderer>();
     }
     private void Update()
     {
-        if (targetTransform != null)
+        
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Turret"))
         {
-            attackTime += Time.time;
-            spinPos.transform.LookAt(targetTransform);
-            if (attackTime >= 60 / nowAttackSpeed) 
-            {
-                Attack();
-            }
+            isMake = false;
         }
         else
         {
-            attackTime = 0;
+            isMake = true;
         }
     }
-    protected abstract void Attack();
+
+    public abstract void Attack();
     protected void SetTurret(float mainkgTime, float makingCost, float attackDamge, float attackSpeed, float attackRange, int maxHp, int hpRise, float upgradeCost, float upgradeTime, float repairTime, float repairCost, float attackRise, float attackSpeedRise, float upgradCostRise, float maxUpgradeCount)
     {
+        this.makingTime = mainkgTime * 60;
         this.maxHp = maxHp;
         this.nowHp = maxHp;
         this.hpRise = hpRise;
@@ -101,8 +115,8 @@ public abstract class Turret : MonoBehaviour
         this.attackSpeed = attackSpeed;
         this.attackRange = attackRange;
         this.upgradeCost = upgradeCost;
-        this.upgradeTime = upgradeTime;
-        this.repairTime = repairTime;
+        this.upgradeTime = upgradeTime * 60;
+        this.repairTime = repairTime * 60;
         this.repairCost = repairCost;
         this.attackRise = attackRise;
         this.attackSpeedRise = attackSpeedRise;
@@ -118,6 +132,26 @@ public abstract class Turret : MonoBehaviour
         headMeshFilter.mesh = turretHeadMesh[nowUpgradeCount];
         bodyMeshFilter.mesh = turretBodyMesh[nowUpgradeCount];
     }
+
+    public void ChangeColor()
+    {
+        if (isMake)
+        {
+            bodyRenderer.material.color = Color.blue;
+            headRenderer.material.color = Color.blue;
+        }
+        else
+        {
+            bodyRenderer.material.color = Color.red;
+            headRenderer.material.color = Color.red;
+        }
+    }
+
+    public void ResetColor()
+    {
+        bodyRenderer.material.color = Color.white;
+        headRenderer.material.color = Color.white;
+    }
                                                                                                                                                                 
     //코루틴은 가비지컬렉터가 많이 불린다                                                                                                                       
     //메모리를 많이 먹는다는 뜻이다                                                                                                                             
@@ -125,34 +159,29 @@ public abstract class Turret : MonoBehaviour
     //하지만 함수를 업데이트에서 호출해 비교하면서 하는것보단 좋다                                                                                              
     //공격은 이벤트를 이용해 만들어 보자
     //상태 패턴을 이용해서 삭제하는거랑 공격이런거 정리해보자
-    protected IEnumerator SearchEnemy()
+    public void SearchEnemy()
     {
-        while (true)
+
+        Collider[] enemyCollider = Physics.OverlapSphere(transform.position, attackRange, monsterLayer);//레이어 마스크 몬스터 추가
+        Transform nierTargetTransform = null;
+        if (enemyCollider.Length > 0)
         {
-            yield return new WaitUntil(() => targetTransform == null);
-            yield return new WaitForSeconds(1);
-
-            Collider[] enemyCollider = Physics.OverlapSphere(transform.position, attackRange, monsterLayer);//레이어 마스크 몬스터 추가
-            Transform nierTargetTransform = null;
-            if (enemyCollider.Length > 0)
+            float nierTargetDistance = Mathf.Infinity;
+            foreach (Collider collider in enemyCollider)
             {
-                float nierTargetDistance = Mathf.Infinity;
-                foreach (Collider collider in enemyCollider)
-                {
-                    float distance = Vector3.SqrMagnitude(transform.position - collider.transform.position);
+                float distance = Vector3.SqrMagnitude(transform.position - collider.transform.position);
 
-                    if (/*!collider.GetComponent<Monster>().isDead&&*/distance < nierTargetDistance)
-                    {
-                        nierTargetDistance = distance;
-                        nierTargetTransform = collider.transform;
-                    }
+                if (/*!collider.GetComponent<Monster>().isDead&&*/distance < nierTargetDistance)
+                {
+                    nierTargetDistance = distance;
+                    nierTargetTransform = collider.transform;
                 }
             }
-
-
-            targetTransform = nierTargetTransform;
-
         }
+
+
+        targetTransform = nierTargetTransform;
+
 
     }
 

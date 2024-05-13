@@ -32,7 +32,7 @@ public class MissleTurret : Turret
         nowAttackRadius = attackRadius;
     }
 
-    protected override void Attack()
+    public override void Attack()
     {
         if(Physics.Raycast(firePos.transform.position,Vector3.forward,out RaycastHit hit, attackRange))
         {

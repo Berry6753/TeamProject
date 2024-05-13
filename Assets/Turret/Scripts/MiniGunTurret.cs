@@ -29,7 +29,7 @@ public class MiniGunTurret : Turret
         SetTurret(makingTime, makingCost, attackDamge, attackSpeed, attackRange, maxHp, hpRise, upgradeCost, upgradeTime, repairTime, repairCost, attackRise, attackSpeedRise, upgradCostRise, maxUpgradeCount);
     }
 
-    protected override void Attack()
+    public override void Attack()
     {
         if (Physics.Raycast(firePos.transform.position, Vector3.forward, out RaycastHit hit, attackRange))
         {

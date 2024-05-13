@@ -9,7 +9,6 @@ public class Ttest : Turret
     void Start()
     {
         b = true;
-        
     }
 
     // Update is called once per frame
@@ -17,7 +16,7 @@ public class Ttest : Turret
     {
     }
 
-    protected override void Attack()
+    public override void Attack()
     {
     }
 

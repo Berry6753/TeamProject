@@ -36,7 +36,7 @@ public class FireTurret : Turret
         attackBoxPos = new Vector3(firePos.transform.position.x, firePos.transform.position.y, firePos.transform.position.z + attackRange);
     }
 
-    protected override void Attack()
+    public override void Attack()
     {
         if(Physics.Raycast(firePos.transform.position,Vector3.forward,out RaycastHit hit, attackRange))
         {
