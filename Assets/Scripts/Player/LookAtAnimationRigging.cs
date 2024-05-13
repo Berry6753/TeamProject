@@ -67,7 +67,7 @@ public class LookAtAnimationRigging : MonoBehaviour
     private void Rigging()
     {
         rigs[0].weight = Mathf.Lerp(rigs[0].weight, reloadTargetWeight, Time.deltaTime * 10f);
-        rigs[1].weight = Mathf.Lerp(rigs[1].weight, aimingTargetWeight * reloadTargetWeight, Time.deltaTime * 10f);
+        rigs[1].weight = Mathf.Lerp(rigs[1].weight, reloadTargetWeight, Time.deltaTime * 10f);
         rigs[2].weight = Mathf.Lerp(rigs[2].weight, reloadTargetWeight, Time.deltaTime * 10f);
         rigs[3].weight = Mathf.Lerp(rigs[3].weight, aimingTargetWeight * reloadTargetWeight, Time.deltaTime * 10f);
         rigs[4].weight = Mathf.Lerp(rigs[4].weight, aimingTargetWeight * reloadTargetWeight, Time.deltaTime * 10f);

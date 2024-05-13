@@ -64,7 +64,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 1
+      - time: 0.9859813
         functionName: ReloadEnd
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 617d9dd3ec6b3f340bd823042e1b94f0, type: 3}

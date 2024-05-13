@@ -14,8 +14,10 @@ public class Player_BuildSystem : MonoBehaviour
     public float BuildModeOn {  get; private set; }
 
     GameObject build;
+    GameObject deleteBuild;
 
     private Vector3 buildPos;
+    private Ray ray;
 
     private void Awake()
     {
@@ -27,7 +29,7 @@ public class Player_BuildSystem : MonoBehaviour
     private Vector3 GetMouseWorldPosition()
     {
         Vector2 screenCenterPoint = new Vector2(Screen.width / 2, Screen.height / 2);
-        Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+        ray = Camera.main.ScreenPointToRay(screenCenterPoint);
 
         if(Physics.Raycast(ray, out RaycastHit hit, 8f, mask))
         {
@@ -79,11 +81,11 @@ public class Player_BuildSystem : MonoBehaviour
                 }
             }
 
-            build = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], GetMouseWorldPosition());
+            //build = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], GetMouseWorldPosition());
         }
         else
         {
-            build.SetActive(false);
+            //build.SetActive(false);
         }
     }
 
@@ -96,12 +98,34 @@ public class Player_BuildSystem : MonoBehaviour
     private void CreateBuilding()
     {
         if (BuildModeOn > 0f)
-        {           
-            if(build != null)
+        {
+            if (Physics.Raycast(Camera.main.transform.position, (GetMouseWorldPosition() - Camera.main.transform.position).normalized, out RaycastHit hit, 8f, mask))
             {
-                build.transform.position = GetMouseWorldPosition();
-                build.transform.rotation = transform.rotation;
-            }
+                Debug.DrawLine(ray.origin, hit.point, Color.green);
+                Debug.Log(hit.transform.name);
+
+                if (hit.transform.CompareTag("Turret"))
+                {
+                    Debug.Log("설치된 터렛 찾음");
+                    deleteBuild = hit.transform.gameObject;
+
+                    if (build != null)
+                    {
+                        build.SetActive(false);
+                        build = null;
+                    }
+                }
+                else if (build != null)
+                {
+                    build.transform.position = GetMouseWorldPosition();
+                    build.transform.rotation = transform.rotation;
+                }
+                else
+                {
+                    deleteBuild = null;
+                    build = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], GetMouseWorldPosition());
+                }
+            }            
         }
     }
 
@@ -110,7 +134,23 @@ public class Player_BuildSystem : MonoBehaviour
         if (BuildModeOn < 0f) return;
         if (GetComponent<Player_Aiming>().isFire)
         {
-            MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], build.transform.position, transform.rotation);
+            if(deleteBuild != null)
+            {
+                deleteBuild.SetActive(false);
+            }
+            else
+            {
+                GameObject BuilingTurret = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], build.transform.position, transform.rotation);
+                var childs = BuilingTurret.GetComponentsInChildren<Collider>();
+                foreach (var turretCollider in childs)
+                {
+                    turretCollider.gameObject.layer = LayerMask.NameToLayer("Turret");
+                    turretCollider.tag = "Turret";
+                }
+
+                //BuilingTurret.layer = LayerMask.NameToLayer("Turret");
+                //BuilingTurret.tag = "Turret";
+            }
         }        
     }
 }
