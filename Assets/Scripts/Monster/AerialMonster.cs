@@ -26,16 +26,16 @@ public class AerialMonster : Monster
 
     private void PrioTarget()
     {
-        for (int i = 0; i < turretTarget.Count; i++)
+        if(turretTarget != null)
         {
-            if (turretTarget[i] != null)
+            for (int i = 0; i < turretTarget.Count; i++)
             {
                 transform.LookAt(turretTarget[i]);
                 transform.position = Vector3.MoveTowards(transform.position, turretTarget[i].position, speed * Time.deltaTime);
                 break;
             }
         }
-        if (turretTarget == null)
+        else if (turretTarget == null)
         {
             transform.LookAt(defaltTarget);
             transform.position = Vector3.MoveTowards(transform.position, defaltTarget.position, speed * Time.deltaTime);

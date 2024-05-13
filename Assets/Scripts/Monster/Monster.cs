@@ -25,7 +25,7 @@ public abstract class Monster : MonoBehaviour
     //[SerializeField] protected float sensingRange;    //°¨Áö ¹üÀ§
 
     [SerializeField] protected Transform defaltTarget;  //±âº» Å¸°Ù
-    protected List<Transform> turretTarget;             //ÅÍ·¿ Å¸°Ù
+    protected List<Transform> turretTarget = new List<Transform>();       //ÅÍ·¿ Å¸°Ù
     
     protected int wave;                   
     
@@ -45,15 +45,15 @@ public abstract class Monster : MonoBehaviour
 
     protected void PriorityTarget()                     //Å¸°Ù ¿ì¼±¼øÀ§ ÃßÀû
     {
-        for (int i = 0; i < turretTarget.Count; i++)
+        if (turretTarget != null)
         {
-            if (turretTarget[i] != null)
+            for (int i = 0; i < turretTarget.Count; i++)
             {
-                nav.SetDestination(turretTarget[i].position);
+                nav.SetDestination(turretTarget[i].transform.position);
                 break;
             }
         }
-        if(turretTarget == null)
+        else if (turretTarget == null)
         {
             nav.SetDestination(defaltTarget.position);
         }
@@ -94,17 +94,16 @@ public abstract class Monster : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Turret"))
         {
-            Debug.Log(other.gameObject.name + " In");
             turretTarget.Add(other.gameObject.transform);
             isChase = true;
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    protected void OnTriggerExit(Collider other)
     {
         if(other.gameObject.CompareTag("Turret"))
         {

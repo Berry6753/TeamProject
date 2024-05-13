@@ -6,6 +6,7 @@ public class NormalMonster : Monster
 {
     private void Update()
     {
+        Debug.Log(defaltTarget.position);
         ChaseTarget();
     }
 
