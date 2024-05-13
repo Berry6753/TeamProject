@@ -113,8 +113,12 @@ public class Player_Aiming : MonoBehaviour
             if (context.performed)
             {
                 isFire = true;
-                buildSystem.BuildTurret();
-            }            
+                buildSystem.BuildTurret();                
+            }
+            if (context.canceled)
+            {
+                isFire = false;
+            }
         }
         else
         {
@@ -205,7 +209,7 @@ public class Player_Aiming : MonoBehaviour
             {
                 debugTransform.position = hits.point;
                 Debug.DrawLine(GunFireStartPoint.position, hits.point, Color.red);
-                Debug.Log("공격!!!");
+                
             }
                 //if (hit.transform.CompareTag("Monster"))
                 //{
@@ -224,6 +228,7 @@ public class Player_Aiming : MonoBehaviour
             AttackTimer = 0;
             notAimingTimer = 0;
             animator.SetBool(hashFire, true);
+            Debug.Log("공격!!!");
         }
         else
         {

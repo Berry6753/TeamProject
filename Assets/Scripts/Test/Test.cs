@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
+
     private void OnDisable()
     {
         MultiObjectPool.ReturnToPool(gameObject);
