@@ -1,12 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+
+
+public enum TurretStateName
+{
+    BLUESCREEN,MAKING,SEARCH,ATTACK,UPGRADE,REPAIR,DESTROIY
+}
+
 
 public abstract class Turret : MonoBehaviour
 {
-    private float searchTime = 0.5f;
-    private float checkSearchTime;
+    
     private float attackTime;
 
     [SerializeField]
@@ -15,6 +22,10 @@ public abstract class Turret : MonoBehaviour
     private Mesh[] turretBodyMesh;
     private MeshFilter headMeshFilter;
     private MeshFilter bodyMeshFilter;
+    private MeshRenderer headRenderer;
+    private MeshRenderer bodyRenderer;
+
+
 
     [SerializeField]
     private GameObject turretHead;
@@ -23,16 +34,15 @@ public abstract class Turret : MonoBehaviour
 
     [SerializeField]
     protected GameObject firePos;
-    [SerializeField]
-    private GameObject spinPos;
 
     protected Transform targetTransform;
-    protected LayerMask monsterLayer = 6;
+    protected LayerMask monsterLayer = 9;
 
     private int nowUpgradeCount;
     private int nowHp;
     private int maxHp;
     private int hpRise;
+    private int nowMaxHp;
     private float makingTime;
     private float attackDamge;
     private float attackSpeed;
@@ -48,44 +58,132 @@ public abstract class Turret : MonoBehaviour
     private float makingCost;
 
 
-    public bool isUpgrade;
-    public bool isRepair;
-    public bool isTarget;
+    private float nowUpgradeCost;
+    private float nowAttackDamge;
+    private float nowAttackSpeed;
 
-    
+    private bool isUpgrade;
+    private bool isRepair;
+    [HideInInspector]
+    public SphereCollider checkCollider;
+    [HideInInspector]
+    public CapsuleCollider turretCollider;
+
+    public GameObject spinPos;
+    [HideInInspector]
+    public StateMachine turretStatemachine;
+
+    public bool isTarget;
+    public bool isMake;
+
+    public TurretStateName turretStateName;
+
+    public Transform turretTargetTransform { get { return targetTransform; } }
+    public float turretAttackSpeed { get { return nowAttackSpeed; } }
+    public float turretMakingTime { get { return makingTime; } }
+    public float turretRepairTime { get { return repairTime; } }
+    public float turretUpgradeTime { get { return upgradeTime; } }
     public float turretRepairCost { get { return repairCost; } }
     public float turretUpgradCost { get { return upgradeCost; } }
     public float turretMakingCost { get { return makingCost; } }
+    public bool isTurretUpgrade { get { return isUpgrade; } }
+    public bool isTurretRepair { get { return isRepair; } }
 
 
-    private void Awake()
+    protected virtual void Awake()
     {
         bodyMeshFilter = turretBody.GetComponent<MeshFilter>();
         headMeshFilter = turretHead.GetComponent<MeshFilter>();
+        bodyRenderer = turretBody.GetComponent<MeshRenderer>();
+        headRenderer = turretHead.GetComponent<MeshRenderer>();
+        checkCollider = GetComponent<SphereCollider>();
+        turretCollider = GetComponent<CapsuleCollider>();
+        gameObject.AddComponent<StateMachine>();
+        turretStatemachine = GetComponent<StateMachine>();
+        SetState();
+        turretStatemachine.InitState(TurretStateName.BLUESCREEN);
+        Debug.Log("sdasda");
     }
-    private void Start()
+
+    protected virtual void OnEnable()
     {
-        
+        turretStatemachine.ChangeState(TurretStateName.BLUESCREEN);
     }
+
+    private void OnDisable()
+    {
+        MultiObjectPool.ReturnToPool(gameObject);
+    }
+
     private void Update()
     {
-        if (targetTransform != null)
+        if(turretStateName != TurretStateName.DESTROIY)
         {
-            attackTime += Time.time;
-            spinPos.transform.LookAt(targetTransform);
-            if (attackTime >= attackSpeed)
-            {
-                Attack();
-            }
+            UpgradeCheck();
+            RepairCheck();
+        }
+
+        if (nowHp >= 0)
+        {
+            turretStatemachine.ChangeState(TurretStateName.DESTROIY);
+        }
+
+
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Turret"))
+        {
+            isMake = false;
         }
         else
         {
-            attackTime = 0;
+            isMake = true;
         }
     }
-    protected abstract void Attack();
+
+    private void SetState()
+    {
+        turretStatemachine.AddState(TurretStateName.BLUESCREEN,new TurretBlueScreenState(this));
+        turretStatemachine.AddState(TurretStateName.SEARCH, new TurretSearchState(this));
+        turretStatemachine.AddState(TurretStateName.ATTACK, new TurretAttackState(this));
+        turretStatemachine.AddState(TurretStateName.UPGRADE, new TurretUpgradeState(this));
+        turretStatemachine.AddState(TurretStateName.MAKING, new TurretMakingState(this));
+        turretStatemachine.AddState(TurretStateName.REPAIR, new TurretRepairState(this));
+        turretStatemachine.AddState(TurretStateName.DESTROIY, new TurretDestroyState(this));
+
+    }
+
+    private void RepairCheck()
+    {
+        if (turretStateName == TurretStateName.REPAIR || turretStateName == TurretStateName.UPGRADE)
+        {
+            isRepair = false;
+        }
+        else
+        {
+            isRepair = true;
+        }
+    }
+
+    private void UpgradeCheck()
+    {
+        if (turretStateName == TurretStateName.UPGRADE || nowUpgradeCount >= maxUpgradeCount)
+        {
+            isUpgrade = false;
+        }
+        else
+        {
+            isUpgrade = true;
+        }
+    }
+
+
+    public abstract void Attack();
     protected void SetTurret(float mainkgTime, float makingCost, float attackDamge, float attackSpeed, float attackRange, int maxHp, int hpRise, float upgradeCost, float upgradeTime, float repairTime, float repairCost, float attackRise, float attackSpeedRise, float upgradCostRise, float maxUpgradeCount)
     {
+        this.makingTime = mainkgTime * 60;
         this.maxHp = maxHp;
         this.nowHp = maxHp;
         this.hpRise = hpRise;
@@ -94,49 +192,101 @@ public abstract class Turret : MonoBehaviour
         this.attackSpeed = attackSpeed;
         this.attackRange = attackRange;
         this.upgradeCost = upgradeCost;
-        this.upgradeTime = upgradeTime;
-        this.repairTime = repairTime;
+        this.upgradeTime = upgradeTime * 60;
+        this.repairTime = repairTime * 60;
         this.repairCost = repairCost;
         this.attackRise = attackRise;
         this.attackSpeedRise = attackSpeedRise;
         this.upgradCostRise= upgradCostRise;
         this.maxUpgradeCount = maxUpgradeCount;
+
+        nowUpgradeCount = 0;
+        nowUpgradeCost = upgradeCost;
+        nowAttackDamge = attackDamge;
+        nowAttackSpeed = attackSpeed;
+        nowMaxHp = maxHp;
+
+        headMeshFilter.mesh = turretHeadMesh[nowUpgradeCount];
+        bodyMeshFilter.mesh = turretBodyMesh[nowUpgradeCount];
     }
-                                                                                                                                                                
+
+    public void ChangeColor()
+    {
+        if (isMake)
+        {
+            bodyRenderer.material.color = Color.blue;
+            headRenderer.material.color = Color.blue;
+        }
+        else
+        {
+            bodyRenderer.material.color = Color.red;
+            headRenderer.material.color = Color.red;
+        }
+    }
+
+    public void ResetColor()
+    {
+        bodyRenderer.material.color = Color.white;
+        headRenderer.material.color = Color.white;
+    }
+
+    public void OnRenderer()
+    {
+        bodyRenderer.enabled = true;
+        headRenderer.enabled = true;
+    }
+    public void OffRenderer()
+    {
+        bodyRenderer.enabled = false;
+        headRenderer.enabled = false;
+    }
+
     //코루틴은 가비지컬렉터가 많이 불린다                                                                                                                       
     //메모리를 많이 먹는다는 뜻이다                                                                                                                             
     //포탑이 많아질 예정이니 코루틴 없이 구현해보자                                                                                                             
     //하지만 함수를 업데이트에서 호출해 비교하면서 하는것보단 좋다                                                                                              
     //공격은 이벤트를 이용해 만들어 보자
     //상태 패턴을 이용해서 삭제하는거랑 공격이런거 정리해보자
-    protected IEnumerator SearchEnemy()
+    public void SearchEnemy()
     {
-        while (true)
+
+        Collider[] enemyCollider = Physics.OverlapSphere(transform.position, attackRange, monsterLayer);//레이어 마스크 몬스터 추가
+        Transform nierTargetTransform = null;
+        if (enemyCollider.Length > 0)
         {
-            yield return new WaitUntil(() => targetTransform == null);
-            yield return new WaitForSeconds(1);
-
-            Collider[] enemyCollider = Physics.OverlapSphere(transform.position, attackRange, monsterLayer);//레이어 마스크 몬스터 추가
-            Transform nierTargetTransform = null;
-            if (enemyCollider.Length > 0)
+            float nierTargetDistance = Mathf.Infinity;
+            foreach (Collider collider in enemyCollider)
             {
-                float nierTargetDistance = Mathf.Infinity;
-                foreach (Collider collider in enemyCollider)
-                {
-                    float distance = Vector3.SqrMagnitude(transform.position - collider.transform.position);
+                float distance = Vector3.SqrMagnitude(transform.position - collider.transform.position);
 
-                    if (/*collider.GetComponent<Monster>().isDead!=null&&*/distance < nierTargetDistance)
-                    {
-                        nierTargetDistance = distance;
-                        nierTargetTransform = collider.transform;
-                    }
+                if (/*!collider.GetComponent<Monster>().isDead&&*/distance < nierTargetDistance)
+                {
+                    nierTargetDistance = distance;
+                    nierTargetTransform = collider.transform;
                 }
             }
-
-            targetTransform = nierTargetTransform;
-
         }
 
+
+        targetTransform = nierTargetTransform;
+
+
+    }
+
+    public void TurretMake()
+    {
+        turretStatemachine.ChangeState(TurretStateName.MAKING);
+    }
+
+    public void TurretRepair()
+    {
+        turretStatemachine.ChangeState(TurretStateName.REPAIR);
+    }
+
+    public void TurretUpgrade()
+    {
+        //상태 업그레이드로
+        turretStatemachine.ChangeState(TurretStateName.UPGRADE);
     }
 
     public void Hurt(int damge)
@@ -147,10 +297,10 @@ public abstract class Turret : MonoBehaviour
     public virtual void Upgrade()
     {
         nowUpgradeCount++;
-        upgradeCost *= upgradCostRise;
-        attackDamge *= attackRise;
-        attackSpeed += attackSpeedRise;
-        maxHp += hpRise;
+        nowUpgradeCost *= upgradCostRise;
+        nowAttackDamge *= attackRise;
+        nowAttackSpeed += attackSpeedRise;
+        nowMaxHp += hpRise;
         nowHp += hpRise;
 
         //업그레이드시 외형변경
@@ -160,6 +310,9 @@ public abstract class Turret : MonoBehaviour
 
     public void Repair()
     {
-        nowHp = maxHp;
+        nowHp = nowMaxHp;
     }
+
+   
+
 }

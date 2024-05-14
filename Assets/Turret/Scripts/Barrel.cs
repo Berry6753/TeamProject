@@ -32,20 +32,66 @@ public class Barrel : MonoBehaviour
     private int range = 5;
     private LayerMask monsterLayer;
     private MeshRenderer meshRenderer;
+    private float checkTime;
+    private float makingTime = 15 * 60;
 
-    public int maikngCost = 5;
+    private SphereCollider checkColleder;
+    private BoxCollider bodyColleder;
+
+    public bool isMake;
+
+    public int makingCost = 5;
 
     //현재 태그와 레이어 설정안함 0512기준
 
     private void Awake()
     {
         meshRenderer = GetComponent<MeshRenderer>();
+        checkColleder = GetComponent<SphereCollider>();
+        bodyColleder = GetComponent<BoxCollider>();
     }
 
     private void OnEnable()
     {
         meshRenderer.enabled = true;
-        
+        checkColleder.enabled = true;
+        bodyColleder.enabled = false;
+    }
+
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Turret"))
+        {
+            meshRenderer.material.color = Color.red;
+            isMake = false;
+        }
+        else
+        {
+            meshRenderer.material.color = Color.blue;
+            isMake = true;
+        }
+    }
+
+    public void Making()
+    {
+        meshRenderer.enabled = false;
+        //이펙트 재생
+        while (true)
+        {
+            checkTime += Time.time;
+            if(checkTime >= makingTime)
+            {
+                meshRenderer.enabled = true;
+                meshRenderer.material.color = Color.white;
+                checkColleder.enabled = false;
+                bodyColleder.enabled = true;
+                gameObject.tag = "Barrel";
+                gameObject.layer = 8;
+                checkTime = 0;
+                break;
+            }
+        }
     }
 
     public void Hurt()
@@ -65,6 +111,15 @@ public class Barrel : MonoBehaviour
             }
         }
 
+        gameObject.tag = "Untagged";
+        gameObject.layer = 0;
+
         gameObject.transform.parent.gameObject.SetActive(false);
     }
+
+    private void OnDisable()
+    {
+        MultiObjectPool.ReturnToPool(gameObject);
+    }
+
 }

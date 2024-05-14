@@ -92,6 +92,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 355304598553419386}
+  - component: {fileID: 1460994999475234388}
+  - component: {fileID: 5007144407796792416}
+  - component: {fileID: 1824475265237433171}
+  - component: {fileID: 7684568531394657784}
   m_Layer: 0
   m_Name: MissleTurret1
   m_TagString: Untagged
@@ -116,6 +120,81 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1460994999475234388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355304598553051738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdbc0e674e1058249aa866b94138b93e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turretHeadMesh:
+  - {fileID: 4300002, guid: 09ab23981809ccb4eb233443c33f4e68, type: 3}
+  - {fileID: 4300000, guid: b42ad9c8cc0abae4c8004f5468b05d6a, type: 3}
+  - {fileID: 4300000, guid: 2057bc528a273ef46990a4a58efc36ee, type: 3}
+  - {fileID: 4300002, guid: 13015362b50c67746a73e4548a7df891, type: 3}
+  turretBodyMesh:
+  - {fileID: 4300000, guid: 09ab23981809ccb4eb233443c33f4e68, type: 3}
+  - {fileID: 4300002, guid: b42ad9c8cc0abae4c8004f5468b05d6a, type: 3}
+  - {fileID: 4300002, guid: 2057bc528a273ef46990a4a58efc36ee, type: 3}
+  - {fileID: 4300000, guid: 13015362b50c67746a73e4548a7df891, type: 3}
+  turretHead: {fileID: 355304598553051742}
+  turretBody: {fileID: 355304598553051736}
+  firePos: {fileID: 8542735475367188335}
+  checkCollider: {fileID: 0}
+  turretCollider: {fileID: 0}
+  spinPos: {fileID: 8475662051849910778}
+  turretStatemachine: {fileID: 0}
+  isTarget: 0
+  isMake: 0
+  turretStateName: 0
+--- !u!136 &5007144407796792416
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355304598553051738}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.22
+  m_Height: 0.64
+  m_Direction: 2
+  m_Center: {x: 0, y: 0.12, z: 0.1}
+--- !u!135 &1824475265237433171
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355304598553051738}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &7684568531394657784
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355304598553051738}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 78
+  m_CollisionDetection: 0
 --- !u!1 &355304598553051742
 GameObject:
   m_ObjectHideFlags: 0

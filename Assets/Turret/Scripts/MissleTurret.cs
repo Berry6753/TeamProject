@@ -4,32 +4,68 @@ using UnityEngine;
 
 public class MissleTurret : Turret
 {
-    private int nowUpgradeCount = 0;
-    private int nowHp;
-    private int maxHp = 5;
-    private int hpRise = 1;
-    private float makingTime = 15;
-    private float attackDamge = 100;
-    private float attackSpeed = 0.35f;
-    private float attackRange = 20;
-    private float upgradeTime = 15;
-    private float repairTime = 15;
-    private float attackRise = 50;
-    private float attackSpeedRise = 0.2f;
-    private float upgradCostRise = 1.5f;
-    private float maxUpgradeCount = 3;
-    private float repairCost = 10;
-    private float upgradeCost = 20;
-    private float makingCost = 30;
+    private int nowMissleTurretUpgradeCount = 0;
+    private int nowMissleTurretHp;
+    private int maxMissleTurretHp = 5;
+    private int missleTurretHpRise = 2;
+    private float missleTurretAttackRadius = 3;
+    private float missleTurretNowAttackRadius;
+    private float missleTurretAttackRadiusRise = 0.5f;
+    private float missleTurretMakingTime = 15;
+    private float missleTurretAttackDamge = 50;
+    private float missleTurretAttackSpeed = 0.5f;
+    private float missleTurretAttackRange = 15;
+    private float missleTurretUpgradeTime = 15;
+    private float missleTurretRepairTime = 15;
+    private float missleTurretAttackRise = 20;
+    private float missleTurretAttackSpeedRise = 0.3f;
+    private float missleTurretUpgradCostRise = 1.3f;
+    private float missleTurretMaxUpgradeCount = 4;
+    private float missleTurretRepairCost = 8;
+    private float missleTurretUpgradeCost = 15;
+    private float missleTurretMakingCost = 20;
 
-    private void Awake()
+    protected override void OnEnable()
     {
-        SetTurret(makingTime, makingCost, attackDamge, attackSpeed, attackRange, maxHp, hpRise, upgradeCost, upgradeTime, repairTime, repairCost, attackRise, attackSpeedRise, upgradCostRise, maxUpgradeCount);
+        base.OnEnable();
+        base.SetTurret(missleTurretMakingTime, missleTurretMakingCost, missleTurretAttackDamge, missleTurretAttackSpeed, missleTurretAttackRange, maxMissleTurretHp, missleTurretHpRise, 
+            missleTurretUpgradeCost, missleTurretUpgradeTime, missleTurretRepairTime, missleTurretRepairCost, missleTurretAttackRise, missleTurretAttackSpeedRise, missleTurretUpgradCostRise, missleTurretMaxUpgradeCount);
+        missleTurretNowAttackRadius = missleTurretAttackRadius;
     }
 
-    protected override void Attack()
+    public override void Attack()
     {
-       
+        if(Physics.Raycast(firePos.transform.position,Vector3.forward,out RaycastHit hit, missleTurretAttackRange))
+        {
+            if (!hit.collider.CompareTag("Monster"))
+            {
+                return;
+            }
+            else
+            {
+                Collider[] targets = Physics.OverlapSphere(targetTransform.position, missleTurretNowAttackRadius, monsterLayer);
+                //이펙트 생성
+                foreach (Collider target in targets)
+                {
+                    if (target.CompareTag("Monster"))
+                    {
+                        //몬스터 데미지주는 부분
+                        Debug.Log("범위 터렛 공격");
+
+
+                    }
+                    //드럼통 터지는 부분
+                }
+            }
+        }
+        
+
+    }
+
+    public override void Upgrade()
+    {
+        base.Upgrade();
+        missleTurretNowAttackRadius += missleTurretAttackRadiusRise;
     }
 
 }
