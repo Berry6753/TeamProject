@@ -143,9 +143,6 @@ MonoBehaviour:
   turretHead: {fileID: 2102919445623182817}
   turretBody: {fileID: 2102919445623182823}
   firePos: {fileID: 5397238567561986648}
-  monsterLayer:
-    serializedVersion: 2
-    m_Bits: 0
   turretCollider: {fileID: 0}
   spinPos: {fileID: 3649226993373462613}
   turretStatemachine: {fileID: 0}
@@ -180,7 +177,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 78
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!1 &2102919445623182823
 GameObject:
