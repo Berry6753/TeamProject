@@ -36,7 +36,9 @@ public abstract class Turret : MonoBehaviour
     protected GameObject firePos;
 
     protected Transform targetTransform;
-    protected LayerMask monsterLayer = 9;
+
+    [SerializeField]
+    protected LayerMask monsterLayer;
 
     private int nowUpgradeCount;
     private int nowHp;
@@ -64,8 +66,6 @@ public abstract class Turret : MonoBehaviour
 
     private bool isUpgrade;
     private bool isRepair;
-    [HideInInspector]
-    public SphereCollider checkCollider;
     [HideInInspector]
     public CapsuleCollider turretCollider;
 
@@ -96,13 +96,11 @@ public abstract class Turret : MonoBehaviour
         headMeshFilter = turretHead.GetComponent<MeshFilter>();
         bodyRenderer = turretBody.GetComponent<MeshRenderer>();
         headRenderer = turretHead.GetComponent<MeshRenderer>();
-        checkCollider = GetComponent<SphereCollider>();
         turretCollider = GetComponent<CapsuleCollider>();
         gameObject.AddComponent<StateMachine>();
         turretStatemachine = GetComponent<StateMachine>();
         SetState();
         turretStatemachine.InitState(TurretStateName.BLUESCREEN);
-        Debug.Log("sdasda");
     }
 
     protected virtual void OnEnable()
@@ -122,25 +120,12 @@ public abstract class Turret : MonoBehaviour
             UpgradeCheck();
             RepairCheck();
         }
-
-        if (nowHp >= 0)
+        if (nowHp <= 0)
         {
             turretStatemachine.ChangeState(TurretStateName.DESTROIY);
         }
 
 
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Turret"))
-        {
-            isMake = false;
-        }
-        else
-        {
-            isMake = true;
-        }
     }
 
     private void SetState()
@@ -212,15 +197,22 @@ public abstract class Turret : MonoBehaviour
 
     public void ChangeColor()
     {
-        if (isMake)
+        Collider[] turretColliders = Physics.OverlapSphere(transform.position, 10, LayerMask.NameToLayer("Turret"));
+        Debug.Log(transform.position);
+
+        if (turretColliders.Length > 0) 
         {
-            bodyRenderer.material.color = Color.blue;
-            headRenderer.material.color = Color.blue;
+            Debug.Log("vvvv");
+            isMake = false;
+            bodyRenderer.material.color = Color.red;
+            headRenderer.material.color = Color.red;
         }
         else
         {
-            bodyRenderer.material.color = Color.red;
-            headRenderer.material.color = Color.red;
+
+            isMake = true;
+            bodyRenderer.material.color = Color.blue;
+            headRenderer.material.color = Color.blue;
         }
     }
 

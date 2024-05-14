@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2300000}
   - component: {fileID: 5410854673087362430}
   - component: {fileID: 9172078226456295275}
-  - component: {fileID: 6259020819258547601}
   - component: {fileID: 3879683968128605410}
   m_Layer: 0
   m_Name: Barrel
@@ -114,19 +113,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.74251044, y: 0.78072184, z: 1.1456774}
   m_Center: {x: -0.000000014901168, y: 0, z: 0}
---- !u!135 &6259020819258547601
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100000}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1
-  m_Center: {x: -0.000000014901168, y: 0, z: 0}
 --- !u!54 &3879683968128605410
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -152,6 +138,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4908591466955828243}
+  - component: {fileID: 5892920127600034286}
   m_Layer: 0
   m_Name: BarrelPos
   m_TagString: Untagged
@@ -168,10 +155,22 @@ Transform:
   m_GameObject: {fileID: 7835255645410379541}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 400000}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5892920127600034286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7835255645410379541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72b9d373480cbd34ebd7fa8f51a124c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

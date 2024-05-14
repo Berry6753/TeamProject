@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class Barrel : MonoBehaviour
 {
@@ -35,7 +36,6 @@ public class Barrel : MonoBehaviour
     private float checkTime;
     private float makingTime = 15 * 60;
 
-    private SphereCollider checkColleder;
     private BoxCollider bodyColleder;
 
     public bool isMake;
@@ -47,32 +47,40 @@ public class Barrel : MonoBehaviour
     private void Awake()
     {
         meshRenderer = GetComponent<MeshRenderer>();
-        checkColleder = GetComponent<SphereCollider>();
         bodyColleder = GetComponent<BoxCollider>();
     }
 
     private void OnEnable()
     {
         meshRenderer.enabled = true;
-        checkColleder.enabled = true;
         bodyColleder.enabled = false;
+        gameObject.layer = LayerMask.NameToLayer("debug");
     }
 
-
-    private void OnTriggerStay(Collider other)
+    private void Update()
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Turret"))
+        MakeCheck();
+    }
+
+    private void MakeCheck()
+    {
+        Collider[] turretColliders = Physics.OverlapSphere(transform.position, 10, LayerMask.NameToLayer("Turret"));
+
+
+        if (turretColliders.Length > 0)
         {
-            meshRenderer.material.color = Color.red;
+            Debug.Log("aaa");
             isMake = false;
+            meshRenderer.material.color = Color.red;
         }
         else
         {
-            meshRenderer.material.color = Color.blue;
+
             isMake = true;
+            meshRenderer.material.color = Color.blue;
+
         }
     }
-
     public void Making()
     {
         meshRenderer.enabled = false;
@@ -84,10 +92,9 @@ public class Barrel : MonoBehaviour
             {
                 meshRenderer.enabled = true;
                 meshRenderer.material.color = Color.white;
-                checkColleder.enabled = false;
                 bodyColleder.enabled = true;
                 gameObject.tag = "Barrel";
-                gameObject.layer = 8;
+                gameObject.layer = LayerMask.NameToLayer("Turret");
                 checkTime = 0;
                 break;
             }
@@ -112,14 +119,14 @@ public class Barrel : MonoBehaviour
         }
 
         gameObject.tag = "Untagged";
-        gameObject.layer = 0;
+        gameObject.layer = LayerMask.NameToLayer("debug");
 
         gameObject.transform.parent.gameObject.SetActive(false);
     }
 
-    private void OnDisable()
-    {
-        MultiObjectPool.ReturnToPool(gameObject);
-    }
+    //private void OnDisable()
+    //{
+    //    MultiObjectPool.ReturnToPool(gameObject);
+    //}
 
 }

@@ -37,6 +37,8 @@ public class Player_Info : MonoBehaviour
 
         equipedBulletCount = maxEquipedBulletCount;
         magazineCount = maxMagazineCount;
+
+        GearCount = 100f;
     }
 
     public void AddGearCount(float gearCount)

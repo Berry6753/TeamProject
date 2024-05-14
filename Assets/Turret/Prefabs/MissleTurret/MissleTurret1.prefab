@@ -94,7 +94,6 @@ GameObject:
   - component: {fileID: 355304598553419386}
   - component: {fileID: 1460994999475234388}
   - component: {fileID: 5007144407796792416}
-  - component: {fileID: 1824475265237433171}
   - component: {fileID: 7684568531394657784}
   m_Layer: 0
   m_Name: MissleTurret1
@@ -112,7 +111,7 @@ Transform:
   m_GameObject: {fileID: 355304598553051738}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.147, y: -0.99999905, z: -10.483}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 355304598553419384}
@@ -145,6 +144,9 @@ MonoBehaviour:
   turretHead: {fileID: 355304598553051742}
   turretBody: {fileID: 355304598553051736}
   firePos: {fileID: 8542735475367188335}
+  monsterLayer:
+    serializedVersion: 2
+    m_Bits: 0
   checkCollider: {fileID: 0}
   turretCollider: {fileID: 0}
   spinPos: {fileID: 8475662051849910778}
@@ -166,19 +168,6 @@ CapsuleCollider:
   m_Height: 0.64
   m_Direction: 2
   m_Center: {x: 0, y: 0.12, z: 0.1}
---- !u!135 &1824475265237433171
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 355304598553051738}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &7684568531394657784
 Rigidbody:
   m_ObjectHideFlags: 0

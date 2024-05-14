@@ -10,14 +10,14 @@ public class TurretBlueScreenState : TurretBaseState
 
     public override void Enter()
     {
+        turret.OnRenderer();
         turret.turretStateName = TurretStateName.BLUESCREEN;
         //체크용 트리거 on
-        turret.checkCollider.enabled = true;
         //터렛의 콜라이더 off
         turret.turretCollider.enabled = false;
         //터렛의 태그와 레이어 없애기
         turret.gameObject.tag = "Untagged";
-        turret.gameObject.layer = 0;
+        turret.gameObject.layer = LayerMask.NameToLayer("debug");
     }
 
     public override void Update()
@@ -30,11 +30,10 @@ public class TurretBlueScreenState : TurretBaseState
         turret.ResetColor();
         turret.OffRenderer();
         //체크용 트리거 off
-        turret.checkCollider.enabled = false;
         //터렛의 콜라이더 on
         turret.turretCollider.enabled = true;
         //터렛의 태그와 레이어 설정
         turret.gameObject.tag = "Turret";
-        turret.gameObject.layer = 8;
+        turret.gameObject.layer = LayerMask.NameToLayer("Turret");
     }
 }

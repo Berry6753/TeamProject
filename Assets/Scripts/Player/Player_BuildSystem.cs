@@ -48,30 +48,34 @@ public class Player_BuildSystem : MonoBehaviour
 
     public void OnSelectTurret(InputAction.CallbackContext context)
     {
-        if(context.ReadValue<float>() > 0.5f)
+        if (context.performed)
         {
-            SelectBuildTurretIndex++;
-
-            if(SelectBuildTurretIndex >= MultiObjectPool.inst.poolDictionary.Count)
+            if (context.ReadValue<float>() > 0.5f)
             {
-                SelectBuildTurretIndex = 0;
-            }         
-        }
-        else if(context.ReadValue<float>() < 0.5f)
-        {
-            SelectBuildTurretIndex--;
+                SelectBuildTurretIndex++;
 
-            if (SelectBuildTurretIndex < 0)
+                if (SelectBuildTurretIndex >= MultiObjectPool.inst.poolDictionary.Count)
+                {
+                    SelectBuildTurretIndex = 0;
+                }
+            }
+            else if (context.ReadValue<float>() < 0.5f)
             {
-                SelectBuildTurretIndex = MultiObjectPool.inst.poolDictionary.Count -1 ;
+                SelectBuildTurretIndex--;
+
+                if (SelectBuildTurretIndex < 0)
+                {
+                    SelectBuildTurretIndex = MultiObjectPool.inst.poolDictionary.Count - 1;
+                }
+            }
+
+            if (build != null)
+            {
+                build.SetActive(false);
+                build = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], GetMouseWorldPosition());
             }
         }
-
-        if(build != null)
-        {
-            build.SetActive(false);
-            build = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], GetMouseWorldPosition());
-        }
+        
     }
 
     public void OnChangeBuildMode(InputAction.CallbackContext callback)
@@ -92,6 +96,7 @@ public class Player_BuildSystem : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(SelectBuildTurretIndex);
         CreateBuilding();
         //BuildTurret();
     }
@@ -171,48 +176,69 @@ public class Player_BuildSystem : MonoBehaviour
             }
             else
             {
-                float buildTurretGearCount;
-                if (build.GetComponent<Turret>() != null)
+                if(build.GetComponent<Turret>() != null)
                 {
-                    buildTurretGearCount = build.GetComponent<Turret>().turretMakingCost;
-                }
-                else
-                {
-                    buildTurretGearCount = build.GetComponent<Barrel>().maikngCost;
-                }
-                
-
-                if (build.GetComponent<_Test1>().isBuildAble)
-                {
-                    if (info.GearCount < buildTurretGearCount)
+                    if (build.GetComponent<Turret>().isMake)
                     {
-                        Debug.Log("기어의 수가 부족합니다.");
-                        return;
+                        CreateTurretPrecondition();
                     }
-
-                    //기어 소모
-                    info.UseGear(buildTurretGearCount);
-                    //터렛 생성
-                    GameObject BuilingTurret = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], build.transform.position, transform.rotation);
-
-                    //터렛의 상태를 Build or Making이라고 변경
-
-                    //디버그 전용
-                    //생성된 터렛 태그와 레이어 변경
-                    var childs = BuilingTurret.GetComponentsInChildren<Collider>();
-                    foreach (var turretCollider in childs)
-                    {
-                        turretCollider.gameObject.layer = LayerMask.NameToLayer("Turret");
-                        turretCollider.tag = "Turret";
-                        turretCollider.isTrigger = false;
-                    }
-
-                    BuilingTurret.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
                 }
-
-                //BuilingTurret.layer = LayerMask.NameToLayer("Turret");
-                //BuilingTurret.tag = "Turret";
+                else if(build.transform.GetChild(0).GetComponent<Barrel>() != null)
+                {
+                    if (build.transform.GetChild(0).GetComponent<Barrel>().isMake)
+                    {
+                        CreateTurretPrecondition();
+                    }
+                }
+               
             }
         }        
+    }
+
+    private void CreateTurretPrecondition()
+    {
+        float buildTurretGearCount;
+
+        if (build.GetComponent<Turret>() != null)
+        {
+            buildTurretGearCount = build.GetComponent<Turret>().turretMakingCost;
+        }
+        else
+        {
+            buildTurretGearCount = build.transform.GetChild(0).GetComponent<Barrel>().makingCost;
+        }
+
+        if (info.GearCount < buildTurretGearCount)
+        {
+            Debug.Log("기어의 수가 부족합니다.");
+            return;
+        }
+
+        //기어 소모
+        info.UseGear(buildTurretGearCount);
+        //터렛 생성
+        GameObject BuilingTurret = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], build.transform.position, transform.rotation);
+
+        //터렛의 상태를 Build or Making이라고 변경
+        if (BuilingTurret.GetComponent<Turret>() != null)
+        {
+            BuilingTurret.GetComponent<Turret>().TurretMake();
+        }
+        else
+        {
+            BuilingTurret.transform.GetChild(0).GetComponent<Barrel>().Making();
+        }
+
+        //디버그 전용
+        //생성된 터렛 태그와 레이어 변경
+        //var childs = BuilingTurret.GetComponentsInChildren<Collider>();
+        //foreach (var turretCollider in childs)
+        //{
+        //    turretCollider.gameObject.layer = LayerMask.NameToLayer("Turret");
+        //    turretCollider.tag = "Turret";
+        //    turretCollider.isTrigger = false;
+        //}
+
+        //BuilingTurret.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
     }
 }

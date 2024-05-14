@@ -94,7 +94,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2102919445623474629}
   - component: {fileID: -8626498370065601506}
-  - component: {fileID: 8267848118103579042}
   - component: {fileID: 3306886283616019948}
   - component: {fileID: 2704425773978038097}
   m_Layer: 0
@@ -113,7 +112,7 @@ Transform:
   m_GameObject: {fileID: 2102919445623182821}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.924, y: -0.974, z: -12.635}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2102919445623474631}
@@ -144,26 +143,15 @@ MonoBehaviour:
   turretHead: {fileID: 2102919445623182817}
   turretBody: {fileID: 2102919445623182823}
   firePos: {fileID: 5397238567561986648}
-  checkCollider: {fileID: 0}
+  monsterLayer:
+    serializedVersion: 2
+    m_Bits: 0
   turretCollider: {fileID: 0}
   spinPos: {fileID: 3649226993373462613}
   turretStatemachine: {fileID: 0}
   isTarget: 0
   isMake: 0
   turretStateName: 0
---- !u!135 &8267848118103579042
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2102919445623182821}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &3306886283616019948
 CapsuleCollider:
   m_ObjectHideFlags: 0
