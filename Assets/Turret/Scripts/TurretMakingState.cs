@@ -20,12 +20,14 @@ public class TurretMakingState : TurretBaseState
         if(checkTime > turret.turretMakingTime)
         {
             //적찾기 상태로 변환
+            turret.turretStatemachine.ChangeState(TurretStateName.SEARCH);
         }
     }
 
     public override void Exit()
     {
         checkTime = 0;
+        turret.OnRenderer();
         //만드는 이펙트 끄기
     }
 }

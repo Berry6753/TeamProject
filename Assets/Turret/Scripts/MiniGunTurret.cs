@@ -5,33 +5,35 @@ using UnityEngine;
 public class MiniGunTurret : Turret
 {
 
-    private int nowUpgradeCount = 0;
-    private int nowHp;
-    private int maxHp = 5;
-    private int hpRise = 3;
-    private float makingTime = 15;
-    private float attackDamge = 25;
-    private float attackSpeed = 2;
-    private float attackRange = 12;
-    private float upgradeTime = 15;
-    private float repairTime = 15;
-    private float attackRise = 5;
-    private float attackSpeedRise = 0.5f;
-    private float upgradCostRise = 2;
-    private float maxUpgradeCount = 5;
-    private float repairCost = 5;
-    private float upgradeCost = 10;
-    private float makingCost = 15;
+    private int nowMiniGunUpgradeCount = 0;
+    private int nowMiniGunHp;
+    private int maxMiniGunHp = 5;
+    private int miniGunhpRise = 3;
+    private float miniGunMakingTime = 15;
+    private float miniGunAttackDamge = 25;
+    private float miniGunAttackSpeed = 2;
+    private float miniGunAttackRange = 12;
+    private float miniGunUpgradeTime = 15;
+    private float miniGunRepairTime = 15;
+    private float miniGunAttackRise = 5;
+    private float miniGunAttackSpeedRise = 0.5f;
+    private float miniGunUpgradCostRise = 2;
+    private float miniGunMaxUpgradeCount = 5;
+    private float miniGunRepairCost = 5;
+    private float miniGunUpgradeCost = 10;
+    private float miniGunMakingCost = 15;
 
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        SetTurret(makingTime, makingCost, attackDamge, attackSpeed, attackRange, maxHp, hpRise, upgradeCost, upgradeTime, repairTime, repairCost, attackRise, attackSpeedRise, upgradCostRise, maxUpgradeCount);
+        base.OnEnable();
+        base.SetTurret(miniGunMakingTime, miniGunMakingCost, miniGunAttackDamge, miniGunAttackSpeed, miniGunAttackRange, maxMiniGunHp, miniGunhpRise, miniGunUpgradeCost
+            , miniGunUpgradeTime, miniGunRepairTime, miniGunRepairCost, miniGunAttackRise, miniGunAttackSpeedRise, miniGunUpgradCostRise, miniGunMaxUpgradeCount);
     }
 
     public override void Attack()
     {
-        if (Physics.Raycast(firePos.transform.position, Vector3.forward, out RaycastHit hit, attackRange))
+        if (Physics.Raycast(firePos.transform.position, Vector3.forward, out RaycastHit hit, miniGunAttackRange))
         {
             if (!hit.collider.CompareTag("Monster"))
             {
@@ -39,8 +41,9 @@ public class MiniGunTurret : Turret
             }
             else if (hit.collider.CompareTag("Monster"))
             {
-            //몬스터 데미지 주는 부분
-            //몬스터 함수 불러온단 소리
+                //몬스터 데미지 주는 부분
+                //몬스터 함수 불러온단 소리
+                Debug.Log("연사 터렛 공격");
 
             }
             //else if ()
@@ -48,7 +51,7 @@ public class MiniGunTurret : Turret
             ////드럼통 폭발시키기도 있어야함
 
             //}
-        } 
+        }
     }
 
 }

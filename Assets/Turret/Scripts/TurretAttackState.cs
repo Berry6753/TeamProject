@@ -11,6 +11,7 @@ public class TurretAttackState : TurretBaseState
     public override void Enter()
     {
         turret.turretStateName = TurretStateName.ATTACK;
+        turret.Attack();
     }
 
     public override void Update()
@@ -27,6 +28,7 @@ public class TurretAttackState : TurretBaseState
         if(turret.turretTargetTransform == null /*||turret.turretTargetTransform.gameObject.GetComponent<Monster>().isDead*/)
         {
             //적찾기 상태로 변경
+            turret.turretStatemachine.ChangeState(TurretStateName.SEARCH);
         }
 
 

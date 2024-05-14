@@ -26,6 +26,7 @@ public class TurretSearchState : TurretBaseState
         if(turret.turretTargetTransform != null)
         {
             //공격 상태로 변환
+            turret.turretStatemachine.ChangeState(TurretStateName.ATTACK);
         }
     }
 

@@ -61,11 +61,17 @@ public abstract class Turret : MonoBehaviour
     private float nowAttackDamge;
     private float nowAttackSpeed;
 
+    private bool isUpgrade;
+    private bool isRepair;
+    [HideInInspector]
+    public SphereCollider checkCollider;
+    [HideInInspector]
+    public CapsuleCollider turretCollider;
+
     public GameObject spinPos;
+    [HideInInspector]
+    public StateMachine turretStatemachine;
 
-
-    public bool isUpgrade;
-    public bool isRepair;
     public bool isTarget;
     public bool isMake;
 
@@ -74,9 +80,13 @@ public abstract class Turret : MonoBehaviour
     public Transform turretTargetTransform { get { return targetTransform; } }
     public float turretAttackSpeed { get { return nowAttackSpeed; } }
     public float turretMakingTime { get { return makingTime; } }
+    public float turretRepairTime { get { return repairTime; } }
+    public float turretUpgradeTime { get { return upgradeTime; } }
     public float turretRepairCost { get { return repairCost; } }
     public float turretUpgradCost { get { return upgradeCost; } }
     public float turretMakingCost { get { return makingCost; } }
+    public bool isTurretUpgrade { get { return isUpgrade; } }
+    public bool isTurretRepair { get { return isRepair; } }
 
 
     private void Awake()
@@ -85,10 +95,32 @@ public abstract class Turret : MonoBehaviour
         headMeshFilter = turretHead.GetComponent<MeshFilter>();
         bodyRenderer = turretBody.GetComponent<MeshRenderer>();
         headRenderer = turretHead.GetComponent<MeshRenderer>();
+        checkCollider = GetComponent<SphereCollider>();
+        turretCollider = GetComponent<CapsuleCollider>();
+        turretStatemachine = new StateMachine();
+        SetState();
+        turretStatemachine.InitState(TurretStateName.BLUESCREEN);
     }
+
+    protected virtual void OnEnable()
+    {
+        turretStatemachine.ChangeState(TurretStateName.BLUESCREEN);
+    }
+
     private void Update()
     {
-        
+        if(turretStateName != TurretStateName.DESTROIY)
+        {
+            UpgradeCheck();
+            RepairCheck();
+        }
+
+        if (nowHp >= 0)
+        {
+            turretStatemachine.ChangeState(TurretStateName.DESTROIY);
+        }
+
+
     }
 
     private void OnTriggerStay(Collider other)
@@ -102,6 +134,43 @@ public abstract class Turret : MonoBehaviour
             isMake = true;
         }
     }
+
+    private void SetState()
+    {
+        turretStatemachine.AddState(TurretStateName.BLUESCREEN,new TurretBlueScreenState(this));
+        turretStatemachine.AddState(TurretStateName.SEARCH, new TurretSearchState(this));
+        turretStatemachine.AddState(TurretStateName.ATTACK, new TurretAttackState(this));
+        turretStatemachine.AddState(TurretStateName.UPGRADE, new TurretUpgradeState(this));
+        turretStatemachine.AddState(TurretStateName.MAKING, new TurretMakingState(this));
+        turretStatemachine.AddState(TurretStateName.REPAIR, new TurretRepairState(this));
+        turretStatemachine.AddState(TurretStateName.DESTROIY, new TurretDestroyState(this));
+
+    }
+
+    private void RepairCheck()
+    {
+        if (turretStateName == TurretStateName.REPAIR || turretStateName == TurretStateName.UPGRADE)
+        {
+            isRepair = false;
+        }
+        else
+        {
+            isRepair = true;
+        }
+    }
+
+    private void UpgradeCheck()
+    {
+        if (turretStateName == TurretStateName.UPGRADE || nowUpgradeCount >= maxUpgradeCount)
+        {
+            isUpgrade = false;
+        }
+        else
+        {
+            isUpgrade = true;
+        }
+    }
+
 
     public abstract void Attack();
     protected void SetTurret(float mainkgTime, float makingCost, float attackDamge, float attackSpeed, float attackRange, int maxHp, int hpRise, float upgradeCost, float upgradeTime, float repairTime, float repairCost, float attackRise, float attackSpeedRise, float upgradCostRise, float maxUpgradeCount)
@@ -152,7 +221,18 @@ public abstract class Turret : MonoBehaviour
         bodyRenderer.material.color = Color.white;
         headRenderer.material.color = Color.white;
     }
-                                                                                                                                                                
+
+    public void OnRenderer()
+    {
+        bodyRenderer.enabled = true;
+        headRenderer.enabled = true;
+    }
+    public void OffRenderer()
+    {
+        bodyRenderer.enabled = false;
+        headRenderer.enabled = false;
+    }
+
     //코루틴은 가비지컬렉터가 많이 불린다                                                                                                                       
     //메모리를 많이 먹는다는 뜻이다                                                                                                                             
     //포탑이 많아질 예정이니 코루틴 없이 구현해보자                                                                                                             
@@ -183,6 +263,22 @@ public abstract class Turret : MonoBehaviour
         targetTransform = nierTargetTransform;
 
 
+    }
+
+    public void TurretMake()
+    {
+        turretStatemachine.ChangeState(TurretStateName.MAKING);
+    }
+
+    public void TurretRepair()
+    {
+        turretStatemachine.ChangeState(TurretStateName.REPAIR);
+    }
+
+    public void TurretUpgrade()
+    {
+        //상태 업그레이드로
+        turretStatemachine.ChangeState(TurretStateName.UPGRADE);
     }
 
     public void Hurt(int damge)

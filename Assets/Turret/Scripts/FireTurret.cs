@@ -6,39 +6,40 @@ public class FireTurret : Turret
 {
     private Vector3 attackBoxRange;
     private Vector3 attackBoxPos;
-    private int nowUpgradeCount = 0;
-    private int nowHp;
-    private int maxHp = 8;
-    private int hpRise = 5;
+    private int nowFireTurretUpgradeCount = 0;
+    private int nowFireTurretHp;
+    private int maxFireTurretHp = 8;
+    private int fireTurretHpRise = 5;
     private float attackRangeX = 2;
-    private float makingTime = 15;
-    private float attackDamge = 5;
-    private float attackSpeed = 5f;
-    private float attackRange = 5;
-    private float upgradeTime = 15;
-    private float repairTime = 15;
-    private float attackRise = 1.5f;
-    private float attackSpeedRise = 0.5f;
-    private float upgradCostRise = 2f;
-    private float maxUpgradeCount = 5;
-    private float repairCost = 5;
-    private float upgradeCost = 10;
-    private float makingCost = 15;
+    private float fireTurretMakingTime = 15;
+    private float fireTurretAttackDamge = 5;
+    private float fireTurretAttackSpeed = 5f;
+    private float fireTurretAttackRange = 5;
+    private float fireTurretUpgradeTime = 15;
+    private float fireTurretRepairTime = 15;
+    private float fireTurretAttackRise = 1.5f;
+    private float fireTurretAttackSpeedRise = 0.5f;
+    private float fireTurretUpgradCostRise = 2f;
+    private float fireTurretMaxUpgradeCount = 5;
+    private float fireTurretRepairCost = 5;
+    private float fireTurretUpgradeCost = 10;
+    private float fireTurretMakingCost = 15;
 
     private void Awake()
     {
-        attackBoxRange = new Vector3(attackRangeX/2, 3, attackRange/2);
+        attackBoxRange = new Vector3(attackRangeX/2, 3, fireTurretAttackRange/2);
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        SetTurret(makingTime, makingCost, attackDamge, attackSpeed, attackRange, maxHp, hpRise, upgradeCost, upgradeTime, repairTime, repairCost, attackRise, attackSpeedRise, upgradCostRise, maxUpgradeCount);
-        attackBoxPos = new Vector3(firePos.transform.position.x, firePos.transform.position.y, firePos.transform.position.z + attackRange);
+        base.OnEnable();
+        base.SetTurret(fireTurretMakingTime, fireTurretMakingCost, fireTurretAttackDamge, fireTurretAttackSpeed, fireTurretAttackRange, maxFireTurretHp, fireTurretHpRise, fireTurretUpgradeCost, fireTurretUpgradeTime, fireTurretRepairTime, fireTurretRepairCost, fireTurretAttackRise, fireTurretAttackSpeedRise, fireTurretUpgradCostRise, fireTurretMaxUpgradeCount);
+        attackBoxPos = new Vector3(firePos.transform.position.x, firePos.transform.position.y, firePos.transform.position.z + fireTurretAttackRange);
     }
 
     public override void Attack()
     {
-        if(Physics.Raycast(firePos.transform.position,Vector3.forward,out RaycastHit hit, attackRange))
+        if(Physics.Raycast(firePos.transform.position,Vector3.forward,out RaycastHit hit, fireTurretAttackRange))
         {
             if (!hit.collider.CompareTag("Monster"))
             {
@@ -54,6 +55,7 @@ public class FireTurret : Turret
                     if (collider.CompareTag("Monster"))
                     {
                         //데미지 주는부분
+                        Debug.Log("지속 터렛 공격");
                     }
                     //else if ()//드럼통 데미지 부분
                     //{
