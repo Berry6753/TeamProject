@@ -22,7 +22,6 @@ public class Barrel : MonoBehaviour
     //private float upgradCostRise;
     //private float maxUpgradeCount;
 
-
     //private void Awake()
     //{
     //    base.SetTurret(makingTime,makingCost,attackDamge,attackRange,maxHp,hpRise,upgradeCost,upgradeTime,)

@@ -57,26 +57,28 @@ public class Player_Aiming : MonoBehaviour
 
     private Player_BuildSystem buildSystem;
 
-    private float equipedBulletCount;
-    [Header("ÃÖ´ë Åº ¼ö")]
-    [SerializeField]
-    private float maxEquipedBulletCount;
+    //private float equipedBulletCount;
+    //[Header("ÃÖ´ë Åº ¼ö")]
+    //[SerializeField]
+    //private float maxEquipedBulletCount;
 
-    private float magazineCount;
-    [Header("ÃÖ´ë ÅºÃ¢ ¼ö")]
-    [SerializeField]
-    private float maxMagazineCount;
+    //private float magazineCount;
+    //[Header("ÃÖ´ë ÅºÃ¢ ¼ö")]
+    //[SerializeField]
+    //private float maxMagazineCount;
+
+    private Player_Info info;
+    private Player_Info_UI UI;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         AttackTimer = AttackDelayTime;
         notAimingTimer = notAimingDelayTime;
+        info = GetComponent<Player_Info>();
 
         buildSystem = GetComponent<Player_BuildSystem>();
-
-        equipedBulletCount = maxEquipedBulletCount;
-        magazineCount = maxMagazineCount;
+        UI = GetComponent<Player_Info_UI>();
     }
 
     public void OnAiming(InputAction.CallbackContext context)
@@ -96,13 +98,13 @@ public class Player_Aiming : MonoBehaviour
 
         if (context.performed)
         {
-            if(magazineCount > 0)
+            if(info.magazineCount > 0)
             {
                 //ÀçÀåÀü ¸ð¼Ç ½ÇÇà
                 animator.SetBool(hashReload, true);
 
                 Debug.Log("ÀåÀü ½ÃÀÛ");
-                Debug.Log($"Åº ¼ö : {equipedBulletCount}, ÅºÃ¢ ¼ö : {magazineCount}");
+                Debug.Log($"Åº ¼ö : {info.equipedBulletCount}, ÅºÃ¢ ¼ö : {info.magazineCount}");
             }            
         }
     }
@@ -239,7 +241,7 @@ public class Player_Aiming : MonoBehaviour
 
     public void Fire()
     {        
-        if(equipedBulletCount > 0)
+        if(info.equipedBulletCount > 0)
         {
             ShootRay();
             //¼¶±¤ ÆÄÆ¼Å¬ Àç»ý
@@ -247,7 +249,10 @@ public class Player_Aiming : MonoBehaviour
             //°Ý¹ß ¼Ò¸® Àç»ý
 
             //ÅºÀÇ ¼ö °¨¼Ò
-            equipedBulletCount--;
+            info.equipedBulletCount--;
+
+            //UI ¹Ý¿µ
+            UI.Fire();
         }
         else
         {
@@ -260,15 +265,16 @@ public class Player_Aiming : MonoBehaviour
         animator.SetBool(hashReload, false);
         notAimingTimer = 0;
         Debug.Log("ÀåÀü Á¾·á...");
-        Debug.Log($"Åº ¼ö : {equipedBulletCount}, ÅºÃ¢ ¼ö : {magazineCount}");
+        Debug.Log($"Åº ¼ö : {info.equipedBulletCount}, ÅºÃ¢ ¼ö : {info.magazineCount}");
     }
 
     public void Reload()
     {
-        if(magazineCount > 0)
+        if(info.magazineCount > 0)
         {
-            magazineCount--;
-            equipedBulletCount = maxEquipedBulletCount;
+            info.magazineCount--;
+            info.equipedBulletCount = info.maxEquipedBulletCount;
+            UI.Reload();
         }
     }
 

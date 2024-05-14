@@ -108,8 +108,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         MoveAnimation();
-        animator.SetFloat(hashMoveX, InputDir.y * animationFloat);
-        animator.SetFloat(hashMoveZ, InputDir.x * animationFloat);
+        animator.SetFloat(hashMoveX, Mathf.Lerp(animator.GetFloat(hashMoveX), InputDir.y * animationFloat, 10f));
+        animator.SetFloat(hashMoveZ, Mathf.Lerp(animator.GetFloat(hashMoveZ), InputDir.x * animationFloat, 10f));
 
         //animator.SetBool("Move", inputMoveDir.magnitude >= 0.1f);
     }

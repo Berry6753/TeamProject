@@ -9,6 +9,19 @@ public class Player_Info : MonoBehaviour
     public float GearCount { get; private set; }
     public float Attack {  get; private set; }
 
+    [Header("ÃÖ´ë Åº ¼ö")]
+    [SerializeField]
+    private float maxBullet;
+    [Header("ÃÖ´ë ÅºÃ¢ ¼ö")]
+    [SerializeField]
+    private float maxMagazine;
+
+    public float maxEquipedBulletCount {  get; private set; }
+    public float equipedBulletCount;
+
+    public float maxMagazineCount {  get; private set; }
+    public float magazineCount;
+
     private Animator animator;
     private bool isDead;
 
@@ -18,6 +31,22 @@ public class Player_Info : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+
+        maxEquipedBulletCount = maxBullet;
+        maxMagazineCount = maxMagazine;
+
+        equipedBulletCount = maxEquipedBulletCount;
+        magazineCount = maxMagazineCount;
+    }
+
+    public void AddGearCount(float gearCount)
+    {
+        GearCount += gearCount;
+    }
+
+    public void UseGear(float gearCount)
+    {
+        GearCount -= gearCount;
     }
 
     public void Hurt(float damage)

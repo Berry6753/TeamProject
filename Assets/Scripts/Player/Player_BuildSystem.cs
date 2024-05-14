@@ -153,20 +153,46 @@ public class Player_BuildSystem : MonoBehaviour
     public void BuildTurret()
     {
         if (BuildModeOn < 0f) return;
+
         if (GetComponent<Player_Aiming>().isFire)
-        {
+        {          
             if(deleteBuild != null)
             {
+                float destroyTurretGearCount = deleteBuild.GetComponent<Turret>().turretMakingCost;
+
                 //선택된 터렛의 상태를 destory로 변경
 
                 //디버그 전용
                 deleteBuild.SetActive(false);
                 deleteBuild = null;
+
+                //해당 포탑의 생성 기어의 50% 회수
+                info.AddGearCount(destroyTurretGearCount * 0.5f);
             }
             else
             {
+                float buildTurretGearCount;
+                if (build.GetComponent<Turret>() != null)
+                {
+                    buildTurretGearCount = build.GetComponent<Turret>().turretMakingCost;
+                }
+                else
+                {
+                    buildTurretGearCount = build.GetComponent<Barrel>().maikngCost;
+                }
+                
+
                 if (build.GetComponent<_Test1>().isBuildAble)
                 {
+                    if (info.GearCount < buildTurretGearCount)
+                    {
+                        Debug.Log("기어의 수가 부족합니다.");
+                        return;
+                    }
+
+                    //기어 소모
+                    info.UseGear(buildTurretGearCount);
+                    //터렛 생성
                     GameObject BuilingTurret = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], build.transform.position, transform.rotation);
 
                     //터렛의 상태를 Build or Making이라고 변경
