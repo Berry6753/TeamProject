@@ -6,8 +6,10 @@ using UnityEngine.InputSystem;
 
 public class Player_BuildSystem : MonoBehaviour
 {
-    private float SelectBuildTurretIndex;
+    [SerializeField] private float SelectBuildTurretIndex;
     [SerializeField] private LayerMask mask;
+
+    private Player_Info info;
 
     private List<string> poolDicTag = new List<string>();
 
@@ -23,6 +25,7 @@ public class Player_BuildSystem : MonoBehaviour
 
     private void Awake()
     {
+        info = GetComponent<Player_Info>();
         BuildModeOn = -1f;
         SelectBuildTurretIndex = 0;
     }
@@ -84,12 +87,6 @@ public class Player_BuildSystem : MonoBehaviour
                     poolDicTag.Add(item.Key);
                 }
             }
-
-            //build = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], GetMouseWorldPosition());
-        }
-        else
-        {
-            //build.SetActive(false);
         }
     }
 
@@ -174,7 +171,7 @@ public class Player_BuildSystem : MonoBehaviour
 
                     //터렛의 상태를 Build or Making이라고 변경
 
-                    //삭제 예정
+                    //디버그 전용
                     //생성된 터렛 태그와 레이어 변경
                     var childs = BuilingTurret.GetComponentsInChildren<Collider>();
                     foreach (var turretCollider in childs)
