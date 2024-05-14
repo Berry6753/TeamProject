@@ -117,4 +117,10 @@ public class Barrel : MonoBehaviour
 
         gameObject.transform.parent.gameObject.SetActive(false);
     }
+
+    private void OnDisable()
+    {
+        MultiObjectPool.ReturnToPool(gameObject);
+    }
+
 }

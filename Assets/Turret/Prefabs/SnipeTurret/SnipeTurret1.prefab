@@ -318,7 +318,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5548785461934420802}
-  - component: {fileID: 3450570847512286923}
   m_Layer: 0
   m_Name: FirePos
   m_TagString: Untagged
@@ -341,33 +340,3 @@ Transform:
   m_Father: {fileID: 2102919445623474625}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3450570847512286923
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5397238567561986648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52dabcf7f1f8cfa41b1ca3709f73c0fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  turretHeadMesh:
-  - {fileID: 4300002, guid: a5758c1fa59f56c4fae8d27c8c8355db, type: 3}
-  - {fileID: 4300000, guid: d2374bbacbbb33f438a2a41b6f637984, type: 3}
-  - {fileID: 4300000, guid: a8dcf308c391de14180e9ead38296ced, type: 3}
-  turretBodyMesh:
-  - {fileID: 4300000, guid: a5758c1fa59f56c4fae8d27c8c8355db, type: 3}
-  - {fileID: 4300002, guid: d2374bbacbbb33f438a2a41b6f637984, type: 3}
-  - {fileID: 4300002, guid: a8dcf308c391de14180e9ead38296ced, type: 3}
-  turretHead: {fileID: 2102919445623182817}
-  turretBody: {fileID: 2102919445623182823}
-  firePos: {fileID: 5397238567561986648}
-  checkCollider: {fileID: 0}
-  turretCollider: {fileID: 0}
-  spinPos: {fileID: 3649226993373462613}
-  turretStatemachine: {fileID: 0}
-  isTarget: 0
-  isMake: 0
-  turretStateName: 0

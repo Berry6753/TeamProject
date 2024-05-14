@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 
@@ -89,7 +90,7 @@ public abstract class Turret : MonoBehaviour
     public bool isTurretRepair { get { return isRepair; } }
 
 
-    private void Awake()
+    protected virtual void Awake()
     {
         bodyMeshFilter = turretBody.GetComponent<MeshFilter>();
         headMeshFilter = turretHead.GetComponent<MeshFilter>();
@@ -97,14 +98,21 @@ public abstract class Turret : MonoBehaviour
         headRenderer = turretHead.GetComponent<MeshRenderer>();
         checkCollider = GetComponent<SphereCollider>();
         turretCollider = GetComponent<CapsuleCollider>();
-        turretStatemachine = new StateMachine();
+        gameObject.AddComponent<StateMachine>();
+        turretStatemachine = GetComponent<StateMachine>();
         SetState();
         turretStatemachine.InitState(TurretStateName.BLUESCREEN);
+        Debug.Log("sdasda");
     }
 
     protected virtual void OnEnable()
     {
         turretStatemachine.ChangeState(TurretStateName.BLUESCREEN);
+    }
+
+    private void OnDisable()
+    {
+        MultiObjectPool.ReturnToPool(gameObject);
     }
 
     private void Update()

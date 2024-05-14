@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FireTurret : Turret
 {
-    private Vector3 attackBoxRange;
+    
     private Vector3 attackBoxPos;
     private int nowFireTurretUpgradeCount = 0;
     private int nowFireTurretHp;
@@ -24,9 +24,10 @@ public class FireTurret : Turret
     private float fireTurretRepairCost = 5;
     private float fireTurretUpgradeCost = 10;
     private float fireTurretMakingCost = 15;
-
-    private void Awake()
+    private Vector3 attackBoxRange;
+    protected override void Awake()
     {
+        base.Awake();
         attackBoxRange = new Vector3(attackRangeX/2, 3, fireTurretAttackRange/2);
     }
 
@@ -34,7 +35,7 @@ public class FireTurret : Turret
     {
         base.OnEnable();
         base.SetTurret(fireTurretMakingTime, fireTurretMakingCost, fireTurretAttackDamge, fireTurretAttackSpeed, fireTurretAttackRange, maxFireTurretHp, fireTurretHpRise, fireTurretUpgradeCost, fireTurretUpgradeTime, fireTurretRepairTime, fireTurretRepairCost, fireTurretAttackRise, fireTurretAttackSpeedRise, fireTurretUpgradCostRise, fireTurretMaxUpgradeCount);
-        attackBoxPos = new Vector3(firePos.transform.position.x, firePos.transform.position.y, firePos.transform.position.z + fireTurretAttackRange);
+        
     }
 
     public override void Attack()
@@ -47,6 +48,7 @@ public class FireTurret : Turret
             }
             else
             {
+                attackBoxPos = new Vector3(firePos.transform.position.x, firePos.transform.position.y, firePos.transform.position.z + fireTurretAttackRange);
                 //ÀÌÆåÆ® »ý¼º
                 Collider[] colliders = Physics.OverlapBox(attackBoxPos, attackBoxRange);
 
