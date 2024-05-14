@@ -1,17 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public abstract class Monster : MonoBehaviour
 {
     [Header("몬스터 스탯")]
-    [SerializeField] protected string monsterName;      //몬스터 종류
-    [SerializeField] protected float attactSpeed;       //공격 속도
+    protected float time = 0;
+    [SerializeField] protected float attackSpeed;       //공격 속도
     [SerializeField] protected float hp;                //체력
     [SerializeField] protected float damage;            //공격력
     [SerializeField] protected float hitNum;            //타격 횟수
+    [SerializeField] protected float attackRange;       //사거리
     [Header("스탯 성장치")]
     [SerializeField] protected float upScaleHp;         //체력 성장치
     [SerializeField] protected float upScaleDamage;     //공격력 성장치
@@ -19,79 +23,173 @@ public abstract class Monster : MonoBehaviour
     [SerializeField] protected float startSpwanNum;     //초기 스폰 수
     [SerializeField] protected float upScaleSpwanNum;   //스폰 증가 수 
     [SerializeField] protected float spawnTiming;       //스폰 기점
+ 
 
-    protected float distance;                           //플레이어와의 거리 
-    
-    //[SerializeField] protected float sensingRange;    //감지 범위
-
-    [SerializeField] protected Transform defaltTarget;  //기본 타겟
-    //protected List<Transform> turretTarget = new List<Transform>();       //터렛 타겟
-    protected Collider[] turret;
+    [SerializeField] protected float sensingRange;      //감지 범위
     protected int turretIndex = 0;
+    protected Collider attack;                          //공격 콜라이더
 
+    protected Transform monsterTr;                      //몬스터 위치
+    protected Transform defaltTarget;                   //기본 타겟
+    protected Transform chaseTarget;
+    [SerializeField] protected LayerMask turretLayer;   //터렛레이어
+    [SerializeField] protected LayerMask monsterLayer;  //몬스터레이어
 
     protected int wave;                   
     
     protected Rigidbody rb;
     protected NavMeshAgent nav;
+    protected Animator anim;
+    protected StateMachine stateMachine;
 
-    protected bool isDead = false;                      //생존 여부
+    protected readonly int hashTrace = Animator.StringToHash("isTrace");
+    protected readonly int hashAttack = Animator.StringToHash("isAttack");
 
-    protected void Start()
+    public enum State
+    { IDLE, TRACE, ATTACK, DIE, GETHIT, SPAWN }
+    public State state = State.IDLE;
+
+    protected bool canAttack = true;
+    [HideInInspector] public bool isDead = false;                         //생존 여부
+ 
+    protected virtual void Awake()
     {
+        monsterTr = GetComponent<Transform>();
         rb = GetComponent<Rigidbody>();
         nav = GetComponent<NavMeshAgent>();
+        anim = GetComponent<Animator>();
+        stateMachine = gameObject.AddComponent<StateMachine>();
+
+
+        stateMachine.AddState(State.IDLE, new IdleState(this));
+        stateMachine.AddState(State.TRACE, new TraceState(this));
+        stateMachine.AddState(State.ATTACK, new AttackState(this));
+        stateMachine.InitState(State.IDLE);
+    }
+    protected virtual void Update()
+    {
+        if (time > 0 && !anim.GetBool("isAttack"))
+        {
+            time -= Time.deltaTime;
+            canAttack = false;
+        }
+        else if(time <= 0)
+        {
+            canAttack = true;
+        }
+
+        Debug.Log("시간" + time);
     }
 
     protected abstract void ChaseTarget();              //타겟 추적
 
-    //protected void PriorityTarget()                     //타겟 우선순위 추적
-    //{
-    //    if (turretTarget.Count > 0)
-    //    {
-    //        for (int i = 0; i < turretTarget.Count; i++)
-    //        {
-    //            nav.SetDestination(turretTarget[i].transform.position);
-    //            break;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        nav.SetDestination(defaltTarget.position);
-    //    }
-    //}
-
-    protected void PriorityTarget()
+    protected virtual IEnumerator MonsterState()        //몬스터 행동 설정
     {
-        turret = Physics.OverlapSphere(transform.position, 100f, 8);
-        Debug.Log(turret);
+        while (!isDead)
+        {
+            yield return new WaitForSeconds(0.3f);
+            if (state == State.DIE)
+            {
+                stateMachine.ChangeState(State.DIE);
+                yield break;
+            }
+
+            float distance = Vector3.Distance(chaseTarget.position, monsterTr.position);
+            if (distance <= attackRange)
+            {
+                FreezeVelocity();
+                if (canAttack)
+                {
+                    stateMachine.ChangeState(State.ATTACK);
+                    attack.enabled = true;
+                }
+                else
+                {
+                    stateMachine.ChangeState(State.IDLE);
+                    attack.enabled = false;
+                }
+            }
+            else
+            {
+                stateMachine.ChangeState(State.TRACE);
+                attack.enabled = false;
+            }
+        }
+    }
+
+    protected void AttackEnd()
+    {
+        anim.SetBool("isAttack", false);
+    }
+
+    protected void AttackDelay()
+    {
+        time = attackSpeed;       
+    }
+
+    protected void PriorityTarget()                     //타겟 우선순위 설정
+    {
+        Collider[] turret = Physics.OverlapSphere(transform.position, sensingRange, turretLayer);
         if (turret.Length > 0)
-        {           
-            nav.SetDestination(turret[turretIndex].transform.position);
+        {   
+            turretDistance(turret);
+            chaseTarget = turret[turretIndex].transform;
         }
         else
         {
-            nav.SetDestination(defaltTarget.transform.position);
+            chaseTarget = defaltTarget;
         }
     }
+
+    protected void NextTarget()
+    {
+        Collider[] monster = Physics.OverlapBox(transform.position, new Vector3(5f, 5f, 5f), transform.rotation, monsterLayer);
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position, new Vector3(5f, 5f, 5f));
+    }
+
+    protected void turretDistance(Collider[] array)
+    {
+        float[] distance = new float[array.Length];
+        int minIndex = 0;
+        for (int i = 0; i < array.Length; i++)
+        {
+            distance[i] = Vector3.Distance(array[i].transform.position, monsterTr.position);
+        }
+        float minDistance = distance[0];
+        for (int i = 0; i < distance.Length; i++)
+        {
+            if (distance[i] < minDistance)
+            {
+                minDistance = distance[i];
+                minIndex = i;
+            }
+        }
+        turretIndex = minIndex;
+    }
+
 
     protected void FreezeVelocity()                     //물리력 제거
     {
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
+    protected abstract void SpawnTiming();              //스폰 타이밍
 
-    protected void UpScaleHp()
+    protected void UpScaleHp()                          //체력 증가량
     {
         hp += upScaleHp * wave;
     }
 
-    protected void UpScaleDamage()
+    protected virtual void UpScaleDamage()              //데미지 증가량
     {
         damage += upScaleDamage * wave;
     }
 
-    protected void UpScaleSpawn()
+    protected void UpScaleSpawn()                       //스폰 증가수
     {
         if (wave % 10 == 0 && wave / 10 > 0)
         {
@@ -99,34 +197,66 @@ public abstract class Monster : MonoBehaviour
         }
     }
 
-    protected void Hurt(float damage)                   //플레이어에게 데미지 입을 시
+    public void Hurt(float damage)                   //플레이어에게 데미지 입을 시
     { 
         hp -= damage;
     }
 
-    protected void isDie()                              //죽었을 시
+    public void isDie()                              //죽었을 시
     { 
         isDead = true;
         Destroy(this.gameObject);
     }
 
-    //protected void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject.CompareTag("Turret"))
-    //    {
-    //        turretTarget.Add(other.gameObject.transform);
-    //        if (other.gameObject.activeSelf == false)
-    //        {
-    //            turretTarget.Remove(other.gameObject.transform);
-    //        }
-    //    }
-    //}
+    protected void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Monster"))
+        {
+            FreezeVelocity();
+            ChaseTarget();
+        }
+    }
+    protected void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Monster"))
+        {
+            FreezeVelocity();
+            ChaseTarget();
+        }
+    }
 
-    //protected void OnTriggerExit(Collider other)
-    //{
-    //    if(other.gameObject.CompareTag("Turret"))
-    //    {
-    //        turretTarget.Remove(other.gameObject.transform);
-    //    }
-    //}
+    protected class BaseMonsterState : BaseState
+    {
+        protected Monster owner;
+        public BaseMonsterState(Monster owner)
+        { this.owner = owner; }
+    }
+    protected class IdleState : BaseMonsterState
+    {
+        public IdleState(Monster owner) : base(owner) { }
+        public override void Enter()
+        {
+            owner.nav.isStopped = true;
+            owner.anim.SetBool(owner.hashTrace, false);
+        }
+    }
+    protected class TraceState : BaseMonsterState
+    {
+        public TraceState(Monster owner) : base(owner) { }
+        public override void Enter()
+        {
+            owner.nav.SetDestination(owner.chaseTarget.position);
+            owner.nav.isStopped = false;
+            owner.anim.SetBool(owner.hashTrace, true);
+            owner.anim.SetBool(owner.hashAttack, false);
+        }
+    }
+    protected class AttackState : BaseMonsterState
+    {
+        public AttackState(Monster owner) : base(owner) { }
+        public override void Enter()
+        {
+            owner.anim.SetBool(owner.hashAttack, true);
+        }
+    }
 }

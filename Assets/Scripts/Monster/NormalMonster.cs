@@ -5,27 +5,31 @@ using UnityEngine;
 
 public class NormalMonster : Monster
 {
-    private void Update()
+    protected override void Awake()
+    {
+        base.Awake();
+        defaltTarget = GameObject.FindWithTag("Player").GetComponent<Transform>();
+        attack = GetComponentInChildren<SphereCollider>();
+        attack.enabled = false;
+    }
+    private void Start()
     {
         ChaseTarget();
     }
 
-    //protected override void ChaseTarget()
-    //{
-    //    distance = Vector3.Distance(transform.position, defaltTarget.position);
-    //    if( distance <= nav.stoppingDistance )
-    //    {
-    //        FreezeVelocity(); 
-    //        PriorityTarget();
-    //    }
-    //    else
-    //    {
-    //        PriorityTarget();
-    //    }
-    //}
+    protected override void Update()
+    {
+        base.Update();
+        PriorityTarget();
+    }
 
     protected override void ChaseTarget()
     {
-        PriorityTarget();       
-    }    
+        StartCoroutine(MonsterState());
+    }
+
+    protected override void SpawnTiming()
+    {
+        throw new NotImplementedException();
+    }
 }

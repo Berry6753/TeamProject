@@ -4,45 +4,61 @@ using UnityEngine;
 
 public class AerialMonster : Monster
 {
-    [SerializeField] private float speed;
-    [SerializeField] private float atttackRange;
-
-    private void Update()
+    protected override void Awake()
+    {
+        base.Awake();
+        defaltTarget = GameObject.FindWithTag("Player").GetComponent<Transform>();
+    }
+    private void Start()
     {
         ChaseTarget();
     }
-    //protected override void ChaseTarget()
-    //{
-    //    distance = Vector3.Distance(transform.position, defaltTarget.position);
-    //    if (distance <= atttackRange)
-    //    {
-    //        rb.velocity = Vector3.zero;
-    //    }
-    //    else
-    //    {
-    //        PrioTarget();
-    //    }
-    //}
+    protected override void Update()
+    {
+        base.Update();
+        PriorityTarget();
+        transform.LookAt(chaseTarget);
+        Debug.Log(state);
+    }
 
-    //private void PrioTarget()
-    //{
-    //    if (turretTarget.Count > 0)
-    //    {
-    //        for (int i = 0; i < turretTarget.Count; i++)
-    //        {
-    //            transform.LookAt(turretTarget[i]);
-    //            transform.position = Vector3.MoveTowards(transform.position, turretTarget[i].position, speed * Time.deltaTime);
-    //            break;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        transform.LookAt(defaltTarget);
-    //        transform.position = Vector3.MoveTowards(transform.position, defaltTarget.position, speed * Time.deltaTime);
-    //    }
-    //}
     protected override void ChaseTarget()
     {
-        distance = Vector3.Distance(transform.position, defaltTarget.position);
+        StartCoroutine(MonsterState());
+    }
+
+    protected override IEnumerator MonsterState()        //몬스터 행동 설정
+    {
+        while (!isDead)
+        {
+            yield return new WaitForSeconds(0.3f);
+            if (state == State.DIE)
+            {
+                stateMachine.ChangeState(State.DIE);
+                yield break;
+            }
+
+            float distance = Vector3.Distance(chaseTarget.position, monsterTr.position);
+            if (distance <= attackRange)
+            {
+                FreezeVelocity();
+                if (canAttack)
+                {
+                    stateMachine.ChangeState(State.ATTACK);
+                }
+                else
+                {
+                    stateMachine.ChangeState(State.IDLE);
+                }
+            }
+            else
+            {
+                stateMachine.ChangeState(State.TRACE);
+            }
+        }
+    }
+
+    protected override void SpawnTiming()
+    {
+        throw new System.NotImplementedException();
     }
 }
