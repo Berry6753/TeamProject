@@ -74,7 +74,7 @@ public class Player_Aiming : MonoBehaviour
     {
         isGameStop = -1f;
         animator = GetComponent<Animator>();
-        AttackTimer = AttackDelayTime;
+        AttackTimer = 0;
         notAimingTimer = notAimingDelayTime;
         info = GetComponent<Player_Info>();
 
@@ -145,15 +145,15 @@ public class Player_Aiming : MonoBehaviour
         GameStopping();
         AimingCamera();
         AimingOnOff();
-
-        FireGun();
         //ShootRay();
     }
 
     private void FixedUpdate()
     {
+        FireGun();
+
         AttackDelay();
-        ChangeNotAimingDelay();        
+        ChangeNotAimingDelay();
     }
 
     private void CameraRotation()
@@ -231,10 +231,9 @@ public class Player_Aiming : MonoBehaviour
         if (isFire && AttackAble)
         {
             AttackAble = false;
-            AttackTimer = 0;
+            AttackTimer = AttackDelayTime;
             notAimingTimer = 0;
-            animator.SetBool(hashFire, true);
-            Debug.Log("공격!!!");
+            animator.SetBool(hashFire, true);            
         }
         else
         {
@@ -246,6 +245,7 @@ public class Player_Aiming : MonoBehaviour
     {        
         if(info.equipedBulletCount > 0)
         {
+            Debug.Log("공격!!!");
             ShootRay();
             //섬광 파티클 재생
             ParticleSystem.GetComponent<ParticleSystem>().Play();
@@ -283,9 +283,9 @@ public class Player_Aiming : MonoBehaviour
 
     private void AttackDelay()
     {
-        if(AttackTimer < AttackDelayTime)
+        if(AttackTimer > 0)
         {
-            AttackTimer += Time.fixedDeltaTime;
+            AttackTimer -= Time.fixedDeltaTime;
         }
         else
         {
