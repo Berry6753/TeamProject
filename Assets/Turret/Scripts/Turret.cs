@@ -37,8 +37,8 @@ public abstract class Turret : MonoBehaviour
 
     protected Transform targetTransform;
 
-    [SerializeField]
     protected LayerMask monsterLayer;
+    private LayerMask turretLayer;
 
     private int nowUpgradeCount;
     private int nowHp;
@@ -101,6 +101,8 @@ public abstract class Turret : MonoBehaviour
         turretStatemachine = GetComponent<StateMachine>();
         SetState();
         turretStatemachine.InitState(TurretStateName.BLUESCREEN);
+        turretLayer = LayerMask.NameToLayer("Turret");
+        monsterLayer = LayerMask.NameToLayer("Monster");
     }
 
     protected virtual void OnEnable()
@@ -197,12 +199,10 @@ public abstract class Turret : MonoBehaviour
 
     public void ChangeColor()
     {
-        Collider[] turretColliders = Physics.OverlapSphere(transform.position, 10, LayerMask.NameToLayer("Turret"));
-        Debug.Log(transform.position);
+        Collider[] turretColliders = Physics.OverlapSphere(transform.position, 5, (1 << turretLayer));
 
         if (turretColliders.Length > 0) 
         {
-            Debug.Log("vvvv");
             isMake = false;
             bodyRenderer.material.color = Color.red;
             headRenderer.material.color = Color.red;
@@ -242,7 +242,7 @@ public abstract class Turret : MonoBehaviour
     public void SearchEnemy()
     {
 
-        Collider[] enemyCollider = Physics.OverlapSphere(transform.position, attackRange, monsterLayer);//레이어 마스크 몬스터 추가
+        Collider[] enemyCollider = Physics.OverlapSphere(transform.position, attackRange, (1 << monsterLayer));//레이어 마스크 몬스터 추가
         Transform nierTargetTransform = null;
         if (enemyCollider.Length > 0)
         {

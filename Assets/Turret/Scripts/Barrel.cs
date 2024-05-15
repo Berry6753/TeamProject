@@ -32,11 +32,15 @@ public class Barrel : MonoBehaviour
     //private int hp = 1;
     private int range = 5;
     private LayerMask monsterLayer;
+    private LayerMask turretLayer;
     private MeshRenderer meshRenderer;
     private float checkTime;
     private float makingTime = 15 * 60;
 
     private BoxCollider bodyColleder;
+
+    private bool isMakeFinsh;
+
 
     public bool isMake;
 
@@ -48,28 +52,33 @@ public class Barrel : MonoBehaviour
     {
         meshRenderer = GetComponent<MeshRenderer>();
         bodyColleder = GetComponent<BoxCollider>();
+        turretLayer = LayerMask.NameToLayer("Turret");
     }
 
     private void OnEnable()
     {
         meshRenderer.enabled = true;
         bodyColleder.enabled = false;
+        isMakeFinsh = false;
         gameObject.layer = LayerMask.NameToLayer("debug");
     }
 
     private void Update()
     {
-        MakeCheck();
+        if (!isMakeFinsh)
+        {
+            MakeCheck();
+
+        }
     }
 
     private void MakeCheck()
     {
-        Collider[] turretColliders = Physics.OverlapSphere(transform.position, 10, LayerMask.NameToLayer("Turret"));
+        Collider[] turretColliders = Physics.OverlapSphere(transform.position, 5, (1 << turretLayer));
 
 
         if (turretColliders.Length > 0)
         {
-            Debug.Log("aaa");
             isMake = false;
             meshRenderer.material.color = Color.red;
         }
@@ -96,6 +105,7 @@ public class Barrel : MonoBehaviour
                 gameObject.tag = "Barrel";
                 gameObject.layer = LayerMask.NameToLayer("Turret");
                 checkTime = 0;
+                isMakeFinsh = true;
                 break;
             }
         }
@@ -104,7 +114,7 @@ public class Barrel : MonoBehaviour
     public void Hurt()
     {
 
-        Collider[] enemyCollider = Physics.OverlapSphere(transform.position, range, monsterLayer);
+        Collider[] enemyCollider = Physics.OverlapSphere(transform.position, range, (1 << monsterLayer));
 
         meshRenderer.enabled = false;
         //ÀÌÆåÆ® »ý¼º
