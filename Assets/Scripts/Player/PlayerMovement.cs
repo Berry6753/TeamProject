@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,15 +10,15 @@ public class PlayerMovement : MonoBehaviour
     private Player_Aiming aiming;
     private CharacterController characterController;
 
-    //[Header("카메라")]
-    //[SerializeField]
-    //private CinemachineFreeLook cameraTransform;
+    [Header("카메라")]
+    [SerializeField]
+    private Transform followcamera;
 
-    //[Header("카메라 LookAt")]
-    //[SerializeField]
-    //private Transform cameraLookAt;
+    private CinemachineVirtualCamera virtualCamera;
 
-    private Rigidbody rb;
+    [Header("카메라 LookAt")]
+    [SerializeField]
+    private Transform cameraLookAt;
 
     private Vector2 InputDir;
     private Vector3 inputMoveDir;
@@ -82,14 +83,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
         aiming = GetComponent<Player_Aiming>();
 
         _velocity = 0f;
+
+        virtualCamera = followcamera.GetComponent<CinemachineVirtualCamera>();
         //animator = GetComponent<Animator>();
-        
+
     }
 
     private void Start()
@@ -211,11 +213,36 @@ public class PlayerMovement : MonoBehaviour
 
     private void Rotation()
     {
-        if (aiming.isGameStop > 0) return;
-        // 카메라의 방향을 캐릭터의 회전값으로 변환
-        Quaternion targetRotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);
+        if (aiming.isGameStop > 0)
+        {
+            Vector3 cameraPos = Camera.main.transform.position;
+            Quaternion cameraRotation = Camera.main.transform.rotation;
 
-        // 캐릭터를 해당 회전값으로 회전시킴
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
+            virtualCamera.Follow = null;
+
+            virtualCamera.transform.position = cameraPos;
+            virtualCamera.transform.rotation = cameraRotation;
+
+            return;
+        }
+        else
+        {
+            if (virtualCamera.Follow == null)
+            {
+                virtualCamera.Follow = cameraLookAt;
+            }
+
+            // 카메라의 방향을 캐릭터의 회전값으로 변환
+            Quaternion targetRotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);
+
+            // 캐릭터를 해당 회전값으로 회전시킴
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
+        }
+
+        //// 카메라의 방향을 캐릭터의 회전값으로 변환
+        //Quaternion targetRotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);
+
+        //// 캐릭터를 해당 회전값으로 회전시킴
+        //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
     }
 }

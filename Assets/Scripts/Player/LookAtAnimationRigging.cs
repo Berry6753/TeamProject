@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
 public class LookAtAnimationRigging : MonoBehaviour
-{
+{ 
+
     private List<MultiAimConstraint> rigs;
     private TwoBoneIKConstraint leftHandRig;
 

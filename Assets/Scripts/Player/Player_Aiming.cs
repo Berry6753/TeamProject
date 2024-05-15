@@ -84,7 +84,7 @@ public class Player_Aiming : MonoBehaviour
 
     public void OnAiming(InputAction.CallbackContext context)
     {
-        if (Time.timeScale == 0) return;
+        if (isGameStop > 0) return;
         if (buildSystem.BuildModeOn > 0f) return;
         isAiming = context.ReadValue<float>() > 0.5f;
     }
@@ -96,7 +96,7 @@ public class Player_Aiming : MonoBehaviour
 
     public void OnReload(InputAction.CallbackContext context)
     {
-        if (Time.timeScale == 0) return;
+        if (isGameStop > 0) return;
         if (buildSystem.BuildModeOn > 0f) return;
 
         if (context.performed)

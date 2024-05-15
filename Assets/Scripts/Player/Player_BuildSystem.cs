@@ -26,6 +26,7 @@ public class Player_BuildSystem : MonoBehaviour
 
     private void Awake()
     {
+        aiming = GetComponent<Player_Aiming>();
         info = GetComponent<Player_Info>();
         BuildModeOn = -1f;
         SelectBuildTurretIndex = 0;
@@ -49,6 +50,7 @@ public class Player_BuildSystem : MonoBehaviour
 
     public void OnSelectTurret(InputAction.CallbackContext context)
     {
+        if (aiming.isGameStop > 0) return;
         if (context.performed)
         {
             if (context.ReadValue<float>() > 0.5f)
@@ -81,6 +83,8 @@ public class Player_BuildSystem : MonoBehaviour
 
     public void OnChangeBuildMode(InputAction.CallbackContext callback)
     {
+        if (aiming.isGameStop > 0) return;
+
         BuildModeOn *= -1;
 
         if(BuildModeOn > 0f)
