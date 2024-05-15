@@ -244,8 +244,7 @@ public class Player_Aiming : MonoBehaviour
     public void Fire()
     {        
         if(info.equipedBulletCount > 0)
-        {
-            Debug.Log("°ø°Ý!!!");
+        {            
             ShootRay();
             //¼¶±¤ ÆÄÆ¼Å¬ Àç»ý
             ParticleSystem.GetComponent<ParticleSystem>().Play();
@@ -255,7 +254,7 @@ public class Player_Aiming : MonoBehaviour
             info.equipedBulletCount--;
 
             //UI ¹Ý¿µ
-            UI.Fire(info.equipedBulletCount);
+            UI.ChangeFireText(info.equipedBulletCount);
         }
         else
         {
@@ -267,17 +266,17 @@ public class Player_Aiming : MonoBehaviour
     {
         animator.SetBool(hashReload, false);
         notAimingTimer = 0;
+        UI.Reload(info.equipedBulletCount, info.magazineCount);
         Debug.Log("ÀåÀü Á¾·á...");
         Debug.Log($"Åº ¼ö : {info.equipedBulletCount}, ÅºÃ¢ ¼ö : {info.magazineCount}");
     }
 
-    public void Reload()
+    public void Reloading()
     {
         if(info.magazineCount > 0)
         {
             info.magazineCount--;
-            info.equipedBulletCount = info.maxEquipedBulletCount;
-            UI.Reload(info.equipedBulletCount, info.magazineCount);
+            info.equipedBulletCount = info.maxEquipedBulletCount;            
         }
     }
 

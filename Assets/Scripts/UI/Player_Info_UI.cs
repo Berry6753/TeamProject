@@ -39,11 +39,6 @@ public class Player_Info_UI : MonoBehaviour
         UseGearTextAnimator = useGearCount.transform.parent.GetComponent<Animator>();
     }
 
-    private void Update()
-    {
-        Debug.Log(50.0f / 100.0f);
-    }
-
     public void PrintPlayerHPBar(float hp, float maxHP)
     {
         HP_Bar.fillAmount = hp/maxHP;
@@ -70,9 +65,10 @@ public class Player_Info_UI : MonoBehaviour
         UseGearTextAnimator.SetTrigger(hashTrigger);
     }
 
-    public void Fire(float equipedBulletCount)
+    public void ChangeFireText(float equipedBulletCount)
     {
         bulletText.text = $"{equipedBulletCount} / 30";
+        Debug.Log($"{bulletText.text}");
     }
 
     public void Reload(float equipedBulletCount, float magazineCount)
