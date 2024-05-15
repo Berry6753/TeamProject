@@ -116,7 +116,7 @@ public class Player_BuildSystem : MonoBehaviour
                 Debug.DrawLine(Camera.main.transform.position, hit.point, Color.green);
                 Debug.Log(hit.transform.name);
 
-                if (hit.transform.CompareTag("Turret"))
+                if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Turret"))
                 {
                     Debug.Log("설치된 터렛 찾음");
                     deleteBuild = hit.transform.gameObject;
@@ -141,14 +141,19 @@ public class Player_BuildSystem : MonoBehaviour
             }
             else
             {
+                //if (build != null)
+                //{
+                //    build.transform.position = new Vector3(Camera.main.transform.position.x, transform.position.y, Camera.main.transform.position.z) + new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z) * 8f;
+                //    build.transform.rotation = transform.rotation;
+                //}
+                //else
+                //{
+                //    build = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], GetMouseWorldPosition());
+                //}
                 if (build != null)
                 {
-                    build.transform.position = new Vector3(Camera.main.transform.position.x, transform.position.y, Camera.main.transform.position.z) + new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z) * 8f;
-                    build.transform.rotation = transform.rotation;
-                }
-                else
-                {
-                    build = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], GetMouseWorldPosition());
+                    build.SetActive(false);
+                    build = null;
                 }
             }        
         }
@@ -167,7 +172,17 @@ public class Player_BuildSystem : MonoBehaviour
         {          
             if(deleteBuild != null)
             {
-                float destroyTurretGearCount = deleteBuild.GetComponent<Turret>().turretMakingCost;
+                float destroyTurretGearCount = 0f;
+
+                if(deleteBuild.GetComponent<Turret>() != null)
+                {
+                    destroyTurretGearCount = deleteBuild.GetComponent<Turret>().turretMakingCost;
+                }
+                else if (deleteBuild.GetComponent<Barrel>() != null)
+                {
+                    destroyTurretGearCount = deleteBuild.GetComponent<Barrel>().makingCost;
+                }
+                
 
                 //선택된 터렛의 상태를 destory로 변경
 
@@ -180,6 +195,7 @@ public class Player_BuildSystem : MonoBehaviour
             }
             else
             {
+                if (build == null) return;
                 if(build.GetComponent<Turret>() != null)
                 {
                     if (build.GetComponent<Turret>().isMake)
