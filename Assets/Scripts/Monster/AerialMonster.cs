@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class AerialMonster : Monster
 {
+    [SerializeField] private ParticleSystem fireball;
+
     protected override void Awake()
     {
         base.Awake();
@@ -18,7 +20,6 @@ public class AerialMonster : Monster
         base.Update();
         PriorityTarget();
         transform.LookAt(chaseTarget);
-        Debug.Log(state);
     }
 
     protected override void ChaseTarget()
@@ -55,6 +56,11 @@ public class AerialMonster : Monster
                 stateMachine.ChangeState(State.TRACE);
             }
         }
+    }
+
+    private void PlayFireball()
+    { 
+        fireball.Play();
     }
 
     protected override void SpawnTiming()

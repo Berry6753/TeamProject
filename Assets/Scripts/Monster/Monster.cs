@@ -44,13 +44,16 @@ public abstract class Monster : MonoBehaviour
 
     protected readonly int hashTrace = Animator.StringToHash("isTrace");
     protected readonly int hashAttack = Animator.StringToHash("isAttack");
+    protected readonly int hashGetHit = Animator.StringToHash("isGetHit");
+    protected readonly int hashDie = Animator.StringToHash("isDie");
 
     public enum State
     { IDLE, TRACE, ATTACK, DIE, GETHIT, SPAWN }
     public State state = State.IDLE;
 
     protected bool canAttack = true;
-    [HideInInspector] public bool isDead = false;                         //생존 여부
+    [HideInInspector] public bool isDead = false;                    
+    //생존 여부
  
     protected virtual void Awake()
     {
@@ -64,6 +67,8 @@ public abstract class Monster : MonoBehaviour
         stateMachine.AddState(State.IDLE, new IdleState(this));
         stateMachine.AddState(State.TRACE, new TraceState(this));
         stateMachine.AddState(State.ATTACK, new AttackState(this));
+        stateMachine.AddState(State.GETHIT, new GetHitState(this));
+        stateMachine.AddState(State.DIE, new DieState(this));
         stateMachine.InitState(State.IDLE);
     }
     protected virtual void Update()
@@ -77,8 +82,6 @@ public abstract class Monster : MonoBehaviour
         {
             canAttack = true;
         }
-
-        Debug.Log("시간" + time);
     }
 
     protected abstract void ChaseTarget();              //타겟 추적
@@ -88,9 +91,10 @@ public abstract class Monster : MonoBehaviour
         while (!isDead)
         {
             yield return new WaitForSeconds(0.3f);
-            if (state == State.DIE)
+            if ( hp <= 0 /*state == State.DIE*/)
             {
                 stateMachine.ChangeState(State.DIE);
+                isDie();
                 yield break;
             }
 
@@ -200,12 +204,12 @@ public abstract class Monster : MonoBehaviour
     public void Hurt(float damage)                   //플레이어에게 데미지 입을 시
     { 
         hp -= damage;
+        stateMachine.ChangeState(State.GETHIT);
     }
 
     public void isDie()                              //죽었을 시
     { 
         isDead = true;
-        Destroy(this.gameObject);
     }
 
     protected void OnCollisionEnter(Collision collision)
@@ -257,6 +261,22 @@ public abstract class Monster : MonoBehaviour
         public override void Enter()
         {
             owner.anim.SetBool(owner.hashAttack, true);
+        }
+    }
+    protected class GetHitState : BaseMonsterState
+    { 
+        public GetHitState(Monster owner) : base(owner) { }
+        public override void Enter()
+        {
+            owner.anim.SetTrigger(owner.hashGetHit);
+        }
+    }
+    protected class DieState : BaseMonsterState
+    {
+        public DieState(Monster owner) : base(owner) { }
+        public override void Enter()
+        {
+            owner.anim.SetTrigger(owner.hashDie);
         }
     }
 }

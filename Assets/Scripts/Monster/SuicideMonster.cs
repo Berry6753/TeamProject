@@ -6,7 +6,11 @@ using UnityEngine;
 
 public class SuicideMonster : Monster
 {
-    private float explosionTime = 3;
+    private float explosionTime = 3f;
+    private float duringExplosion = 3f;
+    [SerializeField] private ParticleSystem exlosionEffect;
+    [SerializeField] private GameObject form;
+
     protected override void Awake()
     {
         base.Awake();
@@ -49,7 +53,10 @@ public class SuicideMonster : Monster
                 yield return new WaitForSeconds(explosionTime);
                 stateMachine.ChangeState(State.ATTACK);
                 attack.enabled = true;
-                //ÀÚÆø ½ÇÇà
+                exlosionEffect.Play();
+                form.SetActive(false);
+                yield return new WaitForSeconds(duringExplosion);
+                Destroy(gameObject);
                 yield break;
             }
             else
