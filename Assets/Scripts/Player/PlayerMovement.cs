@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private Player_Aiming aiming;
     private CharacterController characterController;
 
     //[Header("카메라")]
@@ -84,6 +85,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
+        aiming = GetComponent<Player_Aiming>();
 
         _velocity = 0f;
         //animator = GetComponent<Animator>();
@@ -129,6 +131,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
+        if (aiming.isGameStop > 0) return;
         if (colliders.Length <= 0) return;
         if (context.performed)
         {
@@ -208,6 +211,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Rotation()
     {
+        if (aiming.isGameStop > 0) return;
         // 카메라의 방향을 캐릭터의 회전값으로 변환
         Quaternion targetRotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);
 

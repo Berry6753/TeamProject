@@ -9,6 +9,7 @@ public class Player_BuildSystem : MonoBehaviour
     [SerializeField] private float SelectBuildTurretIndex;
     [SerializeField] private LayerMask mask;
 
+    private Player_Aiming aiming;
     private Player_Info info;
 
     private List<string> poolDicTag = new List<string>();
