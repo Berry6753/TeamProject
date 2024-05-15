@@ -255,7 +255,7 @@ public class Player_Aiming : MonoBehaviour
             info.equipedBulletCount--;
 
             //UI ¹Ý¿µ
-            UI.Fire();
+            UI.Fire(info.equipedBulletCount);
         }
         else
         {
@@ -277,7 +277,7 @@ public class Player_Aiming : MonoBehaviour
         {
             info.magazineCount--;
             info.equipedBulletCount = info.maxEquipedBulletCount;
-            UI.Reload();
+            UI.Reload(info.equipedBulletCount, info.magazineCount);
         }
     }
 

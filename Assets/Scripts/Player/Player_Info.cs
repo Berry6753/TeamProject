@@ -5,8 +5,12 @@ using UnityEngine;
 
 public class Player_Info : MonoBehaviour
 {
+    [Header("최대 체력")]
+    [SerializeField]
+    private float maxHp;
+
     public float HP {  get; private set; }
-    public float GearCount { get; private set; }
+    public int GearCount { get; private set; }
     public float Attack {  get; private set; }
 
     [Header("최대 탄 수")]
@@ -25,12 +29,15 @@ public class Player_Info : MonoBehaviour
     private Animator animator;
     private bool isDead;
 
+    private Player_Info_UI UI;
+
     private readonly int hashHurt = Animator.StringToHash("Hurt");
     private readonly int hashDead = Animator.StringToHash("Dead");
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        UI = GetComponent<Player_Info_UI>();
 
         maxEquipedBulletCount = maxBullet;
         maxMagazineCount = maxMagazine;
@@ -38,22 +45,28 @@ public class Player_Info : MonoBehaviour
         equipedBulletCount = maxEquipedBulletCount;
         magazineCount = maxMagazineCount;
 
-        GearCount = 100f;
+        HP = maxHp;
+
+        GearCount = 100;
+        UI.InitGearText(GearCount);
     }
 
-    public void AddGearCount(float gearCount)
+    public void AddGearCount(int gearCount)
     {
         GearCount += gearCount;
+        UI.ChangeGearText(GearCount, gearCount);
     }
 
-    public void UseGear(float gearCount)
+    public void UseGear(int gearCount)
     {
         GearCount -= gearCount;
+        UI.ChangeGearText(GearCount, -gearCount);
     }
 
     public void Hurt(float damage)
     {
         HP -= damage;
+        UI.PrintPlayerHPBar(HP, maxHp);
         if (HP <= 0)
         {
             Dead();

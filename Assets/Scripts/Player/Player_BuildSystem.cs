@@ -176,7 +176,7 @@ public class Player_BuildSystem : MonoBehaviour
                 deleteBuild = null;
 
                 //해당 포탑의 생성 기어의 50% 회수
-                info.AddGearCount(destroyTurretGearCount * 0.5f);
+                info.AddGearCount((int)Mathf.Round(destroyTurretGearCount * 0.5f));
             }
             else
             {
@@ -201,11 +201,11 @@ public class Player_BuildSystem : MonoBehaviour
 
     private void CreateTurretPrecondition()
     {
-        float buildTurretGearCount;
+        int buildTurretGearCount;
 
         if (build.GetComponent<Turret>() != null)
         {
-            buildTurretGearCount = build.GetComponent<Turret>().turretMakingCost;
+            buildTurretGearCount = (int)build.GetComponent<Turret>().turretMakingCost;
         }
         else
         {

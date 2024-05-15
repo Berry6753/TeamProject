@@ -148,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
         if (colliders.Length > 0 && _velocity < 0.0f)
         {
             Debug.Log("isGrounded");
-            _velocity = -1f;
+            _velocity = -1.0f;
         }
         else
         {
