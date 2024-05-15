@@ -7,17 +7,11 @@ public class TestScripts : MonoBehaviour
 {
     Rigidbody rb;
 
-    [SerializeField] private float hp;
+    [SerializeField] private float hp = 100;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private void OnParticleCollision(GameObject other)

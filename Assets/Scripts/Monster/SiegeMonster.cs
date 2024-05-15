@@ -9,13 +9,13 @@ public class SiegeMonster : Monster
     protected override void Awake()
     {
         base.Awake();
-        defaltTarget = GameObject.FindWithTag("Core").GetComponent<Transform>();
+        defaultTarget = GameObject.FindWithTag("Core").GetComponent<Transform>();
         attack = GetComponentInChildren<SphereCollider>();
         attack.enabled = false;
     }
     private void Start()
     {
-        chaseTarget = defaltTarget;
+        chaseTarget = defaultTarget;
         ChaseTarget();
     }
 

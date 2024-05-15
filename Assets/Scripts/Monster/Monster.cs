@@ -30,7 +30,7 @@ public abstract class Monster : MonoBehaviour
     protected Collider attack;                          //공격 콜라이더
 
     protected Transform monsterTr;                      //몬스터 위치
-    protected Transform defaltTarget;                   //기본 타겟
+    protected Transform defaultTarget;                  //기본 타겟
     protected Transform chaseTarget;
     [SerializeField] protected LayerMask turretLayer;   //터렛레이어
     [SerializeField] protected LayerMask monsterLayer;  //몬스터레이어
@@ -44,11 +44,10 @@ public abstract class Monster : MonoBehaviour
 
     protected readonly int hashTrace = Animator.StringToHash("isTrace");
     protected readonly int hashAttack = Animator.StringToHash("isAttack");
-    protected readonly int hashGetHit = Animator.StringToHash("isGetHit");
     protected readonly int hashDie = Animator.StringToHash("isDie");
 
     public enum State
-    { IDLE, TRACE, ATTACK, DIE, GETHIT, SPAWN }
+    { IDLE, TRACE, ATTACK, DIE}
     public State state = State.IDLE;
 
     protected bool canAttack = true;
@@ -63,11 +62,9 @@ public abstract class Monster : MonoBehaviour
         anim = GetComponent<Animator>();
         stateMachine = gameObject.AddComponent<StateMachine>();
 
-
         stateMachine.AddState(State.IDLE, new IdleState(this));
         stateMachine.AddState(State.TRACE, new TraceState(this));
         stateMachine.AddState(State.ATTACK, new AttackState(this));
-        stateMachine.AddState(State.GETHIT, new GetHitState(this));
         stateMachine.AddState(State.DIE, new DieState(this));
         stateMachine.InitState(State.IDLE);
     }
@@ -141,7 +138,7 @@ public abstract class Monster : MonoBehaviour
         }
         else
         {
-            chaseTarget = defaltTarget;
+            chaseTarget = defaultTarget;
         }
     }
 
@@ -204,7 +201,6 @@ public abstract class Monster : MonoBehaviour
     public void Hurt(float damage)                   //플레이어에게 데미지 입을 시
     { 
         hp -= damage;
-        stateMachine.ChangeState(State.GETHIT);
     }
 
     public void isDie()                              //죽었을 시
@@ -261,14 +257,6 @@ public abstract class Monster : MonoBehaviour
         public override void Enter()
         {
             owner.anim.SetBool(owner.hashAttack, true);
-        }
-    }
-    protected class GetHitState : BaseMonsterState
-    { 
-        public GetHitState(Monster owner) : base(owner) { }
-        public override void Enter()
-        {
-            owner.anim.SetTrigger(owner.hashGetHit);
         }
     }
     protected class DieState : BaseMonsterState

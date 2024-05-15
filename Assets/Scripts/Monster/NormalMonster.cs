@@ -8,7 +8,7 @@ public class NormalMonster : Monster
     protected override void Awake()
     {
         base.Awake();
-        defaltTarget = GameObject.FindWithTag("Player").GetComponent<Transform>();
+        defaultTarget = GameObject.FindWithTag("Player").GetComponent<Transform>();
         attack = GetComponentInChildren<SphereCollider>();
         attack.enabled = false;
     }
