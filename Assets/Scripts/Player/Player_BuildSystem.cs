@@ -96,7 +96,6 @@ public class Player_BuildSystem : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(SelectBuildTurretIndex);
         CreateBuilding();
         //BuildTurret();
     }
