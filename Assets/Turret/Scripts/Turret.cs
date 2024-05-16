@@ -104,13 +104,14 @@ public abstract class Turret : MonoBehaviour
         turretStatemachine.InitState(TurretStateName.BLUESCREEN);
         turretLayer = LayerMask.NameToLayer("Turret");
         monsterLayer = LayerMask.NameToLayer("Monster");
-        makingEfect.SetActive(false);
-        fireEfect.SetActive(false);
+        
     }
 
     protected virtual void OnEnable()
     {
         turretStatemachine.ChangeState(TurretStateName.BLUESCREEN);
+        makingEfect.SetActive(false);
+        fireEfect.SetActive(false);
     }
 
     private void OnDisable()

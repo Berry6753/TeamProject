@@ -34,6 +34,7 @@ public class MissleTurret : Turret
         base.SetTurret(missleTurretMakingTime, missleTurretMakingCost, missleTurretAttackDamge, missleTurretAttackSpeed, missleTurretAttackRange, maxMissleTurretHp, missleTurretHpRise, 
             missleTurretUpgradeCost, missleTurretUpgradeTime, missleTurretRepairTime, missleTurretRepairCost, missleTurretAttackRise, missleTurretAttackSpeedRise, missleTurretUpgradCostRise, missleTurretMaxUpgradeCount);
         missleTurretNowAttackRadius = missleTurretAttackRadius;
+        explosionEffect.SetActive(false);
     }
 
     public override void Attack()
@@ -48,6 +49,9 @@ public class MissleTurret : Turret
             {
                 Collider[] targets = Physics.OverlapSphere(targetTransform.position, missleTurretNowAttackRadius, monsterLayer);
                 //ÀÌÆåÆ® »ý¼º
+                explosionEffect.SetActive(true);
+                explosionEffect.transform.position = targets[0].transform.position;
+                explosionEffect.GetComponent<ParticleSystem>().Play();
                 foreach (Collider target in targets)
                 {
                     if (target.CompareTag("Monster"))

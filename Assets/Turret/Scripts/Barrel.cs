@@ -28,6 +28,11 @@ public class Barrel : MonoBehaviour
     //    base.SetTurret(makingTime,makingCost,attackDamge,attackRange,maxHp,hpRise,upgradeCost,upgradeTime,)
     //}
 
+    [SerializeField]
+    private GameObject makingEffect;
+    [SerializeField]
+    private GameObject explosionEffect;
+
     private int attackDamge = 300;
     //private int hp = 1;
     private int range = 5;
@@ -53,6 +58,7 @@ public class Barrel : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
         bodyColleder = GetComponent<BoxCollider>();
         turretLayer = LayerMask.NameToLayer("Turret");
+        
     }
 
     private void OnEnable()
@@ -61,6 +67,8 @@ public class Barrel : MonoBehaviour
         bodyColleder.enabled = false;
         isMakeFinsh = false;
         gameObject.layer = LayerMask.NameToLayer("debug");
+        explosionEffect.SetActive(false);
+        makingEffect.SetActive(false);
     }
 
     private void Update()
@@ -94,6 +102,7 @@ public class Barrel : MonoBehaviour
     {
         meshRenderer.enabled = false;
         //ÀÌÆåÆ® Àç»ý
+        makingEffect.SetActive(true);
         while (true)
         {
             checkTime += Time.time;
@@ -109,6 +118,7 @@ public class Barrel : MonoBehaviour
                 break;
             }
         }
+        makingEffect.SetActive(false);
     }
 
     public void Hurt()
@@ -118,7 +128,7 @@ public class Barrel : MonoBehaviour
 
         meshRenderer.enabled = false;
         //ÀÌÆåÆ® »ý¼º
-
+        explosionEffect.SetActive(true);
 
         if (enemyCollider.Length > 0)
         {

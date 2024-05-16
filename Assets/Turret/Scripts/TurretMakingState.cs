@@ -11,6 +11,7 @@ public class TurretMakingState : TurretBaseState
     {
         turret.turretStateName = TurretStateName.MAKING;
         //만드는 이펙트 생성
+        turret.makingEfect.SetActive(true);
     }
 
     public override void Update()
@@ -29,5 +30,6 @@ public class TurretMakingState : TurretBaseState
         checkTime = 0;
         turret.OnRenderer();
         //만드는 이펙트 끄기
+        turret.makingEfect.SetActive(false);
     }
 }
