@@ -31,7 +31,7 @@ public class SnipeTurret : Turret
 
     public override void Attack()
     {
-        if(Physics.Raycast(firePos.transform.position,Vector3.forward,out RaycastHit hit, snipeTurretAttackRange))
+        if(Physics.Raycast(firePos.transform.position, firePos.transform.forward,out RaycastHit hit, snipeTurretAttackRange))
         {
             if (!hit.collider.CompareTag("Monster"))
             {
@@ -39,8 +39,9 @@ public class SnipeTurret : Turret
             }
             else
             {
-                RaycastHit[] raycastHits = Physics.RaycastAll(firePos.transform.position, Vector3.forward, snipeTurretAttackRange);
-
+                RaycastHit[] raycastHits = Physics.RaycastAll(firePos.transform.position, firePos.transform.forward, snipeTurretAttackRange);
+                fireEfect.SetActive(true);
+                fireEfect.GetComponent<ParticleSystem>().Play();
                 foreach (RaycastHit monster in raycastHits)
                 {
 

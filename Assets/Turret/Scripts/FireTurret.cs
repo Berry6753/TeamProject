@@ -28,7 +28,7 @@ public class FireTurret : Turret
     protected override void Awake()
     {
         base.Awake();
-        attackBoxRange = new Vector3(attackRangeX/2, 3, fireTurretAttackRange/2);
+        attackBoxRange = new Vector3(attackRangeX, 3, fireTurretAttackRange);
     }
 
     protected override void OnEnable()
@@ -40,7 +40,7 @@ public class FireTurret : Turret
 
     public override void Attack()
     {
-        if(Physics.Raycast(firePos.transform.position,Vector3.forward,out RaycastHit hit, fireTurretAttackRange))
+        if(Physics.Raycast(firePos.transform.position, firePos.transform.forward,out RaycastHit hit, fireTurretAttackRange))
         {
             if (!hit.collider.CompareTag("Monster"))
             {
@@ -48,16 +48,18 @@ public class FireTurret : Turret
             }
             else
             {
-                attackBoxPos = new Vector3(firePos.transform.position.x, firePos.transform.position.y, firePos.transform.position.z + fireTurretAttackRange);
+                attackBoxPos = firePos.transform.position + firePos.transform.forward * (fireTurretAttackRange / 2);
                 //이펙트 생성
-                Collider[] colliders = Physics.OverlapBox(attackBoxPos, attackBoxRange);
-
+                fireEfect.SetActive(true);
+                Collider[] colliders = Physics.OverlapBox(attackBoxPos, attackBoxRange,firePos.transform.rotation);
+                Debug.Log(attackBoxPos);
                 foreach (Collider collider in colliders)
                 {
                     if (collider.CompareTag("Monster"))
                     {
                         //데미지 주는부분
                         Debug.Log("지속 터렛 공격");
+                        Debug.Log(collider.name);
                     }
                     //else if ()//드럼통 데미지 부분
                     //{
@@ -66,5 +68,11 @@ public class FireTurret : Turret
                 }
             }
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(attackBoxPos, attackBoxRange);
     }
 }

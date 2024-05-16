@@ -16,7 +16,7 @@ public class TurretSearchState : TurretBaseState
 
     public override void Update()
     {
-        checkSearchTime += Time.time;
+        checkSearchTime += Time.deltaTime;
         if(checkSearchTime > searchTime)
         {
             turret.SearchEnemy();
