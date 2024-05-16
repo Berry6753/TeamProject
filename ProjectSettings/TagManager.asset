@@ -7,6 +7,7 @@ TagManager:
   - Turret
   - Barrel
   - Gear
+  - Monster
   layers:
   - Default
   - TransparentFX

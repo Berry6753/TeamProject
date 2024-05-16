@@ -40,7 +40,7 @@ public class Barrel : MonoBehaviour
     private LayerMask turretLayer;
     private MeshRenderer meshRenderer;
     private float checkTime;
-    private float makingTime = 15 * 60;
+    private float makingTime = 15;
 
     private BoxCollider bodyColleder;
 
@@ -48,6 +48,7 @@ public class Barrel : MonoBehaviour
 
 
     public bool isMake;
+    public bool isMaking;
 
     public int makingCost = 5;
 
@@ -66,6 +67,7 @@ public class Barrel : MonoBehaviour
         meshRenderer.enabled = true;
         bodyColleder.enabled = false;
         isMakeFinsh = false;
+        isMaking = false;
         gameObject.layer = LayerMask.NameToLayer("debug");
         explosionEffect.SetActive(false);
         makingEffect.SetActive(false);
@@ -76,7 +78,23 @@ public class Barrel : MonoBehaviour
         if (!isMakeFinsh)
         {
             MakeCheck();
+        }
+        
+        if (isMaking)
+        {
+            checkTime += Time.deltaTime;
+            if(checkTime >= makingTime)
+            {
+                meshRenderer.enabled = true;
+                meshRenderer.material.color = Color.white;
+                
+                
+                isMakeFinsh = true;
 
+                makingEffect.SetActive(false);
+                isMaking = false;
+                checkTime = 0;
+            }
         }
     }
 
@@ -100,48 +118,38 @@ public class Barrel : MonoBehaviour
     }
     public void Making()
     {
+        isMaking = true;
         meshRenderer.enabled = false;
-        //이펙트 재생
         makingEffect.SetActive(true);
-        while (true)
-        {
-            checkTime += Time.time;
-            if(checkTime >= makingTime)
-            {
-                meshRenderer.enabled = true;
-                meshRenderer.material.color = Color.white;
-                bodyColleder.enabled = true;
-                gameObject.tag = "Barrel";
-                gameObject.layer = LayerMask.NameToLayer("Turret");
-                checkTime = 0;
-                isMakeFinsh = true;
-                break;
-            }
-        }
-        makingEffect.SetActive(false);
+        gameObject.tag = "Barrel";
+        gameObject.layer = LayerMask.NameToLayer("Turret");
+        bodyColleder.enabled = true;
     }
 
     public void Hurt()
     {
-
-        Collider[] enemyCollider = Physics.OverlapSphere(transform.position, range, (1 << monsterLayer));
-
-        meshRenderer.enabled = false;
-        //이펙트 생성
-        explosionEffect.SetActive(true);
-
-        if (enemyCollider.Length > 0)
+        if (isMakeFinsh)
         {
-            foreach (Collider collider in enemyCollider)
+            Collider[] enemyCollider = Physics.OverlapSphere(transform.position, range / 2, (1 << monsterLayer));
+
+            meshRenderer.enabled = false;
+            //이펙트 생성
+            explosionEffect.SetActive(true);
+
+            if (enemyCollider.Length > 0)
             {
-                //몬스터의 hurt함수나 어쩃든 데미지 주는기능
+                foreach (Collider collider in enemyCollider)
+                {
+                    //몬스터의 hurt함수나 어쩃든 데미지 주는기능
+                }
             }
+
+            gameObject.tag = "Untagged";
+            gameObject.layer = LayerMask.NameToLayer("debug");
+
+            gameObject.transform.parent.gameObject.SetActive(false);
         }
-
-        gameObject.tag = "Untagged";
-        gameObject.layer = LayerMask.NameToLayer("debug");
-
-        gameObject.transform.parent.gameObject.SetActive(false);
+        
     }
 
     //private void OnDisable()

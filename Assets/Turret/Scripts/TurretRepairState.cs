@@ -16,7 +16,7 @@ public class TurretRepairState : TurretBaseState
 
     public override void Update()
     {
-        checkTime += Time.time;
+        checkTime += Time.deltaTime;
         if (checkTime >= turret.turretRepairTime)
         {
             //적찾기로 변경

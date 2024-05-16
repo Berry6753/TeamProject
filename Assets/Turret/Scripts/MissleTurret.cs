@@ -39,7 +39,7 @@ public class MissleTurret : Turret
 
     public override void Attack()
     {
-        if(Physics.Raycast(firePos.transform.position,Vector3.forward,out RaycastHit hit, missleTurretAttackRange))
+        if(Physics.Raycast(firePos.transform.position, firePos.transform.forward,out RaycastHit hit, missleTurretAttackRange))
         {
             if (!hit.collider.CompareTag("Monster"))
             {
@@ -47,11 +47,13 @@ public class MissleTurret : Turret
             }
             else
             {
-                Collider[] targets = Physics.OverlapSphere(targetTransform.position, missleTurretNowAttackRadius, monsterLayer);
+                Collider[] targets = Physics.OverlapSphere(targetTransform.position, missleTurretNowAttackRadius, (1 << monsterLayer));
                 //ÀÌÆåÆ® »ý¼º
+                fireEfect.SetActive(true);
                 explosionEffect.SetActive(true);
-                explosionEffect.transform.position = targets[0].transform.position;
+                explosionEffect.transform.position = targets[0].gameObject.transform.position;
                 explosionEffect.GetComponent<ParticleSystem>().Play();
+                fireEfect.GetComponent<ParticleSystem>().Play();
                 foreach (Collider target in targets)
                 {
                     if (target.CompareTag("Monster"))

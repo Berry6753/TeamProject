@@ -16,16 +16,19 @@ public class TurretAttackState : TurretBaseState
 
     public override void Update()
     {
-        attackCheckTime += Time.time;
+        attackCheckTime += Time.deltaTime;
 
         turret.spinPos.transform.LookAt(turret.turretTargetTransform);
 
-        if (attackCheckTime >= 60 / turret.turretAttackSpeed)
+
+        if (attackCheckTime >= 1/turret.turretAttackSpeed)
         {
+            
             turret.Attack();
+            attackCheckTime = 0;
         }
 
-        if(turret.turretTargetTransform == null /*||turret.turretTargetTransform.gameObject.GetComponent<Monster>().isDead*/)
+        if (turret.turretTargetTransform.gameObject.activeSelf == false /*||turret.turretTargetTransform.gameObject.GetComponent<Monster>().isDead*/)
         {
             //적찾기 상태로 변경
             turret.turretStatemachine.ChangeState(TurretStateName.SEARCH);
@@ -37,6 +40,7 @@ public class TurretAttackState : TurretBaseState
     public override void Exit()
     {
         attackCheckTime = 0;
+        turret.fireEfect.SetActive(false);
     }
 
 

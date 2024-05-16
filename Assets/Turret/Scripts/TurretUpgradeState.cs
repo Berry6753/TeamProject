@@ -15,7 +15,7 @@ public class TurretUpgradeState : TurretBaseState
 
     public override void Update()
     {
-        checkTime += Time.time;
+        checkTime += Time.deltaTime;
 
         if (checkTime >= turret.turretUpgradeTime)
         {

@@ -174,7 +174,7 @@ public abstract class Turret : MonoBehaviour
     public abstract void Attack();
     protected void SetTurret(float mainkgTime, float makingCost, float attackDamge, float attackSpeed, float attackRange, int maxHp, int hpRise, float upgradeCost, float upgradeTime, float repairTime, float repairCost, float attackRise, float attackSpeedRise, float upgradCostRise, float maxUpgradeCount)
     {
-        this.makingTime = mainkgTime * 60;
+        this.makingTime = mainkgTime;
         this.maxHp = maxHp;
         this.nowHp = maxHp;
         this.hpRise = hpRise;
@@ -183,8 +183,8 @@ public abstract class Turret : MonoBehaviour
         this.attackSpeed = attackSpeed;
         this.attackRange = attackRange;
         this.upgradeCost = upgradeCost;
-        this.upgradeTime = upgradeTime * 60;
-        this.repairTime = repairTime * 60;
+        this.upgradeTime = upgradeTime;
+        this.repairTime = repairTime;
         this.repairCost = repairCost;
         this.attackRise = attackRise;
         this.attackSpeedRise = attackSpeedRise;
@@ -246,7 +246,7 @@ public abstract class Turret : MonoBehaviour
     public void SearchEnemy()
     {
 
-        Collider[] enemyCollider = Physics.OverlapSphere(transform.position, attackRange, (1 << monsterLayer));//레이어 마스크 몬스터 추가
+        Collider[] enemyCollider = Physics.OverlapSphere(transform.position, attackRange / 2, (1 << monsterLayer));//레이어 마스크 몬스터 추가
         Transform nierTargetTransform = null;
         if (enemyCollider.Length > 0)
         {

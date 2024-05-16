@@ -33,14 +33,16 @@ public class MiniGunTurret : Turret
 
     public override void Attack()
     {
-        if (Physics.Raycast(firePos.transform.position, Vector3.forward, out RaycastHit hit, miniGunAttackRange))
+        if (Physics.Raycast(firePos.transform.position, firePos.transform.forward, out RaycastHit hit, miniGunAttackRange))
         {
+            
             if (!hit.collider.CompareTag("Monster"))
             {
                 return;
             }
             else if (hit.collider.CompareTag("Monster"))
             {
+                fireEfect.SetActive(true);
                 //몬스터 데미지 주는 부분
                 //몬스터 함수 불러온단 소리
                 Debug.Log("연사 터렛 공격");

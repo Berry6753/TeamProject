@@ -98,8 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc00a952475865d40ad312328a3fa0d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  makingEffect: {fileID: 0}
-  explosionEffect: {fileID: 0}
+  makingEffect: {fileID: 2290039633247633479}
+  explosionEffect: {fileID: 5430216812106038163}
   isMake: 0
   makingCost: 5
 --- !u!65 &9172078226456295275
@@ -239,6 +239,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b967c5de3c01184889d94aa4f20fd19, type: 3}
+--- !u!1 &2290039633247633479 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 193902, guid: 9b967c5de3c01184889d94aa4f20fd19, type: 3}
+  m_PrefabInstance: {fileID: 2290039633247499561}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2290039633247868753 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 418424, guid: 9b967c5de3c01184889d94aa4f20fd19, type: 3}
@@ -304,5 +309,10 @@ PrefabInstance:
 --- !u!4 &5428195305559797147 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4150649967365504, guid: ed511b7776af6174e9b1255c7a81e59c, type: 3}
+  m_PrefabInstance: {fileID: 5429771187048800283}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5430216812106038163 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1809022330002312, guid: ed511b7776af6174e9b1255c7a81e59c, type: 3}
   m_PrefabInstance: {fileID: 5429771187048800283}
   m_PrefabAsset: {fileID: 0}
