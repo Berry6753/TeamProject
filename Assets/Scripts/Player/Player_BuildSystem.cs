@@ -9,6 +9,7 @@ public class Player_BuildSystem : MonoBehaviour
     [SerializeField] private float SelectBuildTurretIndex;
     [SerializeField] private LayerMask mask;
 
+    private Player_Aiming aiming;
     private Player_Info info;
 
     private List<string> poolDicTag = new List<string>();
@@ -25,6 +26,7 @@ public class Player_BuildSystem : MonoBehaviour
 
     private void Awake()
     {
+        aiming = GetComponent<Player_Aiming>();
         info = GetComponent<Player_Info>();
         BuildModeOn = -1f;
         SelectBuildTurretIndex = 0;
@@ -48,6 +50,7 @@ public class Player_BuildSystem : MonoBehaviour
 
     public void OnSelectTurret(InputAction.CallbackContext context)
     {
+        if (aiming.isGameStop > 0) return;
         if (context.performed)
         {
             if (context.ReadValue<float>() > 0.5f)
@@ -80,6 +83,8 @@ public class Player_BuildSystem : MonoBehaviour
 
     public void OnChangeBuildMode(InputAction.CallbackContext callback)
     {
+        if (aiming.isGameStop > 0) return;
+
         BuildModeOn *= -1;
 
         if(BuildModeOn > 0f)
@@ -96,7 +101,6 @@ public class Player_BuildSystem : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(SelectBuildTurretIndex);
         CreateBuilding();
         //BuildTurret();
     }
@@ -109,19 +113,18 @@ public class Player_BuildSystem : MonoBehaviour
             ray = Camera.main.ScreenPointToRay(screenCenterPoint);
             if (Physics.Raycast(ray, out RaycastHit hit, 8f, mask))
             {
-                Debug.DrawLine(Camera.main.transform.position, hit.point, Color.green);
-                Debug.Log(hit.transform.name);
+                if (Mathf.Abs(Vector3.Dot(hit.normal, Vector3.up)) <= 0.5f) 
+                {
+                    DeleteBuild();
+                    return;
+                }
 
-                if (hit.transform.CompareTag("Turret"))
+                if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Turret"))
                 {
                     Debug.Log("설치된 터렛 찾음");
                     deleteBuild = hit.transform.gameObject;
 
-                    if (build != null)
-                    {
-                        build.SetActive(false);
-                        build = null;
-                    }
+                    DeleteBuild();
                 }
                 else if (build != null)
                 {
@@ -137,20 +140,29 @@ public class Player_BuildSystem : MonoBehaviour
             }
             else
             {
-                if (build != null)
-                {
-                    build.transform.position = new Vector3(Camera.main.transform.position.x, transform.position.y, Camera.main.transform.position.z) + new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z) * 8f;
-                    build.transform.rotation = transform.rotation;
-                }
-                else
-                {
-                    build = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], GetMouseWorldPosition());
-                }
+                //if (build != null)
+                //{
+                //    build.transform.position = new Vector3(Camera.main.transform.position.x, transform.position.y, Camera.main.transform.position.z) + new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z) * 8f;
+                //    build.transform.rotation = transform.rotation;
+                //}
+                //else
+                //{
+                //    build = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], GetMouseWorldPosition());
+                //}
+                DeleteBuild();
             }        
         }
         else
         {
-            if (build != null) build.SetActive(false);
+            DeleteBuild();
+        }
+    }
+
+    private void DeleteBuild()
+    {
+        if (build != null)
+        {
+            build.SetActive(false);
             build = null;
         }
     }
@@ -163,7 +175,17 @@ public class Player_BuildSystem : MonoBehaviour
         {          
             if(deleteBuild != null)
             {
-                float destroyTurretGearCount = deleteBuild.GetComponent<Turret>().turretMakingCost;
+                float destroyTurretGearCount = 0f;
+
+                if(deleteBuild.GetComponent<Turret>() != null)
+                {
+                    destroyTurretGearCount = deleteBuild.GetComponent<Turret>().turretMakingCost;
+                }
+                else if (deleteBuild.GetComponent<Barrel>() != null)
+                {
+                    destroyTurretGearCount = deleteBuild.GetComponent<Barrel>().makingCost;
+                }
+                
 
                 //선택된 터렛의 상태를 destory로 변경
 
@@ -172,10 +194,11 @@ public class Player_BuildSystem : MonoBehaviour
                 deleteBuild = null;
 
                 //해당 포탑의 생성 기어의 50% 회수
-                info.AddGearCount(destroyTurretGearCount * 0.5f);
+                info.AddGearCount((int)Mathf.Round(destroyTurretGearCount * 0.5f));
             }
             else
             {
+                if (build == null) return;
                 if(build.GetComponent<Turret>() != null)
                 {
                     if (build.GetComponent<Turret>().isMake)
@@ -197,11 +220,11 @@ public class Player_BuildSystem : MonoBehaviour
 
     private void CreateTurretPrecondition()
     {
-        float buildTurretGearCount;
+        int buildTurretGearCount;
 
         if (build.GetComponent<Turret>() != null)
         {
-            buildTurretGearCount = build.GetComponent<Turret>().turretMakingCost;
+            buildTurretGearCount = (int)build.GetComponent<Turret>().turretMakingCost;
         }
         else
         {

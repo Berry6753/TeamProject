@@ -4,12 +4,14 @@ using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
 public class LookAtAnimationRigging : MonoBehaviour
-{
+{ 
+
     private List<MultiAimConstraint> rigs;
     private TwoBoneIKConstraint leftHandRig;
 
     private float aimingTargetWeight = 0f;
     private float reloadTargetWeight = 0f;
+    private float gameStopTargetWeight = 0f;
 
     private Animator animator;
 
@@ -34,6 +36,7 @@ public class LookAtAnimationRigging : MonoBehaviour
     {
         ChangeWeight();
         ReloadWeight();
+        GameStop();
         Rigging();
         //rigs[1].weight = Mathf.Lerp(rigs[1].weight, targetWeight, Time.deltaTime * 10f);
         //rigs[3].weight = Mathf.Lerp(rigs[3].weight, targetWeight, Time.deltaTime * 10f);
@@ -67,10 +70,22 @@ public class LookAtAnimationRigging : MonoBehaviour
     private void Rigging()
     {
         rigs[0].weight = Mathf.Lerp(rigs[0].weight, reloadTargetWeight, Time.deltaTime * 10f);
-        rigs[1].weight = Mathf.Lerp(rigs[1].weight, reloadTargetWeight, Time.deltaTime * 10f);
-        rigs[2].weight = Mathf.Lerp(rigs[2].weight, reloadTargetWeight, Time.deltaTime * 10f);
+        rigs[1].weight = Mathf.Lerp(rigs[1].weight, reloadTargetWeight * gameStopTargetWeight, Time.deltaTime * 10f);
+        rigs[2].weight = Mathf.Lerp(rigs[2].weight, reloadTargetWeight * gameStopTargetWeight, Time.deltaTime * 10f);
         rigs[3].weight = Mathf.Lerp(rigs[3].weight, aimingTargetWeight * reloadTargetWeight, Time.deltaTime * 10f);
         rigs[4].weight = Mathf.Lerp(rigs[4].weight, aimingTargetWeight * reloadTargetWeight, Time.deltaTime * 10f);
         leftHandRig.weight = Mathf.Lerp(leftHandRig.weight, reloadTargetWeight, Time.deltaTime * 10f);
+    }
+
+    private void GameStop()
+    {
+        if(Time.timeScale == 0)
+        {
+            gameStopTargetWeight = 0f;
+        }
+        else
+        {
+            gameStopTargetWeight = 1f;
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.ProBuilder.MeshOperations;
 using UnityEngine.Windows;
 
 public class Player_Aiming : MonoBehaviour
@@ -12,7 +13,7 @@ public class Player_Aiming : MonoBehaviour
 
     public bool isFire {  get; private set; }
 
-    private float isGameStop = -1f;
+    public float isGameStop {  get; private set; }
 
     private readonly int hashAiming = Animator.StringToHash("Aiming");
     private readonly int hashZoomOn = Animator.StringToHash("ZoomOn");
@@ -27,6 +28,10 @@ public class Player_Aiming : MonoBehaviour
     [SerializeField]
     private Transform CameraLookAt;
 
+    [Header("총")]
+    [SerializeField]
+    private Transform gun;
+
     [Header("총구")]
     [SerializeField]
     private Transform GunFireStartPoint;
@@ -37,6 +42,7 @@ public class Player_Aiming : MonoBehaviour
     [Header("조준 LayerMask")]
     [SerializeField]
     private LayerMask aimColliderLayerMask = new LayerMask();
+
     [Header("Rig의 Target")]
     [SerializeField]
     private Transform debugTransform;
@@ -51,29 +57,34 @@ public class Player_Aiming : MonoBehaviour
     private float notAimingTimer;
     private float notAimingDelayTime = 1.5f;
 
+    [Header("총기 탄착 오차")]
+    [SerializeField]
+    private float attackAccuracy;
+
+    
+    [Header("일반 반동")]
+    [SerializeField]
+    float recoilBack;
+
+    [Header("조준 반동")]
+    [SerializeField]
+    float aimingRecoilBack;
+    //총기 반동
+    private float recoilBackForce;
+
     [Header("공격 파티클")]
     [SerializeField]
     private Transform ParticleSystem;
 
     private Player_BuildSystem buildSystem;
 
-    //private float equipedBulletCount;
-    //[Header("최대 탄 수")]
-    //[SerializeField]
-    //private float maxEquipedBulletCount;
-
-    //private float magazineCount;
-    //[Header("최대 탄창 수")]
-    //[SerializeField]
-    //private float maxMagazineCount;
-
     private Player_Info info;
     private Player_Info_UI UI;
-
     private void Awake()
     {
+        isGameStop = -1f;
         animator = GetComponent<Animator>();
-        AttackTimer = AttackDelayTime;
+        AttackTimer = 0;
         notAimingTimer = notAimingDelayTime;
         info = GetComponent<Player_Info>();
 
@@ -83,6 +94,7 @@ public class Player_Aiming : MonoBehaviour
 
     public void OnAiming(InputAction.CallbackContext context)
     {
+        if (isGameStop > 0) return;
         if (buildSystem.BuildModeOn > 0f) return;
         isAiming = context.ReadValue<float>() > 0.5f;
     }
@@ -94,6 +106,7 @@ public class Player_Aiming : MonoBehaviour
 
     public void OnReload(InputAction.CallbackContext context)
     {
+        if (isGameStop > 0) return;
         if (buildSystem.BuildModeOn > 0f) return;
 
         if (context.performed)
@@ -138,19 +151,20 @@ public class Player_Aiming : MonoBehaviour
 
     private void Update()
     {
+        FirearmRecoil();
         CameraRotation();
         GameStopping();
         AimingCamera();
         AimingOnOff();
-
-        FireGun();
         //ShootRay();
     }
 
     private void FixedUpdate()
     {
+        FireGun();
+
         AttackDelay();
-        ChangeNotAimingDelay();        
+        ChangeNotAimingDelay();
     }
 
     private void CameraRotation()
@@ -158,7 +172,23 @@ public class Player_Aiming : MonoBehaviour
         x_Axis.Update(Time.fixedDeltaTime);
         y_Axis.Update(Time.fixedDeltaTime);
 
-        CameraLookAt.eulerAngles = new Vector3(y_Axis.Value, x_Axis.Value, 0);
+        Quaternion mouseRotation = Quaternion.Euler(y_Axis.Value, x_Axis.Value, 0);
+        // CameraLookAt.rotation에 적용할 회전값 계산
+        Quaternion recoilRotation = Quaternion.Euler(-recoilBackForce, 0, 0);
+
+        CameraLookAt.rotation = mouseRotation * recoilRotation;
+    }
+
+    private void FirearmRecoil()
+    {
+        if (animator.GetBool(hashZoomOn))   //조준 중
+        {
+            recoilBackForce = aimingRecoilBack;
+        }
+        else    //조준 상태 아님
+        {
+            recoilBackForce = recoilBack;
+        }   
     }
 
     private void GameStopping()
@@ -207,17 +237,25 @@ public class Player_Aiming : MonoBehaviour
         Vector2 screenCenterPoint = new Vector2(Screen.width / 2, Screen.height / 2);
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
         if(Physics.Raycast(ray, out RaycastHit hit, 30f, aimColliderLayerMask))
-        {              
-            if (Physics.Raycast(GunFireStartPoint.position, (hit.point - GunFireStartPoint.position).normalized, out RaycastHit hits, 30f, aimColliderLayerMask))
-            {
-                debugTransform.position = hits.point;
+        {
+            float errorFloat;
+            if (!animator.GetBool(hashZoomOn)) errorFloat = attackAccuracy;
+            else errorFloat = 0;
+
+            float errorRange_x = Random.Range(-errorFloat, errorFloat);
+            float errorRange_y = Random.Range(-errorFloat, errorFloat);
+            float errorRange_z = Random.Range(-errorFloat, errorFloat);
+
+            debugTransform.position = hit.point;
+
+            if (Physics.Raycast(GunFireStartPoint.position, (hit.point - GunFireStartPoint.position + new Vector3(errorRange_x, errorRange_y, errorRange_z)).normalized, out RaycastHit hits, 30f, aimColliderLayerMask))
+            {                
                 Debug.DrawLine(GunFireStartPoint.position, hits.point, Color.red);
                 
+                //데미지 부여
+                
             }
-                //if (hit.transform.CompareTag("Monster"))
-                //{
-                //    Debug.Log("몬스터 공격");
-                //}
+
         }
     }
 
@@ -228,10 +266,10 @@ public class Player_Aiming : MonoBehaviour
         if (isFire && AttackAble)
         {
             AttackAble = false;
-            AttackTimer = 0;
+            AttackTimer = AttackDelayTime;
             notAimingTimer = 0;
-            animator.SetBool(hashFire, true);
-            Debug.Log("공격!!!");
+            animator.SetBool(hashFire, true);    
+            
         }
         else
         {
@@ -242,8 +280,12 @@ public class Player_Aiming : MonoBehaviour
     public void Fire()
     {        
         if(info.equipedBulletCount > 0)
-        {
+        {            
             ShootRay();
+
+            ////카메라 반동
+            //FirearmRecoil();
+
             //섬광 파티클 재생
             ParticleSystem.GetComponent<ParticleSystem>().Play();
             //격발 소리 재생
@@ -252,7 +294,7 @@ public class Player_Aiming : MonoBehaviour
             info.equipedBulletCount--;
 
             //UI 반영
-            UI.Fire();
+            UI.ChangeFireText(info.equipedBulletCount);
         }
         else
         {
@@ -260,29 +302,30 @@ public class Player_Aiming : MonoBehaviour
         }
     }
 
+
     public void ReloadEnd()
     {
         animator.SetBool(hashReload, false);
         notAimingTimer = 0;
+        UI.Reload(info.equipedBulletCount, info.magazineCount);
         Debug.Log("장전 종료...");
         Debug.Log($"탄 수 : {info.equipedBulletCount}, 탄창 수 : {info.magazineCount}");
     }
 
-    public void Reload()
+    public void Reloading()
     {
         if(info.magazineCount > 0)
         {
             info.magazineCount--;
-            info.equipedBulletCount = info.maxEquipedBulletCount;
-            UI.Reload();
+            info.equipedBulletCount = info.maxEquipedBulletCount;            
         }
     }
 
     private void AttackDelay()
     {
-        if(AttackTimer < AttackDelayTime)
+        if(AttackTimer > 0)
         {
-            AttackTimer += Time.fixedDeltaTime;
+            AttackTimer -= Time.fixedDeltaTime;
         }
         else
         {

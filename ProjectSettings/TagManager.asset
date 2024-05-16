@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Turret
   - Barrel
+  - Gear
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - debug
   - Player
   - Monster
-  - 
+  - Item
   - 
   - 
   - 
