@@ -1457,7 +1457,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 413231491}
-  m_RootOrder: 26
+  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &810449263
 SphereCollider:
@@ -5797,7 +5797,7 @@ PrefabInstance:
       objectReference: {fileID: 1584066857}
     - target: {fileID: 1915405831554185720, guid: 2099a87f42f587948bda97378fc5a37a, type: 3}
       propertyPath: recoilBack
-      value: 5
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 1915405831554185720, guid: 2099a87f42f587948bda97378fc5a37a, type: 3}
       propertyPath: attackAccuracy
@@ -5808,8 +5808,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2049109528}
     - target: {fileID: 1915405831554185720, guid: 2099a87f42f587948bda97378fc5a37a, type: 3}
+      propertyPath: AttackDelayTime
+      value: 0.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 1915405831554185720, guid: 2099a87f42f587948bda97378fc5a37a, type: 3}
       propertyPath: aimingRecoilBack
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1999670352159230551, guid: 2099a87f42f587948bda97378fc5a37a, type: 3}
       propertyPath: m_Data.m_SourceObjects.m_Item0.transform
@@ -5906,6 +5910,10 @@ PrefabInstance:
     - target: {fileID: 3342683402802787103, guid: 2099a87f42f587948bda97378fc5a37a, type: 3}
       propertyPath: CameraCollisionFilter.m_Bits
       value: 631
+      objectReference: {fileID: 0}
+    - target: {fileID: 5799383127274689435, guid: 2099a87f42f587948bda97378fc5a37a, type: 3}
+      propertyPath: m_RootOrder
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 5799383127274689435, guid: 2099a87f42f587948bda97378fc5a37a, type: 3}
       propertyPath: m_LocalPosition.x

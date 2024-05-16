@@ -68,7 +68,7 @@ public class Player_Info_UI : MonoBehaviour
     public void ChangeFireText(float equipedBulletCount)
     {
         bulletText.text = $"{equipedBulletCount} / 30";
-        Debug.Log($"{bulletText.text}");
+        //Debug.Log($"{bulletText.text}");
     }
 
     public void Reload(float equipedBulletCount, float magazineCount)

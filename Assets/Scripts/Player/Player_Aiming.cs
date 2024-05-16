@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.ProBuilder.MeshOperations;
@@ -61,7 +62,10 @@ public class Player_Aiming : MonoBehaviour
     [SerializeField]
     private float attackAccuracy;
 
-    
+    [Header("총기 카메라 반동")]
+    [SerializeField]
+    private float cameralerftime;
+
     [Header("일반 반동")]
     [SerializeField]
     float recoilBack;
@@ -69,6 +73,7 @@ public class Player_Aiming : MonoBehaviour
     [Header("조준 반동")]
     [SerializeField]
     float aimingRecoilBack;
+
     //총기 반동
     private float recoilBackForce;
 
@@ -80,6 +85,9 @@ public class Player_Aiming : MonoBehaviour
 
     private Player_Info info;
     private Player_Info_UI UI;
+
+    private Quaternion mouseRotation;
+
     private void Awake()
     {
         isGameStop = -1f;
@@ -115,9 +123,6 @@ public class Player_Aiming : MonoBehaviour
             {
                 //재장전 모션 실행
                 animator.SetBool(hashReload, true);
-
-                Debug.Log("장전 시작");
-                Debug.Log($"탄 수 : {info.equipedBulletCount}, 탄창 수 : {info.magazineCount}");
             }            
         }
     }
@@ -151,12 +156,12 @@ public class Player_Aiming : MonoBehaviour
 
     private void Update()
     {
-        FirearmRecoil();
+        DecideRecoilBack();
         CameraRotation();
         GameStopping();
         AimingCamera();
         AimingOnOff();
-        //ShootRay();
+        //ShootRay();        
     }
 
     private void FixedUpdate()
@@ -172,14 +177,15 @@ public class Player_Aiming : MonoBehaviour
         x_Axis.Update(Time.fixedDeltaTime);
         y_Axis.Update(Time.fixedDeltaTime);
 
-        Quaternion mouseRotation = Quaternion.Euler(y_Axis.Value, x_Axis.Value, 0);
-        // CameraLookAt.rotation에 적용할 회전값 계산
-        Quaternion recoilRotation = Quaternion.Euler(-recoilBackForce, 0, 0);
-
-        CameraLookAt.rotation = mouseRotation * recoilRotation;
+        if (!animator.GetBool(hashAiming)) cameralerftime = 1f;
+        mouseRotation = Quaternion.Euler(y_Axis.Value, x_Axis.Value, 0);
+        
+        CameraLookAt.rotation = Quaternion.Lerp(CameraLookAt.rotation, mouseRotation, cameralerftime);
+        /*mouseRotation;*/
+        //Quaternion.Lerp(CameraLookAt.rotation, mouseRotation, cameraLerfTime);
     }
 
-    private void FirearmRecoil()
+    private void DecideRecoilBack()
     {
         if (animator.GetBool(hashZoomOn))   //조준 중
         {
@@ -188,7 +194,12 @@ public class Player_Aiming : MonoBehaviour
         else    //조준 상태 아님
         {
             recoilBackForce = recoilBack;
-        }   
+        }
+    }
+
+    private void FirearmRecoil()
+    {       
+        CameraLookAt.rotation = Quaternion.Euler(CameraLookAt.eulerAngles.x - recoilBackForce, CameraLookAt.eulerAngles.y, 0);
     }
 
     private void GameStopping()
@@ -265,6 +276,7 @@ public class Player_Aiming : MonoBehaviour
         if (animator.GetBool(hashReload)) return;
         if (isFire && AttackAble)
         {
+            cameralerftime = 0.01f;
             AttackAble = false;
             AttackTimer = AttackDelayTime;
             notAimingTimer = 0;
@@ -273,6 +285,7 @@ public class Player_Aiming : MonoBehaviour
         }
         else
         {
+            cameralerftime = 0.1f;
             animator.SetBool(hashFire, false);
         }
     }
@@ -284,7 +297,7 @@ public class Player_Aiming : MonoBehaviour
             ShootRay();
 
             ////카메라 반동
-            //FirearmRecoil();
+            FirearmRecoil();
 
             //섬광 파티클 재생
             ParticleSystem.GetComponent<ParticleSystem>().Play();

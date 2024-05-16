@@ -7237,8 +7237,8 @@ Transform:
   - {fileID: 2003977856948293537}
   - {fileID: 1999670353399641154}
   - {fileID: 1999670353383781473}
-  - {fileID: 5799383127274689435}
   - {fileID: 4791669126081790325}
+  - {fileID: 5799383127274689435}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7559,6 +7559,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Camera2: {fileID: 4845030480459297506}
   CameraLookAt: {fileID: 1999670353399641154}
+  gun: {fileID: 0}
   GunFireStartPoint: {fileID: 1999670352783386990}
   x_Axis:
     Value: 0
@@ -7601,6 +7602,9 @@ MonoBehaviour:
     m_Bits: 55
   debugTransform: {fileID: 0}
   AttackDelayTime: 0.15
+  attackAccuracy: 0
+  recoilBack: 0
+  aimingRecoilBack: 0
   ParticleSystem: {fileID: 1999670352185896115}
 --- !u!114 &1915405831554185727
 MonoBehaviour:
@@ -7648,6 +7652,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 189f530688781f248a66da0e9842c1ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHp: 0
   maxBullet: 30
   maxMagazine: 8
   equipedBulletCount: 0
@@ -7667,6 +7672,9 @@ MonoBehaviour:
   HP_Bar: {fileID: 0}
   bulletText: {fileID: 0}
   magazineText: {fileID: 0}
+  gearCount: {fileID: 0}
+  turretIcon: {fileID: 0}
+  useGearCount: {fileID: 0}
 --- !u!1 &2001049940246830910
 GameObject:
   m_ObjectHideFlags: 0
@@ -10634,13 +10642,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4845030480459297506}
   m_LocalRotation: {x: -0.2917538, y: 0.50013983, z: -0.18398154, w: -0.7942863}
-  m_LocalPosition: {x: 1.3900001, y: 1.7000003, z: -2}
+  m_LocalPosition: {x: 1.39, y: 1.7, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9057070894121216059}
   m_Father: {fileID: 2004345437577392769}
-  m_RootOrder: 24
+  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8827127066606570652
 MonoBehaviour:
@@ -10795,5 +10803,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2004345437577392769}
-  m_RootOrder: 25
+  m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
