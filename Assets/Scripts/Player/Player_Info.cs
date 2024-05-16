@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player_Info : MonoBehaviour
 {
@@ -11,7 +12,11 @@ public class Player_Info : MonoBehaviour
 
     public float HP {  get; private set; }
     public int GearCount { get; private set; }
-    public float Attack {  get; private set; }
+
+    [Header("공격력")]
+    [SerializeField]
+    private float ATKDamage;
+    public float Attack { get { return ATKDamage; } }
 
     [Header("최대 탄 수")]
     [SerializeField]
@@ -32,7 +37,7 @@ public class Player_Info : MonoBehaviour
     private Player_Info_UI UI;
 
     private readonly int hashHurt = Animator.StringToHash("Hurt");
-    private readonly int hashDead = Animator.StringToHash("Dead");
+    private readonly int hashDead = Animator.StringToHash("Die");
 
     private void Awake()
     {
@@ -80,7 +85,7 @@ public class Player_Info : MonoBehaviour
     private void Dead()
     {
         isDead = true;
-        animator.SetTrigger(hashDead);
+        animator.SetBool(hashDead, true);
     }
 
     //Dead Animation이 끝나면 실행되는 메서드
@@ -88,5 +93,14 @@ public class Player_Info : MonoBehaviour
     {
         //게임 오버 문구
         //게임 오버 메뉴 등장
+    }
+
+    public void OnDebug_Dead(InputAction.CallbackContext context)
+    {
+        if (context.started) return;
+        if (context.performed)
+        {
+            Hurt(50);
+        }
     }
 }

@@ -262,9 +262,16 @@ public class Player_Aiming : MonoBehaviour
             if (Physics.Raycast(GunFireStartPoint.position, (hit.point - GunFireStartPoint.position + new Vector3(errorRange_x, errorRange_y, errorRange_z)).normalized, out RaycastHit hits, 30f, aimColliderLayerMask))
             {                
                 Debug.DrawLine(GunFireStartPoint.position, hits.point, Color.red);
-                
+
                 //데미지 부여
-                
+                if (hits.transform.CompareTag("Monster"))
+                {
+                    hits.transform.GetComponent<Monster>().Hurt(info.Attack);
+                }
+                else if (hits.transform.CompareTag("Barrel"))
+                {
+                    hit.transform.GetComponent<Barrel>().Hurt();
+                }
             }
 
         }

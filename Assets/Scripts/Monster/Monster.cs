@@ -83,7 +83,7 @@ public abstract class Monster : MonoBehaviour
         }
     }
 
-    protected void Hurt(float damage)                   //플레이어에게 데미지 입을 시
+    public void Hurt(float damage)                   //플레이어에게 데미지 입을 시
     { 
         hp -= damage;
     }
