@@ -26,7 +26,9 @@ public abstract class Monster : MonoBehaviour
  
 
     [SerializeField] protected float sensingRange;      //감지 범위
-    protected int turretIndex = 0;
+    protected int turretIndex = 0;                      //가장 가까운 터렛인덱스
+    protected int secondTurretIndex = 0;                //두 번째 가까운 터렛인덱스
+    protected int targetingIndex = 0;                   //타겟으로 삼을 터렛인덱스
     protected Collider attack;                          //공격 콜라이더
 
     protected Transform monsterTr;                      //몬스터 위치
@@ -79,6 +81,7 @@ public abstract class Monster : MonoBehaviour
         {
             canAttack = true;
         }
+        transform.LookAt(chaseTarget);
     }
 
     protected abstract void ChaseTarget();              //타겟 추적
@@ -134,7 +137,8 @@ public abstract class Monster : MonoBehaviour
         if (turret.Length > 0)
         {   
             turretDistance(turret);
-            chaseTarget = turret[turretIndex].transform;
+            TargetingTurret();
+            chaseTarget = turret[targetingIndex].transform;
         }
         else
         {
@@ -142,36 +146,53 @@ public abstract class Monster : MonoBehaviour
         }
     }
 
-    protected void NextTarget()
+    protected void turretDistance(Collider[] array)
+    {
+        float[] distance = new float[array.Length];
+        int minIndex = 0;
+        int secondMinIndex = 0;
+        for (int i = 0; i < array.Length; i++)
+        {
+            distance[i] = Vector3.Distance(array[i].transform.position, monsterTr.position);
+        }
+        float minDistance = distance[0];
+        float secondDistance = distance.Max();
+        for (int i = 0; i < distance.Length; i++)
+        {
+            if (distance[i] < minDistance)
+            {
+                secondDistance = minDistance;
+                secondMinIndex = minIndex;
+                minDistance = distance[i];
+                minIndex = i;
+            }
+            else if(distance[i] < secondDistance)
+            {
+                secondDistance = distance[i];
+                secondMinIndex = i;
+            }
+        }
+        turretIndex = minIndex;
+        secondTurretIndex = secondMinIndex;
+    }
+
+    protected void TargetingTurret()
     {
         Collider[] monster = Physics.OverlapBox(transform.position, new Vector3(5f, 5f, 5f), transform.rotation, monsterLayer);
+        if (monster.Length > 3)
+        {
+            targetingIndex = secondTurretIndex;
+        }
+        else
+        {
+            targetingIndex = turretIndex;
+        }
     }
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(transform.position, new Vector3(5f, 5f, 5f));
     }
-
-    protected void turretDistance(Collider[] array)
-    {
-        float[] distance = new float[array.Length];
-        int minIndex = 0;
-        for (int i = 0; i < array.Length; i++)
-        {
-            distance[i] = Vector3.Distance(array[i].transform.position, monsterTr.position);
-        }
-        float minDistance = distance[0];
-        for (int i = 0; i < distance.Length; i++)
-        {
-            if (distance[i] < minDistance)
-            {
-                minDistance = distance[i];
-                minIndex = i;
-            }
-        }
-        turretIndex = minIndex;
-    }
-
 
     protected void FreezeVelocity()                     //물리력 제거
     {

@@ -19,7 +19,6 @@ public class AerialMonster : Monster
     {
         base.Update();
         PriorityTarget();
-        transform.LookAt(chaseTarget);
     }
 
     protected override void ChaseTarget()
