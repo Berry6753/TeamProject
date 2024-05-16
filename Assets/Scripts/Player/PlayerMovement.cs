@@ -233,7 +233,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             // 카메라의 방향을 캐릭터의 회전값으로 변환
-            Quaternion targetRotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);
+            Quaternion targetRotation = Quaternion.Euler(transform.rotation.x, Camera.main.transform.eulerAngles.y, transform.rotation.z);
 
             // 캐릭터를 해당 회전값으로 회전시킴
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
