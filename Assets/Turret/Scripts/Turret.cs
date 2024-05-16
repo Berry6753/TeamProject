@@ -77,7 +77,8 @@ public abstract class Turret : MonoBehaviour
     public bool isMake;
 
     public TurretStateName turretStateName;
-
+    public GameObject fireEfect;
+    public GameObject makingEfect;
     public Transform turretTargetTransform { get { return targetTransform; } }
     public float turretAttackSpeed { get { return nowAttackSpeed; } }
     public float turretMakingTime { get { return makingTime; } }
@@ -103,6 +104,8 @@ public abstract class Turret : MonoBehaviour
         turretStatemachine.InitState(TurretStateName.BLUESCREEN);
         turretLayer = LayerMask.NameToLayer("Turret");
         monsterLayer = LayerMask.NameToLayer("Monster");
+        makingEfect.SetActive(false);
+        fireEfect.SetActive(false);
     }
 
     protected virtual void OnEnable()
