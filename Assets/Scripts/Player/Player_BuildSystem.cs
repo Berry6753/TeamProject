@@ -113,19 +113,18 @@ public class Player_BuildSystem : MonoBehaviour
             ray = Camera.main.ScreenPointToRay(screenCenterPoint);
             if (Physics.Raycast(ray, out RaycastHit hit, 8f, mask))
             {
-                Debug.DrawLine(Camera.main.transform.position, hit.point, Color.green);
-                Debug.Log(hit.transform.name);
+                if (Mathf.Abs(Vector3.Dot(hit.normal, Vector3.up)) <= 0.5f) 
+                {
+                    DeleteBuild();
+                    return;
+                }
 
                 if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Turret"))
                 {
                     Debug.Log("설치된 터렛 찾음");
                     deleteBuild = hit.transform.gameObject;
 
-                    if (build != null)
-                    {
-                        build.SetActive(false);
-                        build = null;
-                    }
+                    DeleteBuild();
                 }
                 else if (build != null)
                 {
@@ -150,16 +149,20 @@ public class Player_BuildSystem : MonoBehaviour
                 //{
                 //    build = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], GetMouseWorldPosition());
                 //}
-                if (build != null)
-                {
-                    build.SetActive(false);
-                    build = null;
-                }
+                DeleteBuild();
             }        
         }
         else
         {
-            if (build != null) build.SetActive(false);
+            DeleteBuild();
+        }
+    }
+
+    private void DeleteBuild()
+    {
+        if (build != null)
+        {
+            build.SetActive(false);
             build = null;
         }
     }

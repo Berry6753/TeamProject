@@ -22,7 +22,7 @@ public class Gear : MonoBehaviour
 
     private void Update()
     {
-        transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
+        transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -33,4 +33,5 @@ public class Gear : MonoBehaviour
             transform.gameObject.SetActive(false);
         }
     }
+
 }
