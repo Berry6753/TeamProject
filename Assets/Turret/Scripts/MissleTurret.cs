@@ -25,6 +25,9 @@ public class MissleTurret : Turret
     private float missleTurretUpgradeCost = 15;
     private float missleTurretMakingCost = 20;
 
+    [SerializeField]
+    private GameObject explosionEffect;
+
     protected override void OnEnable()
     {
         base.OnEnable();
