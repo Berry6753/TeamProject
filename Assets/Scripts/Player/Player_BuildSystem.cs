@@ -140,15 +140,6 @@ public class Player_BuildSystem : MonoBehaviour
             }
             else
             {
-                //if (build != null)
-                //{
-                //    build.transform.position = new Vector3(Camera.main.transform.position.x, transform.position.y, Camera.main.transform.position.z) + new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z) * 8f;
-                //    build.transform.rotation = transform.rotation;
-                //}
-                //else
-                //{
-                //    build = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], GetMouseWorldPosition());
-                //}
                 DeleteBuild();
             }        
         }

@@ -13,12 +13,14 @@ public class LookAtAnimationRigging : MonoBehaviour
     private float reloadTargetWeight = 0f;
     private float gameStopTargetWeight = 0f;
     private float PlayerDeadTargetWeight = 0f;
+    private float ThrowingTargetWeight = 0f;
 
     private Animator animator;
 
     private readonly int hashAiming = Animator.StringToHash("Aiming");
     private readonly int hashReload = Animator.StringToHash("Reload");
     private readonly int hashDead = Animator.StringToHash("Die");
+    private readonly int hashThrow = Animator.StringToHash("Throw");
 
     private void Awake()
     {
@@ -77,7 +79,7 @@ public class LookAtAnimationRigging : MonoBehaviour
         rigs[2].weight = Mathf.Lerp(rigs[2].weight, PlayerDeadTargetWeight * reloadTargetWeight * gameStopTargetWeight, Time.deltaTime * 10f);
         rigs[3].weight = Mathf.Lerp(rigs[3].weight, PlayerDeadTargetWeight * aimingTargetWeight * reloadTargetWeight, Time.deltaTime * 10f);
         rigs[4].weight = Mathf.Lerp(rigs[4].weight, PlayerDeadTargetWeight * aimingTargetWeight * reloadTargetWeight, Time.deltaTime * 10f);
-        leftHandRig.weight = Mathf.Lerp(leftHandRig.weight, PlayerDeadTargetWeight * reloadTargetWeight, Time.deltaTime * 10f);
+        leftHandRig.weight = Mathf.Lerp(leftHandRig.weight, ThrowingTargetWeight * PlayerDeadTargetWeight * reloadTargetWeight, Time.deltaTime * 10f);
     }
 
     private void GameStop()
@@ -101,6 +103,18 @@ public class LookAtAnimationRigging : MonoBehaviour
         else
         {
             PlayerDeadTargetWeight = 1f;
+        }
+    }
+
+    private void Throwing()
+    {
+        if (animator.GetBool(hashThrow))
+        {
+            ThrowingTargetWeight = 0;
+        }
+        else
+        {
+            ThrowingTargetWeight = 1f;
         }
     }
 }

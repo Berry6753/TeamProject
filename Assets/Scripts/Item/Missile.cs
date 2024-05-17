@@ -31,7 +31,13 @@ public class Missile : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //이펙트 생성
-        Instantiate(skillEffect);
+        ItemObjectPool.SpawnFromPool(skillEffect.name, transform.position, transform.rotation);
+
         gameObject.SetActive(false);
+    }
+
+    void OnDisable()
+    {
+        ItemObjectPool.ReturnToPool(gameObject);
     }
 }

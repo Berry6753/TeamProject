@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ExplosionEffect : MonoBehaviour
@@ -18,6 +19,8 @@ public class ExplosionEffect : MonoBehaviour
 
     public float damage { get { return AttackDamage; } }
 
+    //재생 시간
+    private float timer;
     private void Awake()
     {
         CapsuleCollider = GetComponent<CapsuleCollider>();        
@@ -27,14 +30,20 @@ public class ExplosionEffect : MonoBehaviour
     {
         targets.Clear();
         CapsuleCollider.radius = 0;
+        CapsuleCollider.enabled = true;
 
         StartCoroutine(AugmentAttackArea());
+        StartCoroutine(PlayAnimation());
+    }
 
+    private void FixedUpdate()
+    {
         foreach (var target in targets)
         {
             Debug.Log($"{target.name}에게 {AttackDamage}만큼의 데미지 부여");
         }
     }
+    
 
     IEnumerator AugmentAttackArea()
     {
@@ -43,8 +52,21 @@ public class ExplosionEffect : MonoBehaviour
             yield return new WaitForSeconds(Time.deltaTime);
             CapsuleCollider.radius += 1.5f * Time.deltaTime;            
         }
-        
-        yield return null;
+        CapsuleCollider.enabled = false;
+        targets.Clear();
+        yield break;
+    }
+
+    IEnumerator PlayAnimation()
+    {
+        while (timer < 30)
+        {
+            yield return new WaitForSeconds(Time.deltaTime);
+            timer += Time.deltaTime;
+        }
+
+        transform.parent.gameObject.SetActive(false);
+        yield break;
     }
 
     private void OnDrawGizmos()
@@ -69,5 +91,10 @@ public class ExplosionEffect : MonoBehaviour
         {
             targets.Remove(other.gameObject);
         }
+    }
+
+    void OnDisable()
+    {
+        ItemObjectPool.ReturnToPool(transform.parent.gameObject);
     }
 }

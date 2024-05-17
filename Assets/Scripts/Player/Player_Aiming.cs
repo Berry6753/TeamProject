@@ -129,6 +129,7 @@ public class Player_Aiming : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
+        if (isGameStop > 0) return;
         if (buildSystem.BuildModeOn > 0f)
         {
             if (context.performed)

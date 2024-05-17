@@ -123,11 +123,13 @@ public class PlayerMovement : MonoBehaviour
     // InputSystem 무브먼트
     public void OnMovement(InputAction.CallbackContext context)
     {
+        if (aiming.isGameStop > 0) return;
         InputDir = context.ReadValue<Vector2>();
     }
 
     public void OnRun(InputAction.CallbackContext context)
     {
+        if (aiming.isGameStop > 0) return;
         InputBool = context.ReadValue<float>() > 0.5f;
     }
 

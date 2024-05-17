@@ -68,6 +68,12 @@ public class Player_Info : MonoBehaviour
         UI.ChangeGearText(GearCount, -gearCount);
     }
 
+    public void Heal(float healValue)
+    {
+        HP = Mathf.Clamp(HP + healValue, 0, maxHp);
+        UI.PrintPlayerHPBar(HP, maxHp);
+    }
+
     public void Hurt(float damage)
     {
         HP -= damage;
