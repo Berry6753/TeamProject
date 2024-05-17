@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class FireTurret : Turret
 {
-    
+
+    [SerializeField]
+    private GameObject attackZone;
+
     private Vector3 attackBoxPos;
     private int nowFireTurretUpgradeCount = 0;
     private int nowFireTurretHp;
@@ -35,12 +39,12 @@ public class FireTurret : Turret
     {
         base.OnEnable();
         base.SetTurret(fireTurretMakingTime, fireTurretMakingCost, fireTurretAttackDamge, fireTurretAttackSpeed, fireTurretAttackRange, maxFireTurretHp, fireTurretHpRise, fireTurretUpgradeCost, fireTurretUpgradeTime, fireTurretRepairTime, fireTurretRepairCost, fireTurretAttackRise, fireTurretAttackSpeedRise, fireTurretUpgradCostRise, fireTurretMaxUpgradeCount);
-        
+        attackZone.SetActive(false);
     }
 
     public override void Attack()
     {
-        if(Physics.Raycast(firePos.transform.position, firePos.transform.forward,out RaycastHit hit, fireTurretAttackRange))
+        if (Physics.Raycast(firePos.transform.position, firePos.transform.forward, out RaycastHit hit, fireTurretAttackRange, ~(1 << LayerMask.NameToLayer("Item")))) 
         {
             if (!hit.collider.CompareTag("Monster"))
             {
@@ -48,31 +52,39 @@ public class FireTurret : Turret
             }
             else
             {
-                attackBoxPos = firePos.transform.position + firePos.transform.forward * (fireTurretAttackRange / 2);
-                //ÀÌÆåÆ® »ý¼º
+                //attackBoxPos = firePos.transform.position + firePos.transform.forward * fireTurretAttackRange;
+                //ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
                 fireEfect.SetActive(true);
-                Collider[] colliders = Physics.OverlapBox(attackBoxPos, attackBoxRange,firePos.transform.rotation);
-                Debug.Log(attackBoxPos);
-                foreach (Collider collider in colliders)
-                {
-                    if (collider.CompareTag("Monster"))
-                    {
-                        //µ¥¹ÌÁö ÁÖ´ÂºÎºÐ
-                        Debug.Log("Áö¼Ó ÅÍ·¿ °ø°Ý");
-                        Debug.Log(collider.name);
-                    }
-                    //else if ()//µå·³Åë µ¥¹ÌÁö ºÎºÐ
-                    //{
+                attackZone.SetActive(true);
+                //Collider[] colliders = Physics.OverlapBox(attackBoxPos, attackBoxRange, firePos.transform.rotation);
+               
+                //foreach (Collider collider in colliders)
+                //{
+                //    if (collider.CompareTag("Monster"))
+                //    {
+                        
+                           
+                        
+                       
+                //    }
+                //    //else if ()//ë“œëŸ¼í†µ ê³µê²©ì‹œ
+                //    //{
 
-                    //}
-                }
+                //    //}
+
+                //}
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ÂºÎºï¿½
+                
             }
         }
+
+       
+
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(attackBoxPos, attackBoxRange);
+        
     }
 }

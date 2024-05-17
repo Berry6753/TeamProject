@@ -40,6 +40,7 @@ public class TurretAttackState : TurretBaseState
     public override void Exit()
     {
         attackCheckTime = 0;
+        turret.turretTargetTransform = null;
         turret.fireEfect.SetActive(false);
     }
 

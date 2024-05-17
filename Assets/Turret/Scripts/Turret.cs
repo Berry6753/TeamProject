@@ -79,7 +79,7 @@ public abstract class Turret : MonoBehaviour
     public TurretStateName turretStateName;
     public GameObject fireEfect;
     public GameObject makingEfect;
-    public Transform turretTargetTransform { get { return targetTransform; } }
+    public Transform turretTargetTransform { get { return targetTransform; } set { targetTransform = value; } }
     public float turretAttackSpeed { get { return nowAttackSpeed; } }
     public float turretMakingTime { get { return makingTime; } }
     public float turretRepairTime { get { return repairTime; } }
@@ -246,7 +246,7 @@ public abstract class Turret : MonoBehaviour
     public void SearchEnemy()
     {
 
-        Collider[] enemyCollider = Physics.OverlapSphere(transform.position, attackRange / 2, (1 << monsterLayer));//레이어 마스크 몬스터 추가
+        Collider[] enemyCollider = Physics.OverlapSphere(transform.position, attackRange, (1 << monsterLayer));//레이어 마스크 몬스터 추가
         Transform nierTargetTransform = null;
         if (enemyCollider.Length > 0)
         {
