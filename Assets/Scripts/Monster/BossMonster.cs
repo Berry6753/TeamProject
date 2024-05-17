@@ -9,15 +9,17 @@ using static UnityEngine.UI.GridLayoutGroup;
 public class BossMonster : MonoBehaviour
 {
     [Header("스탯")]
-    [SerializeField] protected float hp;                //체력
-    [SerializeField] protected float damage;            //공격력
-    [SerializeField] protected float hitNum;            //타격 횟수
-    [SerializeField] protected float attackRange;       //사거리
-    [SerializeField] protected float specialAttackRange;//특수 공격 사거리
+    [SerializeField] private float hp;                //체력
+    [SerializeField] private float damage;            //공격력
+    [SerializeField] private float hitNum;            //타격 횟수
+    [SerializeField] private float attackRange;       //사거리
+    [SerializeField] private float specialAttackRange;//특수 공격 사거리
+    private float amongRange;
     [Header("스탯 성장치")]
     [SerializeField] protected float upScaleHp;         //체력 성장치
 
     private float dashSpeed;
+    private float dashTime;
     private float time;
 
     private int wave = 0;
@@ -30,6 +32,8 @@ public class BossMonster : MonoBehaviour
     private Animator anim;
     private NavMeshAgent nav;
     private Rigidbody rb;
+    private Collider mainCollider;
+    private SkinnedMeshRenderer renderer;
     private SphereCollider attackC;
     private BoxCollider jumpAttackC;
     [SerializeField] private CapsuleCollider dashAttackC;
@@ -58,6 +62,7 @@ public class BossMonster : MonoBehaviour
     [HideInInspector] public bool isDead = false;
     private bool isDash = false;
     private bool canAttack = true;
+    private bool canJump = true;
     private bool isBackward = false;
 
     public enum State
@@ -69,6 +74,8 @@ public class BossMonster : MonoBehaviour
         anim = GetComponent<Animator>();
         nav = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
+        mainCollider = GetComponent<Collider>();
+        renderer = GetComponentInChildren<SkinnedMeshRenderer>();
         bossTr = GetComponent<Transform>();
         defaultTarget = GameObject.FindWithTag("Player").GetComponent<Transform>();
         attackC = GetComponentInChildren<SphereCollider>();
@@ -83,6 +90,8 @@ public class BossMonster : MonoBehaviour
         stateMachine.AddState(State.DefaultA2, new DefaultA2State(this));
         stateMachine.AddState(State.DIE, new DieState(this));
         stateMachine.InitState(State.IDLE);
+
+        amongRange = (attackRange + specialAttackRange) / 2;
     }
 
     private void Start()
@@ -110,18 +119,24 @@ public class BossMonster : MonoBehaviour
         {
             DashAttackMove();
         }
-        if (anim.GetBool(hashJump))
-        {
-            JumpAttackMove();
-        }
-        if (!anim.GetBool(hashDash) && !anim.GetBool(hashJump))
-        {
-            transform.LookAt(chaseTarget);
-        }
         else
         {
-            transform.LookAt(null);
+            dashSpeed = 0;
+            dashTime = 0;
         }
+        if (anim.GetBool(hashJump))
+        {
+            if (canJump)
+            {
+                StartCoroutine(JumpAttackMove());   
+            }
+        }
+        LookAt();
+    }
+
+    protected virtual void LookAt()
+    {
+        transform.LookAt(new Vector3(chaseTarget.position.x, transform.position.y, chaseTarget.position.z));
     }
 
     private IEnumerator BossState()
@@ -155,7 +170,15 @@ public class BossMonster : MonoBehaviour
                         stateMachine.ChangeState(State.IDLE);
                     }
                 }
-                else if (distance <= specialAttackRange && distance > attackRange)
+                else if (distance <= amongRange && distance > attackRange)
+                {
+                    nav.enabled = true;
+                    stateMachine.ChangeState(State.TRACE);
+                    attackC.enabled = false;
+                    jumpAttackC.enabled = false;
+                    dashAttackC.enabled = false;
+                }
+                else if (distance <= specialAttackRange && distance > amongRange)
                 {
                     FreezeVelocity();
                     if (canAttack && !anim.GetBool("isAttack"))
@@ -168,7 +191,7 @@ public class BossMonster : MonoBehaviour
                         stateMachine.ChangeState(State.IDLE);
                     }
                 }
-                else if (distance > specialAttackRange)
+                else if (distance > specialAttackRange && !anim.GetBool(hashJump))
                 {
                     nav.enabled = true;
                     stateMachine.ChangeState(State.TRACE);
@@ -203,7 +226,7 @@ public class BossMonster : MonoBehaviour
     }
     private void StandoffAttack()
     {
-        int pattern = Random.Range(3,4);
+        int pattern = Random.Range(2, 3);
         switch (pattern)
         {
             case 0:
@@ -226,18 +249,27 @@ public class BossMonster : MonoBehaviour
     {
         anim.SetBool(hashJump, true);
     }
-    private void JumpAttackMove()
+    private IEnumerator JumpAttackMove()
     {
+        canJump = false;
         nav.enabled = false;
-        rb.AddForce(Vector3.up * 50f * Time.deltaTime, ForceMode.Impulse);
-        transform.position = Vector3.MoveTowards(transform.position, chaseTarget.position, 0.05f);
         float distance = Vector3.Distance(chaseTarget.position, bossTr.position);
-        if (distance < 2)
-        {
-            anim.SetBool(hashJump, false);
-            jumpAttackC.enabled = true;
-            nav.enabled = true;
-        }
+        Vector3 attackPos = transform.position + transform.forward * (distance - 2) + Vector3.up * 20.0f;
+        rb.AddForce(Vector3.up * 100.0f, ForceMode.Impulse);
+        mainCollider.isTrigger = true;
+        yield return new WaitForSeconds(1.0f);
+        renderer.enabled = false;
+        FreezeVelocity();
+        yield return new WaitForSeconds(0.1f);
+        transform.position = attackPos;
+        yield return new WaitForSeconds(1.0f);
+        renderer.enabled = true;
+        anim.SetBool(hashJump, false);
+        jumpAttackC.enabled = true;
+        yield return new WaitForSeconds(2.0f);
+        mainCollider.isTrigger = false;
+        nav.enabled = true;
+        canJump = true;
     }
 
     private void DashAttack_backward()
@@ -264,12 +296,11 @@ public class BossMonster : MonoBehaviour
         {
             dashSpeed += 0.001f;
             float distance = Vector3.Distance(chaseTarget.position, bossTr.position);
-            float dashTime = 0;
             Vector3 attackPos = transform.position + transform.forward * distance;
-            transform.position = Vector3.MoveTowards(transform.position, attackPos, (speed + dashSpeed / 5) + Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, attackPos, (speed + dashSpeed/2) + Time.deltaTime);
             dashTime += Time.deltaTime;
             Debug.Log(dashTime);
-            if (dashTime < 20f)
+            if (dashTime > 2f)
             {
                 Debug.Log("aa");
                 anim.SetBool(hashDash, false);
