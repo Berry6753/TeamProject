@@ -86,8 +86,9 @@ public abstract class Turret : MonoBehaviour
     public float turretMakingTime { get { return makingTime; } }
     public float turretRepairTime { get { return repairTime; } }
     public float turretUpgradeTime { get { return upgradeTime; } }
+    public float turretUpgradeCount { get { return nowUpgradeCount; } }
     public float turretRepairCost { get { return repairCost; } }
-    public float turretUpgradCost { get { return upgradeCost; } }
+    public float turretUpgradCost { get { return nowUpgradeCost; } }
     public float turretMakingCost { get { return makingCost; } }
     public bool isTurretUpgrade { get { return isUpgrade; } }
     public bool isTurretRepair { get { return isRepair; } }
@@ -151,7 +152,7 @@ public abstract class Turret : MonoBehaviour
 
     private void RepairCheck()
     {
-        if (turretStateName == TurretStateName.REPAIR || turretStateName == TurretStateName.UPGRADE)
+        if (turretStateName == TurretStateName.MAKING || turretStateName == TurretStateName.REPAIR || turretStateName == TurretStateName.UPGRADE) 
         {
             isRepair = false;
         }
@@ -285,7 +286,8 @@ public abstract class Turret : MonoBehaviour
     public void TurretUpgrade()
     {
         //상태 업그레이드로
-        turretStatemachine.ChangeState(TurretStateName.UPGRADE);
+        if (isUpgrade)
+            turretStatemachine.ChangeState(TurretStateName.UPGRADE);
     }
 
     public void Hurt(int damge)

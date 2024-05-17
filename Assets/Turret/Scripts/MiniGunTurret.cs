@@ -57,4 +57,11 @@ public class MiniGunTurret : Turret
         }
     }
 
+    public override void Upgrade()
+    {
+        if (base.turretUpgradeCount < 1) 
+        firePos.transform.localPosition = firePos.transform.localPosition+ new Vector3(0, -0.001f, 0);
+        base.Upgrade();
+    }
+
 }

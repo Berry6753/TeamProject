@@ -102,6 +102,7 @@ public class Player_BuildSystem : MonoBehaviour
     private void Update()
     {
         CreateBuilding();
+        UpgradeTurret();
         //BuildTurret();
     }
 
@@ -123,7 +124,7 @@ public class Player_BuildSystem : MonoBehaviour
                 {
                     Debug.Log("설치된 터렛 찾음");
                     deleteBuild = hit.transform.gameObject;
-
+                    
                     DeleteBuild();
                 }
                 else if (build != null)
@@ -164,6 +165,23 @@ public class Player_BuildSystem : MonoBehaviour
         {
             build.SetActive(false);
             build = null;
+        }
+    }
+
+    public void UpgradeTurret()
+    {
+        if (BuildModeOn < 0f) return;
+
+        if(deleteBuild != null)
+        {
+            if (deleteBuild.GetComponent<Turret>() != null && info.GearCount >= deleteBuild.GetComponent<Turret>().turretUpgradCost) 
+            {
+                if (Input.GetKeyDown(KeyCode.G))
+                {
+                    deleteBuild.GetComponent<Turret>().TurretUpgrade();
+                    info.UseGear((int)deleteBuild.GetComponent<Turret>().turretUpgradCost);
+                }
+            }
         }
     }
 

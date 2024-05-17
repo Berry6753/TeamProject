@@ -76,8 +76,16 @@ public class MissleTurret : Turret
 
     public override void Upgrade()
     {
+        if (base.turretUpgradeCount < 3)
+            firePos.transform.localPosition = firePos.transform.localPosition + new Vector3(0.3f, 0f, 0);
+        else
+            firePos.transform.localPosition = firePos.transform.localPosition + new Vector3(0.2f, 0f, 0);
+
         base.Upgrade();
         missleTurretNowAttackRadius += missleTurretAttackRadiusRise;
+
+        if (base.turretUpgradeCount == 2)
+            firePos.transform.localPosition = firePos.transform.localPosition + new Vector3(0f, 0f, -0.03f);
     }
 
 }
