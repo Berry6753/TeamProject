@@ -21,6 +21,7 @@ public class NormalMonster : Monster
     {
         base.Update();
         PriorityTarget();
+        LookAt();
     }
 
     protected override void ChaseTarget()

@@ -27,6 +27,7 @@ public class SuicideMonster : Monster
     protected override void Update()
     {
         base.Update();
+        LookAt();
     }
 
     protected override void ChaseTarget()

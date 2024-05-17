@@ -81,7 +81,11 @@ public abstract class Monster : MonoBehaviour
         {
             canAttack = true;
         }
-        transform.LookAt(chaseTarget);
+    }
+
+    protected virtual void LookAt()
+    {
+        transform.LookAt(new Vector3(chaseTarget.position.x, transform.position.y, chaseTarget.position.z));
     }
 
     protected abstract void ChaseTarget();              //Å¸°Ù ÃßÀû

@@ -5,25 +5,13 @@ using UnityEngine;
 
 public class TestScripts : MonoBehaviour
 {
-    Rigidbody rb;
-
-    [SerializeField] private float hp = 100;
-
-    void Start()
+    private void Update()
     {
-        rb = GetComponent<Rigidbody>();
+        transform.position = Vector3.Lerp(transform.position, transform.forward, Time.deltaTime);
     }
 
-    private void OnParticleCollision(GameObject other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject.CompareTag("Monster"))
-        {
-            Debug.Log("피해받음");
-        }
-    }
-
-    private void Hurt(float damage)
-    { 
-        hp -= damage;
+        Debug.Log("왜 가라앉음?" + collision.gameObject.name);
     }
 }
