@@ -10,7 +10,9 @@ public class TurretUpgradeState : TurretBaseState
     public override void Enter()
     {
         turret.turretStateName = TurretStateName.UPGRADE;
+        turret.OffRenderer();
         //만드는 이펙트 생성
+        turret.makingEfect.SetActive(true);
     }
 
     public override void Update()
@@ -28,5 +30,7 @@ public class TurretUpgradeState : TurretBaseState
     {
         checkTime = 0;
         turret.Upgrade();
+        turret.OnRenderer();
+        turret.makingEfect.SetActive(false);
     }
 }

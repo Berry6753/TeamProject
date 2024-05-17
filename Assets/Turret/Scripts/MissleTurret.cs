@@ -54,7 +54,9 @@ public class MissleTurret : Turret
                 explosionEffect.SetActive(true);
                 explosionEffect.transform.position = targets[0].gameObject.transform.position;
                 explosionEffect.GetComponent<ParticleSystem>().Play();
+                explosionEffect.GetComponent<AudioSource>().Play();
                 fireEfect.GetComponent<ParticleSystem>().Play();
+                fireEfect.GetComponent <AudioSource>().Play();
                 foreach (Collider target in targets)
                 {
                     if (target.CompareTag("Monster"))

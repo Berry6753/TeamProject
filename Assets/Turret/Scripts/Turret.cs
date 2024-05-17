@@ -106,7 +106,7 @@ public abstract class Turret : MonoBehaviour
         turretStatemachine.InitState(TurretStateName.BLUESCREEN);
         turretLayer = LayerMask.NameToLayer("Turret");
         monsterLayer = LayerMask.NameToLayer("Monster");
-        ignoreLayer = 1 << LayerMask.NameToLayer("Item") | 1 << LayerMask.NameToLayer("Ignore Raycast");
+        ignoreLayer = 1 << LayerMask.NameToLayer("Item") | 1 << LayerMask.NameToLayer("Ignore Raycast") | 1 << LayerMask.NameToLayer("Player");
 
     }
 
@@ -163,7 +163,7 @@ public abstract class Turret : MonoBehaviour
 
     private void UpgradeCheck()
     {
-        if (turretStateName == TurretStateName.UPGRADE || nowUpgradeCount >= maxUpgradeCount)
+        if (!isRepair || nowUpgradeCount >= maxUpgradeCount)
         {
             isUpgrade = false;
         }

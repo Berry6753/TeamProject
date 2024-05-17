@@ -43,6 +43,7 @@ public class SnipeTurret : Turret
                 RaycastHit[] raycastHits = Physics.RaycastAll(firePos.transform.position, targetTransform.position - firePos.transform.position, snipeTurretAttackRange);
                 fireEfect.SetActive(true);
                 fireEfect.GetComponent<ParticleSystem>().Play();
+                fireEfect.GetComponent<AudioSource>().Play();
                 foreach (RaycastHit monster in raycastHits)
                 {
 
