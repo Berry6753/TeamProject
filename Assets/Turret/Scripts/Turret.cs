@@ -100,7 +100,7 @@ public abstract class Turret : MonoBehaviour
         headMeshFilter = turretHead.GetComponent<MeshFilter>();
         bodyRenderer = turretBody.GetComponent<MeshRenderer>();
         headRenderer = turretHead.GetComponent<MeshRenderer>();
-        turretCollider = GetComponent<CapsuleCollider>();
+        turretCollider = transform.GetComponent<CapsuleCollider>();
         gameObject.AddComponent<StateMachine>();
         turretStatemachine = GetComponent<StateMachine>();
         SetState();
@@ -118,10 +118,7 @@ public abstract class Turret : MonoBehaviour
         fireEfect.SetActive(false);
     }
 
-    private void OnDisable()
-    {
-        MultiObjectPool.ReturnToPool(gameObject);
-    }
+   
 
     private void Update()
     {
@@ -214,6 +211,7 @@ public abstract class Turret : MonoBehaviour
             isMake = false;
             bodyRenderer.material.color = Color.red;
             headRenderer.material.color = Color.red;
+            Debug.Log(turretColliders[0].name);
         }
         else
         {

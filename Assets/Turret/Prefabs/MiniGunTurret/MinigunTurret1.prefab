@@ -93,9 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3107424174796767421}
-  - component: {fileID: 6873230903553333800}
-  - component: {fileID: 6936550217273894304}
-  - component: {fileID: 1321799162339922551}
+  - component: {fileID: 3961232336866747870}
   m_Layer: 0
   m_Name: MinigunTurret1
   m_TagString: Untagged
@@ -121,7 +119,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6873230903553333800
+--- !u!114 &3961232336866747870
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -130,62 +128,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3107424174797135005}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff9b18ab3b46498429decd7bec7459dc, type: 3}
+  m_Script: {fileID: 11500000, guid: 72b9d373480cbd34ebd7fa8f51a124c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turretHeadMesh:
-  - {fileID: 4300002, guid: 92e845f406e7a374db2e12027f8e5810, type: 3}
-  - {fileID: 4300002, guid: bfbba37a49a0ccd4ea772ba1417ec63a, type: 3}
-  - {fileID: 4300002, guid: 6a492f4dfd76de94bafcc552b5fb8255, type: 3}
-  - {fileID: 4300002, guid: c54c771f5ef3bd7428ca4dd8e269e306, type: 3}
-  - {fileID: 4300002, guid: e2711c43d1dd73e498dde7cebd35fa73, type: 3}
-  turretBodyMesh:
-  - {fileID: 4300000, guid: 92e845f406e7a374db2e12027f8e5810, type: 3}
-  - {fileID: 4300000, guid: bfbba37a49a0ccd4ea772ba1417ec63a, type: 3}
-  - {fileID: 4300000, guid: 6a492f4dfd76de94bafcc552b5fb8255, type: 3}
-  - {fileID: 4300000, guid: c54c771f5ef3bd7428ca4dd8e269e306, type: 3}
-  - {fileID: 4300000, guid: e2711c43d1dd73e498dde7cebd35fa73, type: 3}
-  turretHead: {fileID: 3107424174797135001}
-  turretBody: {fileID: 3107424174797135007}
-  firePos: {fileID: 4616274875906075207}
-  turretCollider: {fileID: 0}
-  spinPos: {fileID: 6220628583400688121}
-  turretStatemachine: {fileID: 0}
-  isTarget: 0
-  isMake: 0
-  turretStateName: 0
-  fireEfect: {fileID: 4980801962042644629}
-  makingEfect: {fileID: 8182219240369671632}
---- !u!136 &6936550217273894304
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3107424174797135005}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.17
-  m_Height: 0.39
-  m_Direction: 0
-  m_Center: {x: 0, y: 0.15, z: 0}
---- !u!54 &1321799162339922551
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3107424174797135005}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!1 &3107424174797135007
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,6 +255,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2312199924405237286}
+  - component: {fileID: 2773370504305896422}
+  - component: {fileID: 3527445261986121630}
+  - component: {fileID: 6747034744397857014}
   m_Layer: 0
   m_Name: SpinPoint
   m_TagString: Untagged
@@ -333,6 +281,71 @@ Transform:
   m_Father: {fileID: 3107424174796767421}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &2773370504305896422
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6220628583400688121}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.17
+  m_Height: 0.9
+  m_Direction: 2
+  m_Center: {x: 0, y: 0.15, z: 0.24}
+--- !u!114 &3527445261986121630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6220628583400688121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff9b18ab3b46498429decd7bec7459dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turretHeadMesh:
+  - {fileID: 4300002, guid: 92e845f406e7a374db2e12027f8e5810, type: 3}
+  - {fileID: 4300002, guid: bfbba37a49a0ccd4ea772ba1417ec63a, type: 3}
+  - {fileID: 4300002, guid: 6a492f4dfd76de94bafcc552b5fb8255, type: 3}
+  - {fileID: 4300002, guid: c54c771f5ef3bd7428ca4dd8e269e306, type: 3}
+  - {fileID: 4300002, guid: e2711c43d1dd73e498dde7cebd35fa73, type: 3}
+  turretBodyMesh:
+  - {fileID: 4300000, guid: 92e845f406e7a374db2e12027f8e5810, type: 3}
+  - {fileID: 4300000, guid: bfbba37a49a0ccd4ea772ba1417ec63a, type: 3}
+  - {fileID: 4300000, guid: 6a492f4dfd76de94bafcc552b5fb8255, type: 3}
+  - {fileID: 4300000, guid: c54c771f5ef3bd7428ca4dd8e269e306, type: 3}
+  - {fileID: 4300000, guid: e2711c43d1dd73e498dde7cebd35fa73, type: 3}
+  turretHead: {fileID: 3107424174797135001}
+  turretBody: {fileID: 3107424174797135007}
+  firePos: {fileID: 4616274875906075207}
+  turretCollider: {fileID: 0}
+  spinPos: {fileID: 6220628583400688121}
+  turretStatemachine: {fileID: 0}
+  isTarget: 0
+  isMake: 0
+  turretStateName: 0
+  fireEfect: {fileID: 4980801962042644629}
+  makingEfect: {fileID: 8182219240369671632}
+--- !u!54 &6747034744397857014
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6220628583400688121}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1001 &4979704898364237791
 PrefabInstance:
   m_ObjectHideFlags: 0
