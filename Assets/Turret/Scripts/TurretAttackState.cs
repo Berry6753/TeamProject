@@ -28,7 +28,7 @@ public class TurretAttackState : TurretBaseState
             attackCheckTime = 0;
         }
 
-        if (turret.turretTargetTransform.gameObject.activeSelf == false /*||turret.turretTargetTransform.gameObject.GetComponent<Monster>().isDead*/)
+        if (turret.turretTargetTransform.gameObject.activeSelf == false || Vector3.Distance(turret.transform.position, turret.turretTargetTransform.transform.position) > turret.turretAttackRange/*||turret.turretTargetTransform.gameObject.GetComponent<Monster>().isDead*/) 
         {
             //적찾기 상태로 변경
             turret.turretStatemachine.ChangeState(TurretStateName.SEARCH);

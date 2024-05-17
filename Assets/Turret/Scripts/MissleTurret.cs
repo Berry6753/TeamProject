@@ -24,6 +24,7 @@ public class MissleTurret : Turret
     private float missleTurretRepairCost = 8;
     private float missleTurretUpgradeCost = 15;
     private float missleTurretMakingCost = 20;
+    
 
     [SerializeField]
     private GameObject explosionEffect;
@@ -39,7 +40,7 @@ public class MissleTurret : Turret
 
     public override void Attack()
     {
-        if(Physics.Raycast(firePos.transform.position, firePos.transform.forward,out RaycastHit hit, missleTurretAttackRange))
+        if(Physics.Raycast(firePos.transform.position, targetTransform.position - firePos.transform.position,out RaycastHit hit, missleTurretAttackRange,~(ignoreLayer)))
         {
             if (!hit.collider.CompareTag("Monster"))
             {

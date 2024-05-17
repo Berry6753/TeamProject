@@ -29,6 +29,9 @@ public class FireTurret : Turret
     private float fireTurretUpgradeCost = 10;
     private float fireTurretMakingCost = 15;
     private Vector3 attackBoxRange;
+
+    
+
     protected override void Awake()
     {
         base.Awake();
@@ -44,7 +47,7 @@ public class FireTurret : Turret
 
     public override void Attack()
     {
-        if (Physics.Raycast(firePos.transform.position, firePos.transform.forward, out RaycastHit hit, fireTurretAttackRange, ~(1 << LayerMask.NameToLayer("Item")))) 
+        if (Physics.Raycast(firePos.transform.position, targetTransform.position - firePos.transform.position, out RaycastHit hit, fireTurretAttackRange, ~(ignoreLayer))) 
         {
             if (!hit.collider.CompareTag("Monster"))
             {
