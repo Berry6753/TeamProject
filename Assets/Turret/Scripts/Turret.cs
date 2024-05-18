@@ -79,13 +79,16 @@ public abstract class Turret : MonoBehaviour
     public TurretStateName turretStateName;
     public GameObject fireEfect;
     public GameObject makingEfect;
-    public Transform turretTargetTransform { get { return targetTransform; } }
+    protected LayerMask ignoreLayer;
+    public Transform turretTargetTransform { get { return targetTransform; } set { targetTransform = value; } }
+    public float turretAttackRange { get { return attackRange; } }
     public float turretAttackSpeed { get { return nowAttackSpeed; } }
     public float turretMakingTime { get { return makingTime; } }
     public float turretRepairTime { get { return repairTime; } }
     public float turretUpgradeTime { get { return upgradeTime; } }
+    public float turretUpgradeCount { get { return nowUpgradeCount; } }
     public float turretRepairCost { get { return repairCost; } }
-    public float turretUpgradCost { get { return upgradeCost; } }
+    public float turretUpgradCost { get { return nowUpgradeCost; } }
     public float turretMakingCost { get { return makingCost; } }
     public bool isTurretUpgrade { get { return isUpgrade; } }
     public bool isTurretRepair { get { return isRepair; } }
@@ -97,14 +100,15 @@ public abstract class Turret : MonoBehaviour
         headMeshFilter = turretHead.GetComponent<MeshFilter>();
         bodyRenderer = turretBody.GetComponent<MeshRenderer>();
         headRenderer = turretHead.GetComponent<MeshRenderer>();
-        turretCollider = GetComponent<CapsuleCollider>();
+        turretCollider = transform.GetComponent<CapsuleCollider>();
         gameObject.AddComponent<StateMachine>();
         turretStatemachine = GetComponent<StateMachine>();
         SetState();
         turretStatemachine.InitState(TurretStateName.BLUESCREEN);
         turretLayer = LayerMask.NameToLayer("Turret");
         monsterLayer = LayerMask.NameToLayer("Monster");
-        
+        ignoreLayer = 1 << LayerMask.NameToLayer("Item") | 1 << LayerMask.NameToLayer("Ignore Raycast") | 1 << LayerMask.NameToLayer("Player");
+
     }
 
     protected virtual void OnEnable()
@@ -114,10 +118,7 @@ public abstract class Turret : MonoBehaviour
         fireEfect.SetActive(false);
     }
 
-    private void OnDisable()
-    {
-        MultiObjectPool.ReturnToPool(gameObject);
-    }
+   
 
     private void Update()
     {
@@ -148,7 +149,7 @@ public abstract class Turret : MonoBehaviour
 
     private void RepairCheck()
     {
-        if (turretStateName == TurretStateName.REPAIR || turretStateName == TurretStateName.UPGRADE)
+        if (turretStateName == TurretStateName.MAKING || turretStateName == TurretStateName.REPAIR || turretStateName == TurretStateName.UPGRADE) 
         {
             isRepair = false;
         }
@@ -160,7 +161,7 @@ public abstract class Turret : MonoBehaviour
 
     private void UpgradeCheck()
     {
-        if (turretStateName == TurretStateName.UPGRADE || nowUpgradeCount >= maxUpgradeCount)
+        if (!isRepair || nowUpgradeCount >= maxUpgradeCount)
         {
             isUpgrade = false;
         }
@@ -210,6 +211,7 @@ public abstract class Turret : MonoBehaviour
             isMake = false;
             bodyRenderer.material.color = Color.red;
             headRenderer.material.color = Color.red;
+            Debug.Log(turretColliders[0].name);
         }
         else
         {
@@ -246,7 +248,7 @@ public abstract class Turret : MonoBehaviour
     public void SearchEnemy()
     {
 
-        Collider[] enemyCollider = Physics.OverlapSphere(transform.position, attackRange / 2, (1 << monsterLayer));//레이어 마스크 몬스터 추가
+        Collider[] enemyCollider = Physics.OverlapSphere(transform.position, attackRange, (1 << monsterLayer));//레이어 마스크 몬스터 추가
         Transform nierTargetTransform = null;
         if (enemyCollider.Length > 0)
         {
@@ -282,7 +284,8 @@ public abstract class Turret : MonoBehaviour
     public void TurretUpgrade()
     {
         //상태 업그레이드로
-        turretStatemachine.ChangeState(TurretStateName.UPGRADE);
+        if (isUpgrade)
+            turretStatemachine.ChangeState(TurretStateName.UPGRADE);
     }
 
     public void Hurt(int damge)

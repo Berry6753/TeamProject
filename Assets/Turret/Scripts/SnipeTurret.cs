@@ -21,6 +21,7 @@ public class SnipeTurret : Turret
     private float snipeTurretRepairCost = 10;
     private float snipeTurretUpgradeCost = 20;
     private float snipeTurretMakingCost = 30;
+    
 
     protected override void OnEnable()
     {
@@ -31,7 +32,7 @@ public class SnipeTurret : Turret
 
     public override void Attack()
     {
-        if(Physics.Raycast(firePos.transform.position, firePos.transform.forward,out RaycastHit hit, snipeTurretAttackRange))
+        if(Physics.Raycast(firePos.transform.position, targetTransform.position - firePos.transform.position,out RaycastHit hit, snipeTurretAttackRange,~(ignoreLayer)))
         {
             if (!hit.collider.CompareTag("Monster"))
             {
@@ -39,9 +40,10 @@ public class SnipeTurret : Turret
             }
             else
             {
-                RaycastHit[] raycastHits = Physics.RaycastAll(firePos.transform.position, firePos.transform.forward, snipeTurretAttackRange);
+                RaycastHit[] raycastHits = Physics.RaycastAll(firePos.transform.position, targetTransform.position - firePos.transform.position, snipeTurretAttackRange);
                 fireEfect.SetActive(true);
                 fireEfect.GetComponent<ParticleSystem>().Play();
+                fireEfect.GetComponent<AudioSource>().Play();
                 foreach (RaycastHit monster in raycastHits)
                 {
 

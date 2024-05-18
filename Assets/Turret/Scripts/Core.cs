@@ -35,7 +35,7 @@ public class Core : MonoBehaviour
     {
         if (!isReloading)
         {
-            checkReloadingTime += Time.time;
+            checkReloadingTime += Time.deltaTime;
             if (checkReloadingTime >= realoadCoolTime)
             {
                 isReloading = true;
@@ -45,7 +45,7 @@ public class Core : MonoBehaviour
 
         if (isUpgrading)
         {
-            checkUpgradeTime += Time.time;
+            checkUpgradeTime += Time.deltaTime;
             if (checkUpgradeTime >= upgradeCoolTime)
             {
                 Upgrade();

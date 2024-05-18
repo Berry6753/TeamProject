@@ -24,6 +24,7 @@ public class MissleTurret : Turret
     private float missleTurretRepairCost = 8;
     private float missleTurretUpgradeCost = 15;
     private float missleTurretMakingCost = 20;
+    
 
     [SerializeField]
     private GameObject explosionEffect;
@@ -39,7 +40,7 @@ public class MissleTurret : Turret
 
     public override void Attack()
     {
-        if(Physics.Raycast(firePos.transform.position, firePos.transform.forward,out RaycastHit hit, missleTurretAttackRange))
+        if(Physics.Raycast(firePos.transform.position, targetTransform.position - firePos.transform.position,out RaycastHit hit, missleTurretAttackRange,~(ignoreLayer)))
         {
             if (!hit.collider.CompareTag("Monster"))
             {
@@ -53,7 +54,9 @@ public class MissleTurret : Turret
                 explosionEffect.SetActive(true);
                 explosionEffect.transform.position = targets[0].gameObject.transform.position;
                 explosionEffect.GetComponent<ParticleSystem>().Play();
+                explosionEffect.GetComponent<AudioSource>().Play();
                 fireEfect.GetComponent<ParticleSystem>().Play();
+                fireEfect.GetComponent <AudioSource>().Play();
                 foreach (Collider target in targets)
                 {
                     if (target.CompareTag("Monster"))
@@ -73,8 +76,16 @@ public class MissleTurret : Turret
 
     public override void Upgrade()
     {
+        if (base.turretUpgradeCount < 3)
+            firePos.transform.localPosition = firePos.transform.localPosition + new Vector3(0.03f, 0f, 0);
+        else
+            firePos.transform.localPosition = firePos.transform.localPosition + new Vector3(0.02f, 0f, 0);
+
         base.Upgrade();
         missleTurretNowAttackRadius += missleTurretAttackRadiusRise;
+
+        if (base.turretUpgradeCount == 2)
+            firePos.transform.localPosition = firePos.transform.localPosition + new Vector3(0f, 0f, -0.03f);
     }
 
 }

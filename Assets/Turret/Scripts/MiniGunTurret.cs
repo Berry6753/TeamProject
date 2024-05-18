@@ -22,7 +22,7 @@ public class MiniGunTurret : Turret
     private float miniGunRepairCost = 5;
     private float miniGunUpgradeCost = 10;
     private float miniGunMakingCost = 15;
-
+    
 
     protected override void OnEnable()
     {
@@ -33,11 +33,12 @@ public class MiniGunTurret : Turret
 
     public override void Attack()
     {
-        if (Physics.Raycast(firePos.transform.position, firePos.transform.forward, out RaycastHit hit, miniGunAttackRange))
+        if (Physics.Raycast(firePos.transform.position, targetTransform.position - firePos.transform.position, out RaycastHit hit, miniGunAttackRange,~(ignoreLayer)))
         {
             
             if (!hit.collider.CompareTag("Monster"))
             {
+                Debug.Log((hit.collider.gameObject.name));
                 return;
             }
             else if (hit.collider.CompareTag("Monster"))
@@ -54,6 +55,13 @@ public class MiniGunTurret : Turret
 
             //}
         }
+    }
+
+    public override void Upgrade()
+    {
+        if (base.turretUpgradeCount < 1) 
+        firePos.transform.localPosition = firePos.transform.localPosition+ new Vector3(0, -0.001f, 0);
+        base.Upgrade();
     }
 
 }

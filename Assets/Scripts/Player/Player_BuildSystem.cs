@@ -102,6 +102,7 @@ public class Player_BuildSystem : MonoBehaviour
     private void Update()
     {
         CreateBuilding();
+        UpgradeTurret();
         //BuildTurret();
     }
 
@@ -123,7 +124,7 @@ public class Player_BuildSystem : MonoBehaviour
                 {
                     Debug.Log("설치된 터렛 찾음");
                     deleteBuild = hit.transform.gameObject;
-
+                    
                     DeleteBuild();
                 }
                 else if (build != null)
@@ -158,6 +159,23 @@ public class Player_BuildSystem : MonoBehaviour
         }
     }
 
+    public void UpgradeTurret()
+    {
+        if (BuildModeOn < 0f) return;
+
+        if(deleteBuild != null)
+        {
+            if (deleteBuild.GetComponent<Turret>() != null && info.GearCount >= deleteBuild.GetComponent<Turret>().turretUpgradCost) 
+            {
+                if (Input.GetKeyDown(KeyCode.G))
+                {
+                    deleteBuild.GetComponent<Turret>().TurretUpgrade();
+                    info.UseGear((int)deleteBuild.GetComponent<Turret>().turretUpgradCost);
+                }
+            }
+        }
+    }
+
     public void BuildTurret()
     {
         if (BuildModeOn < 0f) return;
@@ -181,7 +199,7 @@ public class Player_BuildSystem : MonoBehaviour
                 //선택된 터렛의 상태를 destory로 변경
 
                 //디버그 전용
-                deleteBuild.SetActive(false);
+                deleteBuild.transform.parent.gameObject.SetActive(false);
                 deleteBuild = null;
 
                 //해당 포탑의 생성 기어의 50% 회수
@@ -190,9 +208,9 @@ public class Player_BuildSystem : MonoBehaviour
             else
             {
                 if (build == null) return;
-                if(build.GetComponent<Turret>() != null)
+                if(build.transform.GetChild(1).GetComponent<Turret>() != null)
                 {
-                    if (build.GetComponent<Turret>().isMake)
+                    if (build.transform.GetChild(1).GetComponent<Turret>().isMake)
                     {
                         CreateTurretPrecondition();
                     }
@@ -213,9 +231,9 @@ public class Player_BuildSystem : MonoBehaviour
     {
         int buildTurretGearCount;
 
-        if (build.GetComponent<Turret>() != null)
+        if (build.transform.GetChild(1).GetComponent<Turret>() != null)
         {
-            buildTurretGearCount = (int)build.GetComponent<Turret>().turretMakingCost;
+            buildTurretGearCount = (int)build.transform.GetChild(1).GetComponent<Turret>().turretMakingCost;
         }
         else
         {
@@ -234,9 +252,9 @@ public class Player_BuildSystem : MonoBehaviour
         GameObject BuilingTurret = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], build.transform.position, transform.rotation);
 
         //터렛의 상태를 Build or Making이라고 변경
-        if (BuilingTurret.GetComponent<Turret>() != null)
+        if (BuilingTurret.transform.GetChild(1).GetComponent<Turret>() != null)
         {
-            BuilingTurret.GetComponent<Turret>().TurretMake();
+            BuilingTurret.transform.GetChild(1).GetComponent<Turret>().TurretMake();
         }
         else
         {
