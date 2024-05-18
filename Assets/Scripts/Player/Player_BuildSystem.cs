@@ -24,6 +24,8 @@ public class Player_BuildSystem : MonoBehaviour
 
     private Vector2 screenCenterPoint;
 
+    private bool isUpgradeAble;
+
     private void Awake()
     {
         aiming = GetComponent<Player_Aiming>();
@@ -102,7 +104,8 @@ public class Player_BuildSystem : MonoBehaviour
     private void Update()
     {
         CreateBuilding();
-        UpgradeTurret();
+        PrintTurretUpgradeAble();
+        //UpgradeTurret();
         //BuildTurret();
     }
 
@@ -159,21 +162,35 @@ public class Player_BuildSystem : MonoBehaviour
         }
     }
 
-    public void UpgradeTurret()
+    public void OnUpgradeTurret(InputAction.CallbackContext context)
     {
-        if (BuildModeOn < 0f) return;
-
-        if(deleteBuild != null)
+        if (context.started) return;
+        if (context.performed)
         {
-            if (deleteBuild.GetComponent<Turret>() != null && info.GearCount >= deleteBuild.GetComponent<Turret>().turretUpgradCost) 
+            //if (BuildModeOn < 0f) return;
+            //if (deleteBuild == null) return;
+            if (BuildModeOn < 0f) return;
+            if (!isUpgradeAble) return;
+
+            deleteBuild.GetComponent<Turret>().TurretUpgrade();
+            info.UseGear((int)deleteBuild.GetComponent<Turret>().turretUpgradCost);
+        }        
+    }
+
+    private void PrintTurretUpgradeAble()
+    {
+        if (deleteBuild != null)
+        {
+            if (deleteBuild.GetComponent<Turret>() != null && info.GearCount >= deleteBuild.GetComponent<Turret>().turretUpgradCost)
             {
-                if (Input.GetKeyDown(KeyCode.G))
-                {
-                    deleteBuild.GetComponent<Turret>().TurretUpgrade();
-                    info.UseGear((int)deleteBuild.GetComponent<Turret>().turretUpgradCost);
-                }
+                isUpgradeAble = true;
             }
+            else isUpgradeAble = false;
         }
+        else isUpgradeAble = false;
+
+
+        Debug.Log($"업그레이드 가능 여부 : {isUpgradeAble}");
     }
 
     public void BuildTurret()

@@ -140,7 +140,6 @@ public class PlayerMovement : MonoBehaviour
         if (context.performed)
         {
             _velocity += JumpPower;
-            Debug.Log($"점프 Velocity ; {_velocity}");
         }
     }
 
@@ -149,12 +148,10 @@ public class PlayerMovement : MonoBehaviour
         colliders = Physics.OverlapBox(overlapPos.position, new Vector3(0.3f,0.1f,0.3f), Quaternion.identity, gravityLayermask);
         if (colliders.Length > 0 && _velocity < 0.0f)
         {
-            Debug.Log("isGrounded");
             _velocity = -1.0f;
         }
         else
         {
-            Debug.Log("fly");
             _velocity += gravity * Time.deltaTime;
         }
 
@@ -174,7 +171,6 @@ public class PlayerMovement : MonoBehaviour
 
             characterController.Move(playerMoveDir.normalized * moveSpeed * Time.deltaTime);
             //rb.AddForce(playerMoveDir.normalized * moveSpeed * Time.deltaTime);
-            Debug.Log("움직임");
             //transform.position += playerMoveDir.normalized * moveSpeed * Time.deltaTime;
         }
 

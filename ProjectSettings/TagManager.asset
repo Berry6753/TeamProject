@@ -9,6 +9,8 @@ TagManager:
   - Gear
   - Monster
   - Item
+  - Desert
+  - StoneRoad
   layers:
   - Default
   - TransparentFX

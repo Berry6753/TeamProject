@@ -12,7 +12,6 @@ public class LookAtAnimationRigging : MonoBehaviour
     private float aimingTargetWeight = 0f;
     private float reloadTargetWeight = 0f;
     private float gameStopTargetWeight = 0f;
-    private float PlayerDeadTargetWeight = 0f;
     private float ThrowingTargetWeight = 0f;
 
     private Animator animator;
@@ -38,10 +37,10 @@ public class LookAtAnimationRigging : MonoBehaviour
 
     private void Update()
     {
-        PlayerDead();
         ChangeWeight();
         ReloadWeight();
         GameStop();
+        Throwing();
         Rigging();
         //rigs[1].weight = Mathf.Lerp(rigs[1].weight, targetWeight, Time.deltaTime * 10f);
         //rigs[3].weight = Mathf.Lerp(rigs[3].weight, targetWeight, Time.deltaTime * 10f);
@@ -50,7 +49,7 @@ public class LookAtAnimationRigging : MonoBehaviour
 
     private void ChangeWeight()
     {
-        if (animator.GetBool(hashAiming))
+        if (animator.GetBool(hashAiming) && !animator.GetBool(hashDead))
         {
             aimingTargetWeight = 1f;
         }
@@ -74,12 +73,12 @@ public class LookAtAnimationRigging : MonoBehaviour
 
     private void Rigging()
     {
-        rigs[0].weight = Mathf.Lerp(rigs[0].weight, PlayerDeadTargetWeight * reloadTargetWeight, Time.deltaTime * 10f);
-        rigs[1].weight = Mathf.Lerp(rigs[1].weight, PlayerDeadTargetWeight * reloadTargetWeight * gameStopTargetWeight, Time.deltaTime * 10f);
-        rigs[2].weight = Mathf.Lerp(rigs[2].weight, PlayerDeadTargetWeight * reloadTargetWeight * gameStopTargetWeight, Time.deltaTime * 10f);
-        rigs[3].weight = Mathf.Lerp(rigs[3].weight, PlayerDeadTargetWeight * aimingTargetWeight * reloadTargetWeight, Time.deltaTime * 10f);
-        rigs[4].weight = Mathf.Lerp(rigs[4].weight, PlayerDeadTargetWeight * aimingTargetWeight * reloadTargetWeight, Time.deltaTime * 10f);
-        leftHandRig.weight = Mathf.Lerp(leftHandRig.weight, ThrowingTargetWeight * PlayerDeadTargetWeight * reloadTargetWeight, Time.deltaTime * 10f);
+        rigs[0].weight = Mathf.Lerp(rigs[0].weight, reloadTargetWeight, Time.deltaTime * 10f);
+        rigs[1].weight = Mathf.Lerp(rigs[1].weight, reloadTargetWeight * gameStopTargetWeight, Time.deltaTime * 10f);
+        rigs[2].weight = Mathf.Lerp(rigs[2].weight, reloadTargetWeight * gameStopTargetWeight, Time.deltaTime * 10f);
+        rigs[3].weight = Mathf.Lerp(rigs[3].weight, aimingTargetWeight * reloadTargetWeight, Time.deltaTime * 10f);
+        rigs[4].weight = Mathf.Lerp(rigs[4].weight, aimingTargetWeight * reloadTargetWeight, Time.deltaTime * 10f);
+        leftHandRig.weight = Mathf.Lerp(leftHandRig.weight, ThrowingTargetWeight * reloadTargetWeight, Time.deltaTime * 10f);
     }
 
     private void GameStop()
@@ -91,18 +90,6 @@ public class LookAtAnimationRigging : MonoBehaviour
         else
         {
             gameStopTargetWeight = 1f;
-        }
-    }
-
-    private void PlayerDead()
-    {
-        if (animator.GetBool(hashDead))
-        {
-            PlayerDeadTargetWeight = 0f;
-        }
-        else
-        {
-            PlayerDeadTargetWeight = 1f;
         }
     }
 

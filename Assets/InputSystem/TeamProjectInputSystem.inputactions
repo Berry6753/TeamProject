@@ -148,6 +148,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "TurretUpgrade",
+                    "type": "Button",
+                    "id": "0452a986-408d-4f43-9745-24a5c6966bcf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -308,7 +317,7 @@
                 {
                     "name": "",
                     "id": "9718aa65-f4a4-4f9b-874c-d98d4e824da2",
-                    "path": "<Keyboard>/o",
+                    "path": "<Keyboard>/u",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -368,6 +377,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "SelectItem_4",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4279bbb0-a7cb-45c1-92ef-7e6dd8c3f19f",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TurretUpgrade",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

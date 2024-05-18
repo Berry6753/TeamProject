@@ -88,6 +88,12 @@ public class Player_Aiming : MonoBehaviour
 
     private Quaternion mouseRotation;
 
+    [Header("총 오디오 클립")]
+    [SerializeField]
+    private List<AudioClip> shootAudioClip;
+
+    private AudioSource audioSource;
+
     private void Awake()
     {
         isGameStop = -1f;
@@ -98,6 +104,7 @@ public class Player_Aiming : MonoBehaviour
 
         buildSystem = GetComponent<Player_BuildSystem>();
         UI = GetComponent<Player_Info_UI>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void OnAiming(InputAction.CallbackContext context)
@@ -129,6 +136,7 @@ public class Player_Aiming : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
+        if (context.started) return;
         if (isGameStop > 0) return;
         if (buildSystem.BuildModeOn > 0f)
         {
@@ -147,6 +155,7 @@ public class Player_Aiming : MonoBehaviour
             if (context.performed)
             {
                 isFire = true;
+                //FireGun();
             }
             if (context.canceled)
             {
@@ -160,8 +169,8 @@ public class Player_Aiming : MonoBehaviour
         DecideRecoilBack();
         CameraRotation();
         GameStopping();
-        AimingCamera();
         AimingOnOff();
+        AimingCamera();
         //ShootRay();        
     }
 
@@ -182,6 +191,7 @@ public class Player_Aiming : MonoBehaviour
         mouseRotation = Quaternion.Euler(y_Axis.Value, x_Axis.Value, 0);
         
         CameraLookAt.rotation = Quaternion.Lerp(CameraLookAt.rotation, mouseRotation, cameralerftime);
+        Debug.Log(cameralerftime);
         /*mouseRotation;*/
         //Quaternion.Lerp(CameraLookAt.rotation, mouseRotation, cameraLerfTime);
     }
@@ -288,20 +298,24 @@ public class Player_Aiming : MonoBehaviour
             AttackAble = false;
             AttackTimer = AttackDelayTime;
             notAimingTimer = 0;
-            animator.SetBool(hashFire, true);    
-            
+            animator.SetBool(hashFire, true);
         }
         else
         {
             cameralerftime = 0.1f;
-            animator.SetBool(hashFire, false);
         }
+    }
+
+    public void FireEnd()
+    {        
+        animator.SetBool(hashFire, false);
     }
 
     public void Fire()
     {        
         if(info.equipedBulletCount > 0)
         {            
+            //데미지 부여
             ShootRay();
 
             ////카메라 반동
@@ -309,7 +323,10 @@ public class Player_Aiming : MonoBehaviour
 
             //섬광 파티클 재생
             ParticleSystem.GetComponent<ParticleSystem>().Play();
+
             //격발 소리 재생
+            audioSource.clip = shootAudioClip[0];
+            audioSource.Play();
 
             //탄의 수 감소
             info.equipedBulletCount--;
@@ -320,6 +337,8 @@ public class Player_Aiming : MonoBehaviour
         else
         {
             //빈 탄창 소리 재생
+            audioSource.clip = shootAudioClip[1];
+            audioSource.Play();
         }
     }
 
