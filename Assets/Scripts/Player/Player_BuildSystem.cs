@@ -6,11 +6,12 @@ using UnityEngine.InputSystem;
 
 public class Player_BuildSystem : MonoBehaviour
 {
-    [SerializeField] private float SelectBuildTurretIndex;
+    [SerializeField] private int SelectBuildTurretIndex;
     [SerializeField] private LayerMask mask;
 
     private Player_Aiming aiming;
     private Player_Info info;
+    private TurretIcon_UI turretIcon_UI;
 
     private List<string> poolDicTag = new List<string>();
 
@@ -30,8 +31,14 @@ public class Player_BuildSystem : MonoBehaviour
     {
         aiming = GetComponent<Player_Aiming>();
         info = GetComponent<Player_Info>();
+        turretIcon_UI = GameObject.FindObjectOfType<TurretIcon_UI>();
         BuildModeOn = -1f;
         SelectBuildTurretIndex = 0;
+    }
+
+    private void Start()
+    {
+        turretIcon_UI.PrintSelectTurret(SelectBuildTurretIndex);
     }
 
     private Vector3 GetMouseWorldPosition()
@@ -74,10 +81,12 @@ public class Player_BuildSystem : MonoBehaviour
                 }
             }
 
+            turretIcon_UI.PrintSelectTurret(SelectBuildTurretIndex);
+
             if (build != null)
             {
                 build.SetActive(false);
-                build = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], GetMouseWorldPosition());
+                build = MultiObjectPool.SpawnFromPool(poolDicTag[SelectBuildTurretIndex], GetMouseWorldPosition());
             }
         }
         
@@ -139,7 +148,7 @@ public class Player_BuildSystem : MonoBehaviour
                 else
                 {
                     deleteBuild = null;
-                    build = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], GetMouseWorldPosition());
+                    build = MultiObjectPool.SpawnFromPool(poolDicTag[SelectBuildTurretIndex], GetMouseWorldPosition());
                 }
             }
             else
@@ -266,7 +275,7 @@ public class Player_BuildSystem : MonoBehaviour
         //기어 소모
         info.UseGear(buildTurretGearCount);
         //터렛 생성
-        GameObject BuilingTurret = MultiObjectPool.SpawnFromPool(poolDicTag[(int)SelectBuildTurretIndex], build.transform.position, transform.rotation);
+        GameObject BuilingTurret = MultiObjectPool.SpawnFromPool(poolDicTag[SelectBuildTurretIndex], build.transform.position, transform.rotation);
 
         //터렛의 상태를 Build or Making이라고 변경
         if (BuilingTurret.transform.GetChild(1).GetComponent<Turret>() != null)
