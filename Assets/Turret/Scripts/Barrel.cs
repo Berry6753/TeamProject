@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.UI;
 
 public class Barrel : MonoBehaviour
 {
@@ -32,6 +33,8 @@ public class Barrel : MonoBehaviour
     private GameObject makingEffect;
     [SerializeField]
     private GameObject explosionEffect;
+    [SerializeField]
+    private Slider sliderGage;
 
     private int attackDamge = 300;
     //private int hp = 1;
@@ -59,6 +62,7 @@ public class Barrel : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
         bodyColleder = GetComponent<BoxCollider>();
         turretLayer = LayerMask.NameToLayer("Turret");
+        sliderGage.maxValue = makingTime;
         
     }
 
@@ -71,6 +75,7 @@ public class Barrel : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("debug");
         explosionEffect.SetActive(false);
         makingEffect.SetActive(false);
+        sliderGage.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -83,6 +88,7 @@ public class Barrel : MonoBehaviour
         if (isMaking)
         {
             checkTime += Time.deltaTime;
+            sliderGage.value = checkTime;
             if(checkTime >= makingTime)
             {
                 meshRenderer.enabled = true;
@@ -92,6 +98,7 @@ public class Barrel : MonoBehaviour
                 isMakeFinsh = true;
 
                 makingEffect.SetActive(false);
+                sliderGage.gameObject.SetActive(false);
                 isMaking = false;
                 checkTime = 0;
             }
@@ -121,6 +128,7 @@ public class Barrel : MonoBehaviour
         isMaking = true;
         meshRenderer.enabled = false;
         makingEffect.SetActive(true);
+        sliderGage.gameObject.SetActive(true);
         gameObject.tag = "Barrel";
         gameObject.layer = LayerMask.NameToLayer("Turret");
         bodyColleder.enabled = true;

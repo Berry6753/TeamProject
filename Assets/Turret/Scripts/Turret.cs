@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public enum TurretStateName
@@ -66,6 +67,9 @@ public abstract class Turret : MonoBehaviour
 
     private bool isUpgrade;
     private bool isRepair;
+
+    public Slider sliderGage;
+
     [HideInInspector]
     public CapsuleCollider turretCollider;
 
@@ -108,7 +112,7 @@ public abstract class Turret : MonoBehaviour
         turretLayer = LayerMask.NameToLayer("Turret");
         monsterLayer = LayerMask.NameToLayer("Monster");
         ignoreLayer = 1 << LayerMask.NameToLayer("Item") | 1 << LayerMask.NameToLayer("Ignore Raycast") | 1 << LayerMask.NameToLayer("Player");
-
+        
     }
 
     protected virtual void OnEnable()
@@ -116,6 +120,7 @@ public abstract class Turret : MonoBehaviour
         turretStatemachine.ChangeState(TurretStateName.BLUESCREEN);
         makingEfect.SetActive(false);
         fireEfect.SetActive(false);
+        sliderGage.gameObject.SetActive(false);
     }
 
    

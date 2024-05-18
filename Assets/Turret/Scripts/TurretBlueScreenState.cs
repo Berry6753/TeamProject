@@ -20,11 +20,13 @@ public class TurretBlueScreenState : TurretBaseState
         turret.gameObject.layer = LayerMask.NameToLayer("debug");
         turret.turretCollider.gameObject.tag = "Untagged";
         turret.turretCollider.gameObject.layer = LayerMask.NameToLayer("debug");
+        
     }
 
     public override void Update()
     {
         turret.ChangeColor();
+
     }
 
     public override void Exit() 
