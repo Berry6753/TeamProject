@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MonsterSpawner : MonoBehaviour
 {
-    [SerializeField] private Transform[] spawnPoint;    //스폰위치
+    [SerializeField] private Transform spawnPoint;    //스폰위치
     private Wave currentWave;
 
     private List<GameObject> monsterList;
@@ -30,7 +30,7 @@ public class MonsterSpawner : MonoBehaviour
         {
             while (spawnMonsterCount[i] < currentWave.maxMonsterCount[i])
             {
-                GameObject clone = Instantiate(currentWave.mosnterPrefab[i]);
+                GameObject clone = Instantiate(currentWave.monsterPrefab[i]);
                 GameObject monster = clone.GetComponent<GameObject>();
 
                 monsterList.Add(monster);
@@ -39,6 +39,7 @@ public class MonsterSpawner : MonoBehaviour
 
                 yield return new WaitForSeconds(currentWave.spawnTime);
             }
+            yield return new WaitForSeconds(currentWave.spawnTime);
         }
     }
 }

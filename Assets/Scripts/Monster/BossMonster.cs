@@ -33,8 +33,8 @@ public class BossMonster : MonoBehaviour
     private NavMeshAgent nav;
     private Rigidbody rb;
     private Collider mainCollider;
-    private SkinnedMeshRenderer renderer;
-    private SphereCollider attackC;
+    private SkinnedMeshRenderer[] renderer;
+    private SphereCollider[] attackC;
     private BoxCollider jumpAttackC;
     [SerializeField] private CapsuleCollider dashAttackC;
 
@@ -75,10 +75,10 @@ public class BossMonster : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
         mainCollider = GetComponent<Collider>();
-        renderer = GetComponentInChildren<SkinnedMeshRenderer>();
+        renderer = GetComponentsInChildren<SkinnedMeshRenderer>();
         bossTr = GetComponent<Transform>();
         defaultTarget = GameObject.FindWithTag("Player").GetComponent<Transform>();
-        attackC = GetComponentInChildren<SphereCollider>();
+        attackC = GetComponentsInChildren<SphereCollider>();
         jumpAttackC = GetComponentInChildren<BoxCollider>();
         stateMachine = gameObject.AddComponent<StateMachine>();
 
@@ -160,7 +160,10 @@ public class BossMonster : MonoBehaviour
                     if (canAttack && !anim.GetBool("isAttack"))
                     {
                         CloseAttack();
-                        attackC.enabled = true;
+                        foreach (SphereCollider coll in attackC)
+                        { 
+                            coll.enabled = true; 
+                        }
                         jumpAttackC.enabled = false;
                         dashAttackC.enabled = false;
                     }
@@ -174,7 +177,10 @@ public class BossMonster : MonoBehaviour
                 {
                     nav.enabled = true;
                     stateMachine.ChangeState(State.TRACE);
-                    attackC.enabled = false;
+                    foreach (SphereCollider coll in attackC)
+                    {
+                        coll.enabled = false;
+                    }
                     jumpAttackC.enabled = false;
                     dashAttackC.enabled = false;
                 }
@@ -195,7 +201,10 @@ public class BossMonster : MonoBehaviour
                 {
                     nav.enabled = true;
                     stateMachine.ChangeState(State.TRACE);
-                    attackC.enabled = false;
+                    foreach (SphereCollider coll in attackC)
+                    {
+                        coll.enabled = false;
+                    }
                     jumpAttackC.enabled = false;
                     dashAttackC.enabled = false;
                 }
@@ -204,7 +213,10 @@ public class BossMonster : MonoBehaviour
             {
                 nav.enabled = true;
                 stateMachine.ChangeState(State.IDLE);
-                attackC.enabled = false;
+                foreach (SphereCollider coll in attackC)
+                {
+                    coll.enabled = false;
+                }
                 jumpAttackC.enabled = false;
                 dashAttackC.enabled = false;
             }
@@ -226,21 +238,18 @@ public class BossMonster : MonoBehaviour
     }
     private void StandoffAttack()
     {
-        int pattern = Random.Range(2, 3);
+        int pattern = Random.Range(0, 4);
         switch (pattern)
         {
             case 0:
-                stateMachine.ChangeState(State.TRACE);
-                break;
-            case 1:
-                stateMachine.ChangeState(State.TRACE);
-                break;
-            case 2:
                 stateMachine.ChangeState(State.JumpA);
                 break;
-            case 3:
+            case 1:
                 stateMachine.ChangeState(State.DashA);
                 DashAttack_backward();
+                break;
+            default:
+                stateMachine.ChangeState(State.TRACE);
                 break;
         }
     }
@@ -255,15 +264,20 @@ public class BossMonster : MonoBehaviour
         nav.enabled = false;
         float distance = Vector3.Distance(chaseTarget.position, bossTr.position);
         Vector3 attackPos = transform.position + transform.forward * (distance - 2) + Vector3.up * 20.0f;
-        rb.AddForce(Vector3.up * 100.0f, ForceMode.Impulse);
         mainCollider.isTrigger = true;
         yield return new WaitForSeconds(1.0f);
-        renderer.enabled = false;
+        foreach (SkinnedMeshRenderer render in renderer)
+        {
+            render.enabled = false;
+        }
         FreezeVelocity();
         yield return new WaitForSeconds(0.1f);
         transform.position = attackPos;
         yield return new WaitForSeconds(1.0f);
-        renderer.enabled = true;
+        foreach (SkinnedMeshRenderer render in renderer)
+        {
+            render.enabled = true;
+        }
         anim.SetBool(hashJump, false);
         jumpAttackC.enabled = true;
         yield return new WaitForSeconds(2.0f);
