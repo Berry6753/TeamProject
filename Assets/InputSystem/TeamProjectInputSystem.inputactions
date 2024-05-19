@@ -87,7 +87,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Debug_Dead",
+                    "name": "Debug_Hurt",
                     "type": "Button",
                     "id": "65f6118a-8dfb-4a60-aaba-dc65d70de1b6",
                     "expectedControlType": "Button",
@@ -141,18 +141,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SelectItem_4",
+                    "name": "TurretUpgrade",
                     "type": "Button",
-                    "id": "7a155025-3f26-44a8-8f8e-86262a9404ab",
+                    "id": "0452a986-408d-4f43-9745-24a5c6966bcf",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "TurretUpgrade",
+                    "name": "RepairTurret",
                     "type": "Button",
-                    "id": "0452a986-408d-4f43-9745-24a5c6966bcf",
+                    "id": "dcb1bedc-3a11-4be3-b389-ec4475b53bf7",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -310,14 +310,14 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Debug_Dead",
+                    "action": "Debug_Hurt",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "9718aa65-f4a4-4f9b-874c-d98d4e824da2",
-                    "path": "<Keyboard>/u",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -328,7 +328,7 @@
                 {
                     "name": "",
                     "id": "486965ec-344e-47ee-b79f-5ebb252a9745",
-                    "path": "<Keyboard>/f",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -371,23 +371,23 @@
                 },
                 {
                     "name": "",
-                    "id": "30f6b1b0-579d-420c-9f4d-91499457c035",
-                    "path": "<Keyboard>/4",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SelectItem_4",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "4279bbb0-a7cb-45c1-92ef-7e6dd8c3f19f",
                     "path": "<Keyboard>/g",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "TurretUpgrade",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fc773419-e8ea-4a38-b788-4f050a4a1c2c",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RepairTurret",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

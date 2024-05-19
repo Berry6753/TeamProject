@@ -110,7 +110,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 41a3a2c7b095dcc4383622c75892d5c4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -158,6 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: "\uADA4\uB3C4\uC815\uBC00\uD0C0\uACA9"
+  type: 0
   effectPrefab: {fileID: 315582586514313800, guid: 6b4d63635650ed746ae8c8a0dbc2e6e1, type: 3}
 --- !u!54 &8279397283537978367
 Rigidbody:

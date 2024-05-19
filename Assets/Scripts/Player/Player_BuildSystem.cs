@@ -26,6 +26,7 @@ public class Player_BuildSystem : MonoBehaviour
     private Vector2 screenCenterPoint;
 
     private bool isUpgradeAble;
+    private bool isRepairAble;
 
     private void Awake()
     {
@@ -109,11 +110,42 @@ public class Player_BuildSystem : MonoBehaviour
             }
         }
     }
+    public void OnUpgradeTurret(InputAction.CallbackContext context)
+    {
+        if (context.started) return;
+        if (context.performed)
+        {
+            //if (BuildModeOn < 0f) return;
+            //if (deleteBuild == null) return;
+            if (BuildModeOn < 0f) return;
+            if (!isUpgradeAble) return;
+
+            deleteBuild.GetComponent<Turret>().TurretUpgrade();
+            info.UseGear((int)deleteBuild.GetComponent<Turret>().turretUpgradCost);
+        }
+    }
+
+    public void OnRepairTurret(InputAction.CallbackContext context)
+    {
+        if (context.started) return;
+        if (context.performed)
+        {
+            if (aiming.isGameStop > 0) return;
+            if (BuildModeOn < 0f) return;
+            if (!isRepairAble) return;
+
+            deleteBuild.GetComponent<Turret>().TurretRepair();
+            info.UseGear((int)deleteBuild.GetComponent<Turret>().turretRepairCost);
+        }
+        
+        
+    }
 
     private void Update()
     {
         CreateBuilding();
         PrintTurretUpgradeAble();
+        PrintTurretRepairAble();
         //UpgradeTurret();
         //BuildTurret();
     }
@@ -171,26 +203,12 @@ public class Player_BuildSystem : MonoBehaviour
         }
     }
 
-    public void OnUpgradeTurret(InputAction.CallbackContext context)
-    {
-        if (context.started) return;
-        if (context.performed)
-        {
-            //if (BuildModeOn < 0f) return;
-            //if (deleteBuild == null) return;
-            if (BuildModeOn < 0f) return;
-            if (!isUpgradeAble) return;
-
-            deleteBuild.GetComponent<Turret>().TurretUpgrade();
-            info.UseGear((int)deleteBuild.GetComponent<Turret>().turretUpgradCost);
-        }        
-    }
-
     private void PrintTurretUpgradeAble()
     {
         if (deleteBuild != null)
         {
-            if (deleteBuild.GetComponent<Turret>() != null && info.GearCount >= deleteBuild.GetComponent<Turret>().turretUpgradCost)
+            Turret upgradeTurret = deleteBuild.GetComponent<Turret>();
+            if (upgradeTurret != null && info.GearCount >= upgradeTurret.turretUpgradCost)
             {
                 isUpgradeAble = true;
             }
@@ -200,6 +218,20 @@ public class Player_BuildSystem : MonoBehaviour
 
 
         Debug.Log($"업그레이드 가능 여부 : {isUpgradeAble}");
+    }
+
+    private void PrintTurretRepairAble()
+    {
+        if (deleteBuild != null)
+        {
+            Turret repairTurret = deleteBuild.GetComponent<Turret>();
+            if (repairTurret.isTurretRepair && info.GearCount >= repairTurret.turretRepairCost)
+            {
+                isRepairAble = true;
+            }
+            else isRepairAble=false;
+        }
+        else isRepairAble= false;
     }
 
     public void BuildTurret()
