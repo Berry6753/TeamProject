@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3243629511765019475}
   - component: {fileID: 7303897470470674766}
   - component: {fileID: 1327723792735301921}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Missile_Item_2
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -112,9 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillEffect: {fileID: 2922542473701634172, guid: bcdcbb920a1d5d44d90d1fa3311c9038, type: 3}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 759
+  YPos: 50
 --- !u!54 &1327723792735301921
 Rigidbody:
   m_ObjectHideFlags: 0

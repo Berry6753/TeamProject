@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1579313021008412114
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1579313021008412112}
+  - component: {fileID: 1579313021008412113}
+  m_Layer: 0
+  m_Name: TurretManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1579313021008412112
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1579313021008412114}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1579313021008412113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1579313021008412114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6d0245d40f36dc4ab17ae4d177f30fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pools:
+  - tag: BarrelPos
+    prefab: {fileID: 7835255645410379541, guid: be9c24f009c04624981b308afd66411f, type: 3}
+    size: 1
+  - tag: FireTurret
+    prefab: {fileID: 2895669166751539903, guid: 601f66037d45c3b4a874b2db78014e1e, type: 3}
+    size: 1
+  - tag: Minigun
+    prefab: {fileID: 3107424174797135005, guid: 362e690feabd382439bc9945edf691bc, type: 3}
+    size: 1
+  - tag: Missle
+    prefab: {fileID: 355304598553051738, guid: aa332e064c5879a4488d77e7200b92b3, type: 3}
+    size: 1
+  - tag: Snipe
+    prefab: {fileID: 2102919445623182821, guid: 8709f8c8dba9e5b4395b6e3c7f9285fe, type: 3}
+    size: 1

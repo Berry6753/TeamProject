@@ -52,6 +52,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float gravityMultiplier;
 
+    [Header("걷는 소리 모음")]
+    [SerializeField]
+    private List<AudioClip> walkAudio;
+
+    private AudioSource walkAudioSource;
+
     //중력 값
     private float gravity = -9.81f;
     //현재 중력 가속도
@@ -74,6 +80,7 @@ public class PlayerMovement : MonoBehaviour
 
     private readonly int hashMoveZ = Animator.StringToHash("Z_Speed");
     private readonly int hashMoveX = Animator.StringToHash("X_Speed");
+    private readonly int hashFire = Animator.StringToHash("Fire");
 
     [SerializeField]
     private LayerMask gravityLayermask;
@@ -81,11 +88,14 @@ public class PlayerMovement : MonoBehaviour
     //지반 확인용 overlapCollider
     private Collider[] colliders;
 
+    private bool isGround;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
         aiming = GetComponent<Player_Aiming>();
+        walkAudioSource = GetComponent<AudioSource>();
 
         _velocity = 0f;
 
@@ -117,6 +127,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         Gravity();
+        //DecideWalkSound();
         Movement();
     }
 
@@ -139,7 +150,7 @@ public class PlayerMovement : MonoBehaviour
         if (colliders.Length <= 0) return;
         if (context.performed)
         {
-            _velocity += JumpPower;
+            _velocity += JumpPower;            
         }
     }
 
@@ -149,10 +160,12 @@ public class PlayerMovement : MonoBehaviour
         if (colliders.Length > 0 && _velocity < 0.0f)
         {
             _velocity = -1.0f;
+            //isGround = true;
         }
         else
         {
             _velocity += gravity * Time.deltaTime;
+            //isGround = false;
         }
 
         characterController.Move(new Vector3(0,_velocity,0) * Time.deltaTime);
@@ -180,6 +193,46 @@ public class PlayerMovement : MonoBehaviour
 
         //animator.SetBool("Move", inputMoveDir.magnitude >= 0.1f);
     }
+
+    //private void DecideWalkSound()
+    //{
+    //    if (animator.GetBool(hashFire)) return;
+
+    //    if (isGround)
+    //    {
+    //        foreach (var ground in colliders)
+    //        {
+    //            if (ground.gameObject.layer != LayerMask.NameToLayer("Ground")) continue;
+    //            if (ground.CompareTag("Desert"))
+    //            {
+    //                walkAudioSource.clip = walkAudio[0];
+    //            }
+    //            else if (ground.CompareTag("StoneRoad"))
+    //            {
+    //                walkAudioSource.clip = walkAudio[1];
+    //            }
+    //            else if (ground.gameObject.layer == LayerMask.NameToLayer("Turret"))
+    //            {
+    //                walkAudioSource.clip = walkAudio[2];
+    //            }
+    //        }
+    //    }
+    //    else
+    //    {
+    //        //walkAudioSource.clip = walkAudio[0];
+    //        walkAudioSource.clip = null;
+    //    }         
+    //}
+
+    //public void JumpSoundPlay()
+    //{
+    //    walkAudioSource.Play();
+    //}
+
+    //public void WalkSoundPlay()
+    //{
+    //    walkAudioSource.Play();
+    //}
 
     private void ChangeSpeed()
     {

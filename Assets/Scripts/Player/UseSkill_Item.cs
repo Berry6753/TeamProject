@@ -127,6 +127,10 @@ public class UseSkill_Item : MonoBehaviour
                         animator.SetBool(hashHeal, true);
                         HealingAnimation();
                         break;
+                    case ItemType.Defence:
+                        animator.SetBool(hashThrow, true);
+                        break;
+
                 }  
                 
                 if(SelectUseIndex >= skill_Inven.Count)

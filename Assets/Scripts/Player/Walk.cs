@@ -17,8 +17,8 @@ public class Walk : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player")) return;        
-        
+        if (other.transform.CompareTag("Player")) return;
+        //if (Mathf.Abs(Vector3.Dot(other.ClosestPoint(transform.position), Vector3.up)) <= 0.5f) return;
         if (other.transform.CompareTag("Desert"))
         {
             walkAudioSource.clip = walkAudio[0];
@@ -33,5 +33,10 @@ public class Walk : MonoBehaviour
         }
 
         walkAudioSource.Play();
+    }
+
+    public void WalkSoundPlay()
+    {
+        //walkAudioSource.Play();
     }
 }

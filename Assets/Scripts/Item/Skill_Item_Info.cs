@@ -6,6 +6,7 @@ public enum ItemType
 {
     Attack,
     Heal,
+    Defence
 }
 
 public class Skill_Item_Info : MonoBehaviour
