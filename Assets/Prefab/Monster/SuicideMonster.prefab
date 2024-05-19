@@ -20998,16 +20998,16 @@ MonoBehaviour:
   attackRange: 2
   upScaleHp: 50
   upScaleDamage: 2
-  startSpwanNum: 0
+  startSpawnNum: 0
   upScaleSpwanNum: 1
   spawnTiming: 10
   sensingRange: 0
   turretLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   monsterLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   state: 0
   isDead: 0
   exlosionEffect: {fileID: 1723354810779775139}

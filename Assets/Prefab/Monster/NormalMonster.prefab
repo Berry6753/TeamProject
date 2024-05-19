@@ -2204,7 +2204,7 @@ MonoBehaviour:
   attackRange: 2
   upScaleHp: 10
   upScaleDamage: 2.5
-  startSpwanNum: 5
+  startSpawnNum: 5
   upScaleSpwanNum: 10
   spawnTiming: 1
   sensingRange: 10
@@ -2213,7 +2213,7 @@ MonoBehaviour:
     m_Bits: 256
   monsterLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   state: 0
   isDead: 0
 --- !u!195 &3817533725461811248

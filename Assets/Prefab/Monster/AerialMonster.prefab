@@ -28131,7 +28131,7 @@ MonoBehaviour:
   attackRange: 10
   upScaleHp: 8
   upScaleDamage: 5
-  startSpwanNum: 3
+  startSpawnNum: 3
   upScaleSpwanNum: 10
   spawnTiming: 1
   sensingRange: 20
@@ -28140,7 +28140,7 @@ MonoBehaviour:
     m_Bits: 256
   monsterLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   state: 0
   isDead: 0
   fireball: {fileID: 6206036315837363858}

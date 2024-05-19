@@ -2574,7 +2574,7 @@ MonoBehaviour:
     m_Bits: 256
   monsterLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   state: 0
   isDead: 0
 --- !u!1 &1963485309810411145

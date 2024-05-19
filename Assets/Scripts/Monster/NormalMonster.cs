@@ -9,8 +9,6 @@ public class NormalMonster : Monster
     {
         base.Awake();
         defaultTarget = GameObject.FindWithTag("Player").GetComponent<Transform>();
-        attack = GetComponentInChildren<SphereCollider>();
-        attack.enabled = false;
     }
     private void Start()
     {
@@ -27,10 +25,5 @@ public class NormalMonster : Monster
     protected override void ChaseTarget()
     {
         StartCoroutine(MonsterState());
-    }
-
-    protected override void SpawnTiming()
-    {
-        throw new NotImplementedException();
     }
 }

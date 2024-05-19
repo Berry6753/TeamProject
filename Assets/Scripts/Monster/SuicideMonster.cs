@@ -15,8 +15,6 @@ public class SuicideMonster : Monster
     {
         base.Awake();
         defaultTarget = GameObject.FindWithTag("Player").GetComponent<Transform>();
-        attack = GetComponentInChildren<SphereCollider>();
-        attack.enabled = false;
     }
     private void Start()
     {
@@ -53,7 +51,10 @@ public class SuicideMonster : Monster
                 stateMachine.ChangeState(State.IDLE);
                 yield return new WaitForSeconds(explosionTime);
                 stateMachine.ChangeState(State.ATTACK);
-                attack.enabled = true;
+                foreach (Collider c in attack)
+                {
+                    c.enabled = true;
+                }
                 exlosionEffect.Play();
                 form.SetActive(false);
                 yield return new WaitForSeconds(duringExplosion);
@@ -65,11 +66,6 @@ public class SuicideMonster : Monster
                 stateMachine.ChangeState(State.TRACE);
             }
         }
-    }
-
-    protected override void SpawnTiming()
-    {
-        throw new NotImplementedException();
     }
 
     protected override void UpScaleDamage()

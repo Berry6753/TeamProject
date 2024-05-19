@@ -20,16 +20,15 @@ public abstract class Monster : MonoBehaviour
     [SerializeField] protected float upScaleHp;         //체력 성장치
     [SerializeField] protected float upScaleDamage;     //공격력 성장치
     [Header("스폰 관련")]
-    [SerializeField] protected float startSpwanNum;     //초기 스폰 수
-    [SerializeField] protected float upScaleSpwanNum;   //스폰 증가 수 
-    [SerializeField] protected float spawnTiming;       //스폰 기점
- 
+    [SerializeField] public int startSpawnNum;        //초기 스폰 수
+    [SerializeField] protected int upScaleSpwanNum;   //스폰 증가 수 
+    [SerializeField] protected int spawnTiming;       //스폰 기점
 
     [SerializeField] protected float sensingRange;      //감지 범위
     protected int turretIndex = 0;                      //가장 가까운 터렛인덱스
     protected int secondTurretIndex = 0;                //두 번째 가까운 터렛인덱스
     protected int targetingIndex = 0;                   //타겟으로 삼을 터렛인덱스
-    protected Collider attack;                          //공격 콜라이더
+    protected Collider[] attack;                          //공격 콜라이더
 
     protected Transform monsterTr;                      //몬스터 위치
     protected Transform defaultTarget;                  //기본 타겟
@@ -62,6 +61,11 @@ public abstract class Monster : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
+        attack = GetComponentsInChildren<SphereCollider>();
+        foreach (Collider c in attack)
+        {
+            c.enabled = false;
+        }
         stateMachine = gameObject.AddComponent<StateMachine>();
 
         stateMachine.AddState(State.IDLE, new IdleState(this));
@@ -109,18 +113,27 @@ public abstract class Monster : MonoBehaviour
                 if (canAttack)
                 {
                     stateMachine.ChangeState(State.ATTACK);
-                    attack.enabled = true;
+                    foreach (Collider c in attack)
+                    {
+                        c.enabled = true;
+                    }
                 }
                 else
                 {
                     stateMachine.ChangeState(State.IDLE);
-                    attack.enabled = false;
+                    foreach (Collider c in attack)
+                    {
+                        c.enabled = false;
+                    }
                 }
             }
             else
             {
                 stateMachine.ChangeState(State.TRACE);
-                attack.enabled = false;
+                foreach (Collider c in attack)
+                {
+                    c.enabled = false;
+                }
             }
         }
     }
@@ -203,7 +216,7 @@ public abstract class Monster : MonoBehaviour
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
-    protected abstract void SpawnTiming();              //스폰 타이밍
+    //protected abstract void SpawnTiming();              //스폰 타이밍
 
     protected void UpScaleHp()                          //체력 증가량
     {
@@ -215,11 +228,11 @@ public abstract class Monster : MonoBehaviour
         damage += upScaleDamage * wave;
     }
 
-    protected void UpScaleSpawn()                       //스폰 증가수
+    protected virtual void UpScaleSpawn()                       //스폰 증가수
     {
         if (wave % 10 == 0 && wave / 10 > 0)
         {
-            startSpwanNum += upScaleSpwanNum;
+            startSpawnNum += upScaleSpwanNum;
         }
     }
 

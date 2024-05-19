@@ -39,7 +39,6 @@ public class BossMonster : MonoBehaviour
     [SerializeField] private CapsuleCollider dashAttackC;
 
     [Header("")]
-    [SerializeField] private LayerMask groundLayer;
     [SerializeField] protected LayerMask turretLayer;   //터렛레이어
     [SerializeField] protected LayerMask monsterLayer;  //몬스터레이어
     [SerializeField] protected float sensingRange;      //감지 범위
@@ -313,7 +312,6 @@ public class BossMonster : MonoBehaviour
             Vector3 attackPos = transform.position + transform.forward * distance;
             transform.position = Vector3.MoveTowards(transform.position, attackPos, (speed + dashSpeed/2) + Time.deltaTime);
             dashTime += Time.deltaTime;
-            Debug.Log(dashTime);
             if (dashTime > 2f)
             {
                 Debug.Log("aa");
@@ -427,7 +425,6 @@ public class BossMonster : MonoBehaviour
                 isDash = false;
                 anim.SetBool(hashDash, false);
                 FreezeVelocity();
-                Debug.Log("bb");
             }
         }
     }

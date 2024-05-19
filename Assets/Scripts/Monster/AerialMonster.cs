@@ -67,9 +67,4 @@ public class AerialMonster : Monster
     { 
         fireball.Play();
     }
-
-    protected override void SpawnTiming()
-    {
-        throw new System.NotImplementedException();
-    }
 }

@@ -10,8 +10,6 @@ public class SiegeMonster : Monster
     {
         base.Awake();
         defaultTarget = GameObject.FindWithTag("Core").GetComponent<Transform>();
-        attack = GetComponentInChildren<SphereCollider>();
-        attack.enabled = false;
     }
     private void Start()
     {
@@ -22,6 +20,7 @@ public class SiegeMonster : Monster
     protected override void Update()
     {
         base.Update();
+        PriorityTarget();
         LookAt();
     }
 
@@ -29,9 +28,10 @@ public class SiegeMonster : Monster
     {
         StartCoroutine(MonsterState());
     }
-
-    protected override void SpawnTiming()
+    protected override void UpScaleSpawn()
     {
-        throw new NotImplementedException();
+        if (wave == 5)
+            startSpawnNum = 2;
+        base.UpScaleSpawn();
     }
 }
