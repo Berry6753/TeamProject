@@ -39,15 +39,29 @@ public class Brricade : MonoBehaviour
         ItemObjectPool.ReturnToPool(gameObject);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         foreach(GameObject obj in target)
         {
             Vector3 dir = (obj.transform.position - transform.position);
+
+            if (dir.z < 0)
+            {
+                obj.transform.position += new Vector3(0, 0, -0.8f);
+            }
+            else
+            {
+                obj.transform.position += new Vector3(0, 0, 0.8f);
+            }
+
             //obj.transform.position = obj.transform.position + new Vector3(dir.x, 0, dir.z) * 1000f * Time.deltaTime;
             if (obj.CompareTag("Player"))
             {
                 obj.GetComponent<CharacterController>().Move(new Vector3(dir.x, 0, dir.z) * pushForce * Time.deltaTime);
+            }
+            else if (obj.CompareTag("Monster"))
+            {
+                obj.GetComponent<Rigidbody>().AddForce(new Vector3(dir.x, 0, dir.z) * pushForce * Time.deltaTime);
             }
         }        
     }

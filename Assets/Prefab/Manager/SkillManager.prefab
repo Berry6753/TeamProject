@@ -63,3 +63,12 @@ MonoBehaviour:
   - tag: Healing_Item2
     prefab: {fileID: 1497659366000681694, guid: 52f28ba5b26541a43a711ca11f374a78, type: 3}
     size: 1
+  - tag: Barricade_Item
+    prefab: {fileID: 8402480941508049593, guid: b98214da466b6334f94e079f410f10ce, type: 3}
+    size: 1
+  - tag: Barricade_Item2
+    prefab: {fileID: 8272147208977574949, guid: a5dd381b1d9ff2d4693ab7718edb4f31, type: 3}
+    size: 1
+  - tag: Barricade3
+    prefab: {fileID: 4616737087927537215, guid: 2bf16b55d713f2b4787ee66cb3ef3403, type: 3}
+    size: 1
