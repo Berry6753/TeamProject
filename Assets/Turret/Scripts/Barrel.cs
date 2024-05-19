@@ -89,7 +89,8 @@ public class Barrel : MonoBehaviour
         {
             checkTime += Time.deltaTime;
             sliderGage.value = checkTime;
-            if(checkTime >= makingTime)
+            sliderGage.transform.parent.forward = Camera.main.transform.forward;
+            if (checkTime >= makingTime)
             {
                 meshRenderer.enabled = true;
                 meshRenderer.material.color = Color.white;

@@ -59,6 +59,8 @@ public class FireTurret : Turret
                 //����Ʈ ����
                 fireEfect.SetActive(true);
                 attackZone.SetActive(true);
+                fireAudio.Play();
+                fireAudio.pitch = Time.timeScale;
                 //Collider[] colliders = Physics.OverlapBox(attackBoxPos, attackBoxRange, firePos.transform.rotation);
                
                 //foreach (Collider collider in colliders)
