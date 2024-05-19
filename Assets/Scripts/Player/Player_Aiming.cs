@@ -166,8 +166,8 @@ public class Player_Aiming : MonoBehaviour
 
     private void Update()
     {
-        DecideRecoilBack();
         CameraRotation();
+        DecideRecoilBack();
         GameStopping();
         AimingOnOff();
         AimingCamera();
@@ -187,7 +187,7 @@ public class Player_Aiming : MonoBehaviour
         x_Axis.Update(Time.fixedDeltaTime);
         y_Axis.Update(Time.fixedDeltaTime);
 
-        if (!animator.GetBool(hashAiming)) cameralerftime = 1f;
+        if (!animator.GetBool(hashFire)) cameralerftime = 1f;
         mouseRotation = Quaternion.Euler(y_Axis.Value, x_Axis.Value, 0);
         
         CameraLookAt.rotation = Quaternion.Lerp(CameraLookAt.rotation, mouseRotation, cameralerftime);

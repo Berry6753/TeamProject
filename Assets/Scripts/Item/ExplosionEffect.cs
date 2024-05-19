@@ -78,8 +78,10 @@ public class ExplosionEffect : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log(other.name);
-        if (other.CompareTag("Untagged")) return;
-        if(!targets.Contains(other.gameObject))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground")) return;
+        if (other.gameObject.layer == LayerMask.NameToLayer("Skill")) return;
+        if (other.gameObject.layer == LayerMask.NameToLayer("Item")) return;
+        if (!targets.Contains(other.gameObject))
         {
             targets.Add(other.gameObject);
         }

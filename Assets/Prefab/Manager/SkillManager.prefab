@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2730030265130387419
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2730030265130387417}
+  - component: {fileID: 2730030265130387414}
+  m_Layer: 0
+  m_Name: SkillManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2730030265130387417
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2730030265130387419}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.9892907, y: -2.6910717, z: -7.1983047}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2730030265130387414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2730030265130387419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1ee7216ee7883244b1947335188deb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pools:
+  - tag: Missile_Item 1
+    prefab: {fileID: 6996260740986040176, guid: e9e1a65fdf147844bb088af9abef8e8a, type: 3}
+    size: 1
+  - tag: Missile_Item_2
+    prefab: {fileID: 315582586514313800, guid: 6b4d63635650ed746ae8c8a0dbc2e6e1, type: 3}
+    size: 1
+  - tag: Skill_Missile
+    prefab: {fileID: 2922542473701634172, guid: bcdcbb920a1d5d44d90d1fa3311c9038, type: 3}
+    size: 1
+  - tag: Skill_1
+    prefab: {fileID: 956012002392034499, guid: fbeb3ac9488046e4da58b2cf3586c226, type: 3}
+    size: 1
+  - tag: Healing_Item1
+    prefab: {fileID: 2719358599205244606, guid: c9c2b9f5ce460f44dbf15593ade6cbca, type: 3}
+    size: 1
+  - tag: Healing_Item2
+    prefab: {fileID: 1497659366000681694, guid: 52f28ba5b26541a43a711ca11f374a78, type: 3}
+    size: 1
