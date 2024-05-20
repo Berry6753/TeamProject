@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AerialMonster : Monster
 {
@@ -37,9 +38,10 @@ public class AerialMonster : Monster
         while (!isDead)
         {
             yield return new WaitForSeconds(0.3f);
-            if (state == State.DIE)
+            if (hp <= 0)
             {
                 stateMachine.ChangeState(State.DIE);
+                isDie();
                 yield break;
             }
 
@@ -61,6 +63,12 @@ public class AerialMonster : Monster
                 stateMachine.ChangeState(State.TRACE);
             }
         }
+    }
+
+    public override void isDie()
+    { 
+        base.isDie();
+        nav.areaMask = 1 << NavMesh.GetAreaFromName("Walkable");
     }
 
     private void PlayFireball()
