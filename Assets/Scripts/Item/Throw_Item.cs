@@ -13,16 +13,19 @@ public class Throw_Item : MonoBehaviour
     [SerializeField]
     private float YPos;
 
-    [Header("LookAt")]
-    [SerializeField]
-    private GameObject lookAt;
+    private Transform Player;
 
-    private void OnCollisionEnter(Collision collision)
+    private void Awake()
     {
-        if(collision.gameObject.layer != LayerMask.NameToLayer("Player"))
+        Player = GameObject.FindWithTag("Player").transform;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer != LayerMask.NameToLayer("Player"))
         {
             gameObject.SetActive(false);
-            ItemObjectPool.SpawnFromPool(skillEffect.name, new Vector3(transform.position.x, YPos, transform.position.z), Quaternion.Euler(0, lookAt.transform.rotation.y, 0));           
+            ItemObjectPool.SpawnFromPool(skillEffect.name, new Vector3(transform.position.x, YPos, transform.position.z), Quaternion.Euler(0, Player.eulerAngles.y, 0));
         }
     }
 
