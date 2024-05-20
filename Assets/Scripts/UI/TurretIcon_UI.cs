@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class TurretIcon_UI : MonoBehaviour
 {
+    public static TurretIcon_UI instance;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     private List<string> turretScripts;
 
     private GameObject printTurret;

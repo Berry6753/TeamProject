@@ -20,15 +20,15 @@ public class Missile : MonoBehaviour
         rigidbody = GetComponent<Rigidbody>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if(rigidbody.velocity.y < 0f)
         {
-            rigidbody.AddForce(Vector3.down *  GravityAddForce * Time.deltaTime);
+            rigidbody.AddForce(Vector3.down *  GravityAddForce, ForceMode.VelocityChange);
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
         //ÀÌÆåÆ® »ý¼º
         ItemObjectPool.SpawnFromPool(skillEffect.name, transform.position, transform.rotation);

@@ -32,12 +32,15 @@ public class UseSkill_Item : MonoBehaviour
     private bool readyToThrow;
 
     private Dictionary<Skill_Item_Info, int> skill_Inven;
+    private List<Skill_Item_Info> skill_Item;
 
     private List<GameObject> targetItem;
     private Skill_Item_Info UseItem;
 
     private int SelectGetIndex;
     private int SelectUseIndex;
+
+    private int preIndex = -1;
 
     private Animator animator;
 
@@ -48,6 +51,7 @@ public class UseSkill_Item : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         skill_Inven = new Dictionary<Skill_Item_Info, int>();
+        skill_Item = new List<Skill_Item_Info>();
         targetItem = new List<GameObject>();
         SelectGetIndex = 0;
         SelectUseIndex = 0;
@@ -73,7 +77,11 @@ public class UseSkill_Item : MonoBehaviour
 
     private void Update()
     {
-        SelectUseItem();
+        if (SelectUseIndex != preIndex)
+        {
+            SelectUseItem();
+        }
+
     }
 
     private void SelectUseItem()
@@ -81,8 +89,10 @@ public class UseSkill_Item : MonoBehaviour
         if (skill_Inven.Count > 0)
         {
             if (SelectUseIndex >= skill_Inven.Count) return;
-            UseItem = skill_Inven.Keys.ElementAt(SelectUseIndex);
-            Debug.Log(UseItem.GetName);
+            UseItem = skill_Item[SelectUseIndex];
+            Item_UI.Instance.ChangeItemIcon(UseItem.ItemIcon);
+            Item_UI.Instance.ChangeItemCount(skill_Inven[UseItem]);
+            preIndex = SelectUseIndex;
         }
     }
 
@@ -92,15 +102,27 @@ public class UseSkill_Item : MonoBehaviour
         if (context.performed)
         {
             if (targetItem.Count <= 0) return;
+
             Skill_Item_Info PickUpItem = targetItem[SelectGetIndex].GetComponent<Skill_Item_Info>();
+
+            if (PickUpItem == null) return;
             if (skill_Inven.ContainsKey(PickUpItem))
             {
                 skill_Inven[PickUpItem]++;
             }
             else
             {
-               skill_Inven.Add(PickUpItem, 1);
+                skill_Inven.Add(PickUpItem, 1);
+                skill_Item.Add(PickUpItem);                
+            }            
+
+            if(skill_Item.Count <= 1)
+            {
+                UseItem = PickUpItem;
+                Item_UI.Instance.ChangeItemIcon(skill_Item[SelectUseIndex].ItemIcon);
             }
+
+            Item_UI.Instance.ChangeItemCount(skill_Inven[PickUpItem]);
 
             //setActive(false)
             targetItem[SelectGetIndex].SetActive(false);
@@ -128,19 +150,11 @@ public class UseSkill_Item : MonoBehaviour
                         HealingAnimation();
                         break;
                     case ItemType.Defence:
+                        if (!readyToThrow) return;
                         animator.SetBool(hashThrow, true);
                         break;
 
-                }  
-                
-                if(SelectUseIndex >= skill_Inven.Count)
-                {
-                    SelectUseIndex = skill_Inven.Count - 1;
-                }
-            }
-            else
-            {
-                Debug.Log("가지고 있지 않음");
+                }                            
             }
         }
     }
@@ -170,6 +184,24 @@ public class UseSkill_Item : MonoBehaviour
         if (skill_Inven[UseItem] <= 0)
         {
             skill_Inven.Remove(UseItem);
+            skill_Item.Remove(UseItem);
+        }
+
+        if (SelectUseIndex >= skill_Inven.Count)
+        {
+            SelectUseIndex = Mathf.Clamp(skill_Inven.Count - 1, 0, skill_Inven.Count - 1);
+        }
+
+        if (skill_Item.Count <= 0)
+        {
+            Item_UI.Instance.ChangeItemIcon();
+            Item_UI.Instance.ItemCountNull();
+        }
+        else
+        {
+            UseItem = skill_Item[SelectUseIndex];
+            Item_UI.Instance.ChangeItemCount(skill_Inven[UseItem]);
+            Item_UI.Instance.ChangeItemIcon(UseItem.ItemIcon);
         }
     }
 
@@ -191,10 +223,10 @@ public class UseSkill_Item : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Item"))
-        {
-            targetItem.Add(other.gameObject);
-        }
+        if (other.gameObject.layer != LayerMask.NameToLayer("Item")) return;
+        if (other.CompareTag("Gear")) return;
+
+        targetItem.Add(other.gameObject);        
     }
 
     private void OnTriggerExit(Collider other)

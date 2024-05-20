@@ -11,7 +11,6 @@ public class Player_BuildSystem : MonoBehaviour
 
     private Player_Aiming aiming;
     private Player_Info info;
-    private TurretIcon_UI turretIcon_UI;
 
     private List<string> poolDicTag = new List<string>();
 
@@ -32,14 +31,14 @@ public class Player_BuildSystem : MonoBehaviour
     {
         aiming = GetComponent<Player_Aiming>();
         info = GetComponent<Player_Info>();
-        turretIcon_UI = GameObject.FindObjectOfType<TurretIcon_UI>();
+
         BuildModeOn = -1f;
         SelectBuildTurretIndex = 0;
     }
 
     private void Start()
     {
-        turretIcon_UI.PrintSelectTurret(SelectBuildTurretIndex);
+        TurretIcon_UI.instance.PrintSelectTurret(SelectBuildTurretIndex);
     }
 
     private Vector3 GetMouseWorldPosition()
@@ -82,7 +81,7 @@ public class Player_BuildSystem : MonoBehaviour
                 }
             }
 
-            turretIcon_UI.PrintSelectTurret(SelectBuildTurretIndex);
+            TurretIcon_UI.instance.PrintSelectTurret(SelectBuildTurretIndex);
 
             if (build != null)
             {

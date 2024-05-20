@@ -165,8 +165,7 @@ public class Player_Aiming : MonoBehaviour
     }
 
     private void Update()
-    {
-        CameraRotation();
+    {        
         DecideRecoilBack();
         GameStopping();
         AimingOnOff();
@@ -176,6 +175,7 @@ public class Player_Aiming : MonoBehaviour
 
     private void FixedUpdate()
     {
+        CameraRotation();
         FireGun();
 
         AttackDelay();
