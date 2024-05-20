@@ -9,6 +9,7 @@ TagManager:
   - Turret
   - Core
   - Monster
+  - MonsterHead
   layers:
   - Default
   - TransparentFX
