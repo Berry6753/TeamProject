@@ -92,6 +92,7 @@ public abstract class Turret : MonoBehaviour
     public ParticleSystem firePaticle;
     protected LayerMask ignoreLayer;
     public Transform turretTargetTransform { get { return targetTransform; } set { targetTransform = value; } }
+    public float turretAttackDamge { get { return nowAttackDamge; } }
     public float turretAttackRange { get { return attackRange; } }
     public float turretAttackSpeed { get { return nowAttackSpeed; } }
     public float turretMakingTime { get { return makingTime; } }

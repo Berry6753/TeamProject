@@ -1,12 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 
 public enum PlayerSkillName
 {
+    BARRICATE,
+    HEALLING,
     NUKE,
 
     LAST
@@ -36,6 +39,7 @@ public class Core : MonoBehaviour
     private int maxUpgradeCount = 5;
     private float checkReloadingTime;
     private float checkUpgradeTime;
+    private int checkCount;
     public Player_Info player;
     public PlayerMovement playerMovement;
     public bool isPlayer;
@@ -56,17 +60,17 @@ public class Core : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Info>();
         playerMovement=GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<PlayerMovement>();
         InitCommandDic();
-        for (int i = 0; i < (int)PlayerSkillName.LAST; i++)
-        {
-            skillObjQue[i] = new Queue<GameObject>();
-            for (int j = 0; j < 10; j++)
-            {
-                GameObject gameObject = Instantiate(skillObj[i]);
-                skillObjQue[i].Enqueue(gameObject);
-                gameObject.SetActive(false);
+        //for (int i = 0; i < (int)PlayerSkillName.LAST; i++)
+        //{
+        //    skillObjQue[i] = new Queue<GameObject>();
+        //    for (int j = 0; j < 10; j++)
+        //    {
+        //        GameObject gameObject = Instantiate(skillObj[i]);
+        //        skillObjQue[i].Enqueue(gameObject);
+        //        gameObject.SetActive(false);
 
-            }
-        }
+        //    }
+        //}
     }
 
     // Start is called before the first frame update
@@ -142,6 +146,8 @@ public class Core : MonoBehaviour
 
     private void InitCommandDic()
     {
+        commandDic.Add((int)PlayerSkillName.BARRICATE, new int[4] { 2, 4, 2, 4 });
+        commandDic.Add((int)PlayerSkillName.HEALLING, new int[4] { 2, 2, 2, 1 });
         commandDic.Add((int)PlayerSkillName.NUKE, new int[4] { 1, 1, 1, 2 });
         
     }
@@ -151,19 +157,39 @@ public class Core : MonoBehaviour
         foreach (int i in commandDic.Keys)
         {
             commandDic.TryGetValue(i, out int[] Value);
-            for (int j = 0; j < Value.Length; j++)
+            if (!Enumerable.SequenceEqual(Value, playerMovement.commandQueue.ToArray()))
             {
-                if(!(Value[j] == playerMovement.commandQueue.ToArray()[j]))
-                {
-                    itemKey = -1;
-                    break;
-                }
-                else
-                {
-                    itemKey = i;
-                }
-
+                itemKey = -1;
             }
+            else
+            {
+                itemKey = i;
+                break;
+            }
+            //for (int j = 0; j < Value.Length; j++) 
+            //{
+                
+            //    if(!(Value[j] == playerMovement.commandQueue.ToArray()[j]))
+            //    {
+            //        itemKey = -1;
+            //        checkCount = 0;
+            //        break;
+            //    }
+            //    else
+            //    {
+            //        checkCount++;
+                    
+            //    }
+
+               
+
+            //}
+            //if (checkCount == 4)
+            //{
+            //    itemKey = i;
+            //    checkCount = 0;
+            //    break;
+            //}
             //if (playerMovement.commandQueue.ToArray()==Value)
             //{
             //    itemKey = i;
@@ -190,10 +216,11 @@ public class Core : MonoBehaviour
         }
         else
         {
-            GameObject gameObject = skillObjQue[itemKey].Dequeue();
-            skillObjQue[itemKey].Enqueue(gameObject);
-            gameObject.SetActive(true);
-            gameObject.transform.position = itemSpawnPos.transform.position;
+            GameObject gameObject = ItemObjectPool.SpawnFromPool(skillObj[itemKey].name, itemSpawnPos.transform.position);
+            //GameObject gameObject = skillObjQue[itemKey].Dequeue();
+            //skillObjQue[itemKey].Enqueue(gameObject);
+            //gameObject.SetActive(true);
+            //gameObject.transform.position = itemSpawnPos.transform.position;
             gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 10, 10));
         }
     }

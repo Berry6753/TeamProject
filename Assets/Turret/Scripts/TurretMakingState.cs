@@ -15,6 +15,7 @@ public class TurretMakingState : TurretBaseState
         turret.sliderGage.transform.position = turret.transform.position;
         //만드는 이펙트 생성
         turret.makingEfect.SetActive(true);
+        
     }
 
     public override void Update()
@@ -22,8 +23,9 @@ public class TurretMakingState : TurretBaseState
         checkTime += Time.deltaTime;
         turret.sliderGage.value = checkTime;
         turret.sliderGage.transform.parent.forward = Camera.main.transform.forward;
+        turret.makeAudio.pitch = Time.timeScale;
         //turret.sliderGage.transform.LookAt(Camera.main.transform.position); //플레이어 바라보게 아니면 카메라
-        if(checkTime > turret.turretMakingTime)
+        if (checkTime > turret.turretMakingTime)
         {
             //적찾기 상태로 변환
             turret.turretStatemachine.ChangeState(TurretStateName.SEARCH);

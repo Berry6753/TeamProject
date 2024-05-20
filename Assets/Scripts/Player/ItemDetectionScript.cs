@@ -26,7 +26,7 @@ public class ItemDetectionScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Item"))
+        if(other.gameObject.CompareTag("Gear"))
         {
             Items.Add(other.GetComponent<Transform>());
         }

@@ -27,6 +27,8 @@ public class Skill_Item_Info : MonoBehaviour
     [SerializeField]
     private GameObject effectPrefab;
 
+    public Rigidbody body;
+
     public ItemType getType { get { return type; } }
     public string GetName { get { return itemName; } }
     public GameObject EffectPrefab { get {  return effectPrefab; } }
@@ -39,6 +41,20 @@ public class Skill_Item_Info : MonoBehaviour
     //        ItemObjectPool.SpawnFromPool(effectPrefab.name, new Vector3(transform.position.x, 50, transform.position.z));
     //    }
     //}
+    private void Awake()
+    {
+        body = GetComponent<Rigidbody>();
+    }
+    private void OnEnable()
+    {
+        body.useGravity = true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        body.useGravity=false;
+        body.velocity = Vector3.zero;
+    }
 
     private void OnDisable()
     {

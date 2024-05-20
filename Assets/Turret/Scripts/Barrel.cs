@@ -55,6 +55,8 @@ public class Barrel : MonoBehaviour
 
     public int makingCost = 5;
 
+    private AudioSource makingAudio;
+
     //현재 태그와 레이어 설정안함 0512기준
 
     private void Awake()
@@ -63,6 +65,7 @@ public class Barrel : MonoBehaviour
         bodyColleder = GetComponent<BoxCollider>();
         turretLayer = LayerMask.NameToLayer("Turret");
         sliderGage.maxValue = makingTime;
+        makingAudio=makingEffect.GetComponent<AudioSource>();
         
     }
 
@@ -90,6 +93,7 @@ public class Barrel : MonoBehaviour
             checkTime += Time.deltaTime;
             sliderGage.value = checkTime;
             sliderGage.transform.parent.forward = Camera.main.transform.forward;
+            makingAudio.pitch = Time.timeScale;
             if (checkTime >= makingTime)
             {
                 meshRenderer.enabled = true;
@@ -150,15 +154,21 @@ public class Barrel : MonoBehaviour
                 foreach (Collider collider in enemyCollider)
                 {
                     //몬스터의 hurt함수나 어쩃든 데미지 주는기능
+                    collider.gameObject.GetComponent<Monster>().Hurt(attackDamge);
                 }
             }
 
             gameObject.tag = "Untagged";
             gameObject.layer = LayerMask.NameToLayer("debug");
 
-            gameObject.transform.parent.gameObject.SetActive(false);
+            Invoke("GameObjDisable", 0.5f);
         }
         
+    }
+
+    private void GameObjDisable()
+    {
+        gameObject.transform.parent.gameObject.SetActive(false);
     }
 
     //private void OnDisable()
