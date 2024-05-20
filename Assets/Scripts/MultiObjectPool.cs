@@ -143,7 +143,7 @@ public class MultiObjectPool : MonoBehaviour
         return objectToSpawn;
     }
 
-    void Start()
+    void OnEnable()
     {
         spawnObjects = new List<GameObject>();
         poolDictionary = new Dictionary<string, Queue<GameObject>>();

@@ -36,9 +36,9 @@ public class Core : MonoBehaviour
     private int maxUpgradeCount = 5;
     private float checkReloadingTime;
     private float checkUpgradeTime;
-    private Player_Info player;
-    private PlayerMovement playerMovement;
-    private bool isPlayer;
+    public Player_Info player;
+    public PlayerMovement playerMovement;
+    public bool isPlayer;
 
     private Dictionary<int, int[]> commandDic = new Dictionary<int, int[]>();
     [SerializeField]
@@ -151,18 +151,40 @@ public class Core : MonoBehaviour
         foreach (int i in commandDic.Keys)
         {
             commandDic.TryGetValue(i, out int[] Value);
-            if (playerMovement.commandQueue.Equals(Value))
+            for (int j = 0; j < Value.Length; j++)
             {
-                itemKey = i;
-                return;
+                if(!(Value[j] == playerMovement.commandQueue.ToArray()[j]))
+                {
+                    itemKey = -1;
+                    break;
+                }
+                else
+                {
+                    itemKey = i;
+                }
+
             }
-            else
-            {
-                itemKey = 0;
-            }
+            //if (playerMovement.commandQueue.ToArray()==Value)
+            //{
+            //    itemKey = i;
+            //    Debug.Log(itemKey + "asdad");
+            //    break;
+            //}
+            //else
+            //{
+            //    Debug.Log((playerMovement.commandQueue.ToArray() == Value) + "gggggggggg");
+            //    for (int j = 0; j < Value.Length; j++)
+            //    {
+            //        Debug.Log(Value[j] + $"aaa{j}aaa");
+            //        Debug.Log(playerMovement.commandQueue.ToArray()[j] + $"sssss{j}sssss");
+
+            //    }
+            //    Debug.Log(itemKey + "a");
+                
+            //}
         }
 
-        if (itemKey == 0 || itemKey == (int)PlayerSkillName.LAST)
+        if (itemKey == -1 || itemKey == (int)PlayerSkillName.LAST)
         {
             Debug.Log("커맨드 틀림");
         }
@@ -176,21 +198,4 @@ public class Core : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.CompareTag("Player"))
-        {
-            isPlayer = true;
-            playerMovement.isCore = true;
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.collider.CompareTag("Player"))
-        {
-            isPlayer = false;
-            playerMovement.isCore = false;
-        }
-    }
 }

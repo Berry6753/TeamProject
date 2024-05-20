@@ -93,8 +93,9 @@ public class PlayerMovement : MonoBehaviour
     public bool isCommand;
     public bool isCore;
 
-    public Queue<int> commandQueue;
+    public Queue<int> commandQueue = new Queue<int>();
     public Core core;
+    private bool isPush;
 
     private void Awake()
     {
@@ -125,7 +126,8 @@ public class PlayerMovement : MonoBehaviour
     {
         //Gravity();
         ChangeSpeed();
-        Rotation();       
+        Rotation();
+        Command();
 
         //Debug.Log(cameraTransform.rotation);
         //Debug.Log(transform.forward);
@@ -307,41 +309,83 @@ public class PlayerMovement : MonoBehaviour
 
     public void Command()
     {
-        if (isCore)
+        if (isCore&&!isCommand)
         {
             if (Input.GetKeyUp(KeyCode.Tab))
             {
                 isCommand = true;
-               for (int i = 0; i < 4; i++)
-                {
-                    switch (Input.inputString)
-                    {
-                        case "w":
-                        case "W":
-                            commandQueue.Enqueue(1);
-                            break;
-                        case "a":
-                        case "A":
-                            commandQueue.Enqueue(2);
-                            break;
-                        case "s":
-                        case "S":
-                            commandQueue.Enqueue(3);
-                            break;
-                        case "d":
-                        case "D":
-                            commandQueue.Enqueue(4);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                core.CheckeCommand();
+                StartCoroutine(PushCommand());
+
+                
 
             }
         }
         
     }
 
-   
+   public IEnumerator PushCommand()
+    {
+        while (true) 
+        {
+            isPush = false;
+            
+            yield return new WaitUntil(() => Input.anyKeyDown);
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                commandQueue.Enqueue(1);
+            }
+            else if (Input.GetKeyDown(KeyCode.A))
+            {
+                commandQueue.Enqueue(2);
+            }
+            else if (Input.GetKeyDown(KeyCode.S))
+            {
+                commandQueue.Enqueue(3);
+            }
+            else if (Input.GetKeyDown(KeyCode.D))
+            {
+                commandQueue.Enqueue(4);
+            }
+            else
+            {
+                Debug.Log("X");
+                commandQueue.Enqueue(0);
+            }
+            isPush = true;
+            yield return new WaitUntil(() => isPush);
+            
+            
+            //switch (Input.inputString)
+            //{
+            //    case "w":
+            //    case "W":
+            //        commandQueue.Enqueue(1);
+            //        break;
+            //    case "a":
+            //    case "A":
+            //        commandQueue.Enqueue(2);
+            //        break;
+            //    case "s":
+            //    case "S":
+            //        commandQueue.Enqueue(3);
+            //        break;
+            //    case "d":
+            //    case "D":
+            //        commandQueue.Enqueue(4);
+            //        break;
+            //    default:
+            //        break;
+            //}
+
+            if (commandQueue.Count == 4)
+            {
+                core.CheckeCommand();
+                isCommand = false;
+                commandQueue.Clear();
+                yield break;
+                //StopCoroutine(PushCommand());
+            }
+            
+        }
+    }
 }
