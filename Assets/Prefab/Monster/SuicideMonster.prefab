@@ -19540,9 +19540,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7939179789092445077}
+  - component: {fileID: 7167934865165602569}
   m_Layer: 9
   m_Name: head
-  m_TagString: Untagged
+  m_TagString: MonsterHead
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19565,6 +19566,19 @@ Transform:
   m_Father: {fileID: 7939172792078752613}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &7167934865165602569
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7942188447754946471}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.35
+  m_Center: {x: 0, y: -0.1, z: 0.1}
 --- !u!1 &7942190250466236351
 GameObject:
   m_ObjectHideFlags: 0
@@ -21008,6 +21022,7 @@ MonoBehaviour:
   monsterLayer:
     serializedVersion: 2
     m_Bits: 512
+  dropGearNum: 0
   state: 0
   isDead: 0
   exlosionEffect: {fileID: 1723354810779775139}

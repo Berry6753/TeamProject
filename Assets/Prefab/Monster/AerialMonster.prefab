@@ -28108,7 +28108,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 1
+  m_Radius: 0.7
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0.7, z: 0}
@@ -28141,6 +28141,7 @@ MonoBehaviour:
   monsterLayer:
     serializedVersion: 2
     m_Bits: 512
+  dropGearNum: 0
   state: 0
   isDead: 0
   fireball: {fileID: 6206036315837363858}
@@ -28153,7 +28154,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 7408092878229374756}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1
+  m_Radius: 0.7
   m_Speed: 4
   m_Acceleration: 8
   avoidancePriority: 50

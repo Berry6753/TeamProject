@@ -1749,9 +1749,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3866181257823826853}
+  - component: {fileID: 4828648448806052925}
   m_Layer: 9
   m_Name: head
-  m_TagString: Untagged
+  m_TagString: MonsterHead
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1773,6 +1774,19 @@ Transform:
   m_Father: {fileID: 3871161021768069415}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.16402148}
+--- !u!135 &4828648448806052925
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3868147528903698325}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.25
+  m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!1 &3868163470178974001
 GameObject:
   m_ObjectHideFlags: 0
@@ -2181,7 +2195,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.7
+  m_Radius: 0.4
   m_Height: 2.1
   m_Direction: 1
   m_Center: {x: 0, y: 1.05, z: 0}
@@ -2214,6 +2228,7 @@ MonoBehaviour:
   monsterLayer:
     serializedVersion: 2
     m_Bits: 512
+  dropGearNum: 0
   state: 0
   isDead: 0
 --- !u!195 &3817533725461811248
@@ -2225,7 +2240,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 3868273195810064013}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.7
+  m_Radius: 0.4
   m_Speed: 3
   m_Acceleration: 8
   avoidancePriority: 50
