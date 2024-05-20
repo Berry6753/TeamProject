@@ -37,6 +37,10 @@ public class Player_Aiming : MonoBehaviour
     [SerializeField]
     private Transform GunFireStartPoint;
 
+    [Header("조준점")]
+    [SerializeField]
+    private Transform aim;
+
     public Cinemachine.AxisState x_Axis;
     public Cinemachine.AxisState y_Axis;
 
@@ -64,15 +68,15 @@ public class Player_Aiming : MonoBehaviour
 
     [Header("총기 카메라 반동")]
     [SerializeField]
-    private float cameralerftime;
+    private float cameraLerftime;
 
     [Header("일반 반동")]
     [SerializeField]
-    float recoilBack;
+    float recoilback;
 
     [Header("조준 반동")]
     [SerializeField]
-    float aimingRecoilBack;
+    float aimingrecoilback;
 
     //총기 반동
     private float recoilBackForce;
@@ -99,6 +103,7 @@ public class Player_Aiming : MonoBehaviour
         isGameStop = -1f;
         animator = GetComponent<Animator>();
         AttackTimer = 0;
+        cameraLerftime = 1f;
         notAimingTimer = notAimingDelayTime;
         info = GetComponent<Player_Info>();
 
@@ -165,8 +170,9 @@ public class Player_Aiming : MonoBehaviour
     }
 
     private void Update()
-    {        
-        DecideRecoilBack();
+    {
+        CameraRotation();
+        //DecideRecoilBack();        
         GameStopping();
         AimingOnOff();
         AimingCamera();
@@ -175,7 +181,7 @@ public class Player_Aiming : MonoBehaviour
 
     private void FixedUpdate()
     {
-        CameraRotation();
+        DecideRecoilBack();
         FireGun();
 
         AttackDelay();
@@ -187,24 +193,24 @@ public class Player_Aiming : MonoBehaviour
         x_Axis.Update(Time.fixedDeltaTime);
         y_Axis.Update(Time.fixedDeltaTime);
 
-        if (!animator.GetBool(hashFire)) cameralerftime = 1f;
         mouseRotation = Quaternion.Euler(y_Axis.Value, x_Axis.Value, 0);
-        
-        CameraLookAt.rotation = Quaternion.Lerp(CameraLookAt.rotation, mouseRotation, cameralerftime);
-        Debug.Log(cameralerftime);
+
+        CameraLookAt.rotation = Quaternion.Lerp(CameraLookAt.rotation, mouseRotation, cameraLerftime);
         /*mouseRotation;*/
         //Quaternion.Lerp(CameraLookAt.rotation, mouseRotation, cameraLerfTime);
     }
 
+    //총기 격발 시 카메라 흔들림
+    // 총을 격발하면 cameralerftime 가 
     private void DecideRecoilBack()
     {
         if (animator.GetBool(hashZoomOn))   //조준 중
         {
-            recoilBackForce = aimingRecoilBack;
+            recoilBackForce = aimingrecoilback;
         }
         else    //조준 상태 아님
         {
-            recoilBackForce = recoilBack;
+            recoilBackForce = recoilback;
         }
     }
 
@@ -275,8 +281,13 @@ public class Player_Aiming : MonoBehaviour
                 Debug.DrawLine(GunFireStartPoint.position, hits.point, Color.red);
 
                 //데미지 부여
-                if (hits.transform.CompareTag("Monster"))
+                if (hits.transform.gameObject.layer == LayerMask.NameToLayer("Monster"))
                 {
+                    if (hits.transform.CompareTag("MonsterHead"))
+                    {
+                        hits.transform.GetComponent<Monster>().Hurt(info.Attack);
+                    }
+
                     hits.transform.GetComponent<Monster>().Hurt(info.Attack);
                 }
                 else if (hits.transform.CompareTag("Barrel"))
@@ -293,22 +304,29 @@ public class Player_Aiming : MonoBehaviour
         if (buildSystem.BuildModeOn > 0f) return;
         if (animator.GetBool(hashReload)) return;
         if (isFire && AttackAble)
-        {
-            cameralerftime = 0.01f;
+        {            
             AttackAble = false;
             AttackTimer = AttackDelayTime;
             notAimingTimer = 0;
             animator.SetBool(hashFire, true);
+            cameraLerftime = 0.5f;
         }
-        else
-        {
-            cameralerftime = 0.1f;
-        }
+        //else
+        //{
+        //    cameralerftime = 0.1f;
+        //}
+    }
+
+    public void CameraLerftimeEnd()
+    {
+        cameraLerftime = 1f;
     }
 
     public void FireEnd()
     {        
         animator.SetBool(hashFire, false);
+        cameraLerftime = 1f;
+        //cameralerftime = 1f;
     }
 
     public void Fire()

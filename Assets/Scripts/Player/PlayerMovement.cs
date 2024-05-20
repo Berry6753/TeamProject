@@ -124,7 +124,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Gravity();
+        Gravity();
         ChangeSpeed();
         Rotation();
         Command();
@@ -135,7 +135,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Gravity();
+        //Gravity();
         //DecideWalkSound();
         if (!isCommand)
             Movement();
@@ -154,22 +154,30 @@ public class PlayerMovement : MonoBehaviour
         InputBool = context.ReadValue<float>() > 0.5f;
     }
 
+    //점프 버벅 거림 픽스 필수
     public void OnJump(InputAction.CallbackContext context)
     {
         if (aiming.isGameStop > 0) return;
         if (colliders.Length <= 0) return;
         if (context.performed)
         {
-            _velocity += JumpPower;            
+            _velocity = Mathf.Sqrt(JumpPower * -1f * gravity);            
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.black;
+        Gizmos.DrawCube(overlapPos.position, new Vector3(0.3f, 0.1f, 0.3f));
     }
 
     private void Gravity()
     {
         colliders = Physics.OverlapBox(overlapPos.position, new Vector3(0.3f,0.1f,0.3f), Quaternion.identity, gravityLayermask);
-        if (colliders.Length > 0 && _velocity < 0.0f)
+
+        if (colliders.Length > 0 && _velocity <= 0.0f)
         {
-            _velocity = -1.0f;
+            _velocity = -1f;
             //isGround = true;
         }
         else

@@ -64,6 +64,13 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.20432898
+        functionName: CameraLerftimeEnd
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 617d9dd3ec6b3f340bd823042e1b94f0, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.9917526
         functionName: FireEnd
         data: 

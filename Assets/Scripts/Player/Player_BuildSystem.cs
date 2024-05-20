@@ -207,6 +207,7 @@ public class Player_BuildSystem : MonoBehaviour
         if (deleteBuild != null)
         {
             Turret upgradeTurret = deleteBuild.GetComponent<Turret>();
+            if (upgradeTurret == null) return;
             if (upgradeTurret != null && info.GearCount >= upgradeTurret.turretUpgradCost)
             {
                 isUpgradeAble = true;
@@ -224,6 +225,7 @@ public class Player_BuildSystem : MonoBehaviour
         if (deleteBuild != null)
         {
             Turret repairTurret = deleteBuild.GetComponent<Turret>();
+            if (repairTurret == null) return;
             if (repairTurret.isTurretRepair && info.GearCount >= repairTurret.turretRepairCost)
             {
                 isRepairAble = true;

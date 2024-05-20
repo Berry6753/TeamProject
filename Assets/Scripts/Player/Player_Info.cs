@@ -109,4 +109,9 @@ public class Player_Info : MonoBehaviour
             Hurt(50);
         }
     }
+
+    public void UpgradeAttack()
+    {
+
+    }
 }
