@@ -99,6 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: "\uBC14\uB9AC\uAC8C\uC774\uD2B8"
   type: 2
+  itemIcon: {fileID: 21300000, guid: 9f057b42a9b48c6478fe889fc5247d54, type: 3}
   effectPrefab: {fileID: 8272147208977574949, guid: a5dd381b1d9ff2d4693ab7718edb4f31, type: 3}
 --- !u!135 &6753406662142498380
 SphereCollider:

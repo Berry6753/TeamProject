@@ -113,6 +113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillEffect: {fileID: 2922542473701634172, guid: bcdcbb920a1d5d44d90d1fa3311c9038, type: 3}
   YPos: 50
+  delayTimer: 5
 --- !u!54 &1327723792735301921
 Rigidbody:
   m_ObjectHideFlags: 0

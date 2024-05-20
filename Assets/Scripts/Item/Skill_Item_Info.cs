@@ -19,6 +19,10 @@ public class Skill_Item_Info : MonoBehaviour
     [SerializeField]
     private ItemType type;
 
+    [Header("æ∆¿Ã≈€ Icon")]
+    [SerializeField]
+    private Sprite itemIcon;
+
     [Header("Effect Prefab")]
     [SerializeField]
     private GameObject effectPrefab;
@@ -26,6 +30,7 @@ public class Skill_Item_Info : MonoBehaviour
     public ItemType getType { get { return type; } }
     public string GetName { get { return itemName; } }
     public GameObject EffectPrefab { get {  return effectPrefab; } }
+    public Sprite ItemIcon { get { return itemIcon; } }
 
     //private void OnCollisionEnter(Collision collision)
     //{
