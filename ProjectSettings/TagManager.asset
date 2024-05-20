@@ -11,6 +11,7 @@ TagManager:
   - Item
   - Desert
   - StoneRoad
+  - Core
   layers:
   - Default
   - TransparentFX

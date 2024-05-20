@@ -90,6 +90,12 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isGround;
 
+    public bool isCommand;
+    public bool isCore;
+
+    public Queue<int> commandQueue;
+    public Core core;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -100,6 +106,7 @@ public class PlayerMovement : MonoBehaviour
         _velocity = 0f;
 
         virtualCamera = followcamera.GetComponent<CinemachineVirtualCamera>();
+        core=GameObject.FindWithTag("Core").gameObject.GetComponent<Core>();
         //animator = GetComponent<Animator>();
 
     }
@@ -128,7 +135,8 @@ public class PlayerMovement : MonoBehaviour
     {
         Gravity();
         //DecideWalkSound();
-        Movement();
+        if (!isCommand)
+            Movement();
     }
 
     // InputSystem 무브먼트
@@ -296,4 +304,44 @@ public class PlayerMovement : MonoBehaviour
         //// 캐릭터를 해당 회전값으로 회전시킴
         //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
     }
+
+    public void Command()
+    {
+        if (isCore)
+        {
+            if (Input.GetKeyUp(KeyCode.Tab))
+            {
+                isCommand = true;
+               for (int i = 0; i < 4; i++)
+                {
+                    switch (Input.inputString)
+                    {
+                        case "w":
+                        case "W":
+                            commandQueue.Enqueue(1);
+                            break;
+                        case "a":
+                        case "A":
+                            commandQueue.Enqueue(2);
+                            break;
+                        case "s":
+                        case "S":
+                            commandQueue.Enqueue(3);
+                            break;
+                        case "d":
+                        case "D":
+                            commandQueue.Enqueue(4);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                core.CheckeCommand();
+
+            }
+        }
+        
+    }
+
+   
 }
