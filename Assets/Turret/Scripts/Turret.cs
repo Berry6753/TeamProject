@@ -69,6 +69,10 @@ public abstract class Turret : MonoBehaviour
     private bool isRepair;
 
     public Slider sliderGage;
+    [HideInInspector]
+    public AudioSource fireAudio;
+    [HideInInspector]
+    public AudioSource makeAudio;
 
     [HideInInspector]
     public CapsuleCollider turretCollider;
@@ -83,6 +87,9 @@ public abstract class Turret : MonoBehaviour
     public TurretStateName turretStateName;
     public GameObject fireEfect;
     public GameObject makingEfect;
+    public GameObject deathEffect;
+    [HideInInspector]
+    public ParticleSystem firePaticle;
     protected LayerMask ignoreLayer;
     public Transform turretTargetTransform { get { return targetTransform; } set { targetTransform = value; } }
     public float turretAttackRange { get { return attackRange; } }
@@ -109,6 +116,9 @@ public abstract class Turret : MonoBehaviour
         turretStatemachine = GetComponent<StateMachine>();
         SetState();
         turretStatemachine.InitState(TurretStateName.BLUESCREEN);
+        firePaticle= fireEfect.GetComponent<ParticleSystem>();
+        fireAudio = fireEfect.GetComponent<AudioSource>();
+        makeAudio = makingEfect.GetComponent<AudioSource>();
         turretLayer = LayerMask.NameToLayer("Turret");
         monsterLayer = LayerMask.NameToLayer("Monster");
         ignoreLayer = 1 << LayerMask.NameToLayer("Item") | 1 << LayerMask.NameToLayer("Ignore Raycast") | 1 << LayerMask.NameToLayer("Player");
@@ -121,6 +131,7 @@ public abstract class Turret : MonoBehaviour
         makingEfect.SetActive(false);
         fireEfect.SetActive(false);
         sliderGage.gameObject.SetActive(false);
+        deathEffect.SetActive(false);
     }
 
    

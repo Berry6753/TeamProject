@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class Gear : MonoBehaviour
 {
+    public Rigidbody body;
     [Header("회전 속도")]
     [SerializeField]
     private float rotationSpeed;
 
     private float GearCount;
 
+    private void Awake()
+    {
+        body = GetComponent<Rigidbody>();
+    }
     private void OnEnable()
     {
         int GearRandom = Random.Range(0, 100);
@@ -18,6 +23,8 @@ public class Gear : MonoBehaviour
         else if (GearRandom < 92) GearCount = 3f;
         else if (GearRandom < 97) GearCount = 4f;
         else GearCount = 5f;
+
+        body.useGravity = true;
     }
 
     private void Update()
@@ -27,6 +34,8 @@ public class Gear : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        body.useGravity = false;
+        body.velocity = Vector3.zero;
         if (other.CompareTag("Player"))
         {
             other.GetComponent<Player_Info>().AddGearCount((int)GearCount);

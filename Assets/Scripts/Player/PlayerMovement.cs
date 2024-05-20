@@ -90,6 +90,13 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isGround;
 
+    public bool isCommand;
+    public bool isCore;
+
+    public Queue<int> commandQueue = new Queue<int>();
+    public Core core;
+    private bool isPush;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -100,6 +107,7 @@ public class PlayerMovement : MonoBehaviour
         _velocity = 0f;
 
         virtualCamera = followcamera.GetComponent<CinemachineVirtualCamera>();
+        core=GameObject.FindWithTag("Core").gameObject.GetComponent<Core>();
         //animator = GetComponent<Animator>();
 
     }
@@ -118,7 +126,8 @@ public class PlayerMovement : MonoBehaviour
     {
         //Gravity();
         ChangeSpeed();
-        Rotation();       
+        Rotation();
+        Command();
 
         //Debug.Log(cameraTransform.rotation);
         //Debug.Log(transform.forward);
@@ -128,7 +137,8 @@ public class PlayerMovement : MonoBehaviour
     {
         Gravity();
         //DecideWalkSound();
-        Movement();
+        if (!isCommand)
+            Movement();
     }
 
     // InputSystem 무브먼트
@@ -295,5 +305,87 @@ public class PlayerMovement : MonoBehaviour
 
         //// 캐릭터를 해당 회전값으로 회전시킴
         //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
+    }
+
+    public void Command()
+    {
+        if (isCore&&!isCommand)
+        {
+            if (Input.GetKeyUp(KeyCode.Tab))
+            {
+                isCommand = true;
+                StartCoroutine(PushCommand());
+
+                
+
+            }
+        }
+        
+    }
+
+   public IEnumerator PushCommand()
+    {
+        while (true) 
+        {
+            isPush = false;
+            
+            yield return new WaitUntil(() => Input.anyKeyDown);
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                commandQueue.Enqueue(1);
+            }
+            else if (Input.GetKeyDown(KeyCode.A))
+            {
+                commandQueue.Enqueue(2);
+            }
+            else if (Input.GetKeyDown(KeyCode.S))
+            {
+                commandQueue.Enqueue(3);
+            }
+            else if (Input.GetKeyDown(KeyCode.D))
+            {
+                commandQueue.Enqueue(4);
+            }
+            else
+            {
+                Debug.Log("X");
+                commandQueue.Enqueue(0);
+            }
+            isPush = true;
+            yield return new WaitUntil(() => isPush);
+            
+            
+            //switch (Input.inputString)
+            //{
+            //    case "w":
+            //    case "W":
+            //        commandQueue.Enqueue(1);
+            //        break;
+            //    case "a":
+            //    case "A":
+            //        commandQueue.Enqueue(2);
+            //        break;
+            //    case "s":
+            //    case "S":
+            //        commandQueue.Enqueue(3);
+            //        break;
+            //    case "d":
+            //    case "D":
+            //        commandQueue.Enqueue(4);
+            //        break;
+            //    default:
+            //        break;
+            //}
+
+            if (commandQueue.Count == 4)
+            {
+                core.CheckeCommand();
+                isCommand = false;
+                commandQueue.Clear();
+                yield break;
+                //StopCoroutine(PushCommand());
+            }
+            
+        }
     }
 }

@@ -21,7 +21,8 @@ public class TurretMakingState : TurretBaseState
     {
         checkTime += Time.deltaTime;
         turret.sliderGage.value = checkTime;
-        //turret.sliderGage.transform.LookAt(); 플레이어 바라보게 아니면 카메라
+        turret.sliderGage.transform.parent.forward = Camera.main.transform.forward;
+        //turret.sliderGage.transform.LookAt(Camera.main.transform.position); //플레이어 바라보게 아니면 카메라
         if(checkTime > turret.turretMakingTime)
         {
             //적찾기 상태로 변환

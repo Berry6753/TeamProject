@@ -28,6 +28,15 @@ public class MissleTurret : Turret
 
     [SerializeField]
     private GameObject explosionEffect;
+    private AudioSource explosionAudio;
+    private ParticleSystem explosionPaticle;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        explosionAudio = explosionEffect.GetComponent<AudioSource>();
+        explosionPaticle = explosionEffect.GetComponent<ParticleSystem>();
+    }
 
     protected override void OnEnable()
     {
@@ -53,10 +62,11 @@ public class MissleTurret : Turret
                 fireEfect.SetActive(true);
                 explosionEffect.SetActive(true);
                 explosionEffect.transform.position = targets[0].gameObject.transform.position;
-                explosionEffect.GetComponent<ParticleSystem>().Play();
-                explosionEffect.GetComponent<AudioSource>().Play();
-                fireEfect.GetComponent<ParticleSystem>().Play();
-                fireEfect.GetComponent <AudioSource>().Play();
+                explosionPaticle.Play();
+                explosionAudio.Play();
+                firePaticle.Play();
+                fireAudio.pitch = Time.timeScale;
+                fireAudio.Play();
                 foreach (Collider target in targets)
                 {
                     if (target.CompareTag("Monster"))
