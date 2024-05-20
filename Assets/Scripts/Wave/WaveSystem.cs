@@ -15,6 +15,7 @@ public class WaveSystem : MonoBehaviour
     AerialMonster aerial;
     SiegeMonster siege;
     SuicideMonster suicide;
+    private bool isWave = false;
 
     private void Awake()
     {    
@@ -64,25 +65,37 @@ public class WaveSystem : MonoBehaviour
                 }
             }
         }
-        StartWave();
+    }
+
+    private void Update()
+    {
+        if (!isWave)
+        {
+            StartWave();
+        }
+        else
+        {
+            StartCoroutine(BreakWave(breakTime));
+        }
     }
 
     public void StartWave()
     {
+        isWave = true;
         if (monsterSpawner.MonsterList.Count == 0 && currentWaveIndex < waves.Length)
         {
-            currentWaveIndex++;
             monsterSpawner.StartWave(waves[currentWaveIndex]);
-            if (monsterSpawner.MonsterList.Count == 0)
-            { 
-                StartCoroutine(BreakWave(breakTime));
-            }
+            currentWaveIndex++;
         }
     }
 
     private IEnumerator BreakWave(float time)
     {
-        yield return new WaitForSeconds(time);
+        if (monsterSpawner.MonsterList.Count == 0 && currentWaveIndex < waves.Length)
+        {
+            yield return new WaitForSeconds(time);
+            isWave = false;
+        }
     }
 }
 

@@ -28,10 +28,4 @@ public class SiegeMonster : Monster
     {
         StartCoroutine(MonsterState());
     }
-    protected override void UpScaleSpawn()
-    {
-        if (wave == 5)
-            startSpawnNum = 2;
-        base.UpScaleSpawn();
-    }
 }

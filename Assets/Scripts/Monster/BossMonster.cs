@@ -32,7 +32,6 @@ public class BossMonster : MonoBehaviour
     private Animator anim;
     private NavMeshAgent nav;
     private Rigidbody rb;
-    private Collider mainCollider;
     private SkinnedMeshRenderer[] renderer;
     private SphereCollider[] attackC;
     private BoxCollider jumpAttackC;
@@ -73,7 +72,6 @@ public class BossMonster : MonoBehaviour
         anim = GetComponent<Animator>();
         nav = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
-        mainCollider = GetComponent<Collider>();
         renderer = GetComponentsInChildren<SkinnedMeshRenderer>();
         bossTr = GetComponent<Transform>();
         defaultTarget = GameObject.FindWithTag("Player").GetComponent<Transform>();
@@ -122,6 +120,7 @@ public class BossMonster : MonoBehaviour
         {
             dashSpeed = 0;
             dashTime = 0;
+            LookAt();
         }
         if (anim.GetBool(hashJump))
         {
@@ -130,7 +129,6 @@ public class BossMonster : MonoBehaviour
                 StartCoroutine(JumpAttackMove());   
             }
         }
-        LookAt();
     }
 
     protected virtual void LookAt()
@@ -262,8 +260,7 @@ public class BossMonster : MonoBehaviour
         canJump = false;
         nav.enabled = false;
         float distance = Vector3.Distance(chaseTarget.position, bossTr.position);
-        Vector3 attackPos = transform.position + transform.forward * (distance - 2) + Vector3.up * 20.0f;
-        mainCollider.isTrigger = true;
+        Vector3 attackPos = transform.position + transform.forward * (distance - 2);
         yield return new WaitForSeconds(1.0f);
         foreach (SkinnedMeshRenderer render in renderer)
         {
@@ -280,7 +277,6 @@ public class BossMonster : MonoBehaviour
         anim.SetBool(hashJump, false);
         jumpAttackC.enabled = true;
         yield return new WaitForSeconds(2.0f);
-        mainCollider.isTrigger = false;
         nav.enabled = true;
         canJump = true;
     }

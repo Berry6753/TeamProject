@@ -21,7 +21,7 @@ public abstract class Monster : MonoBehaviour
     [SerializeField] protected float upScaleDamage;     //공격력 성장치
     [Header("스폰 관련")]
     [SerializeField] public int startSpawnNum;        //초기 스폰 수
-    [SerializeField] protected int upScaleSpwanNum;   //스폰 증가 수 
+    [SerializeField] public int upScaleSpwanNum;      //스폰 증가 수 
     [SerializeField] protected int spawnTiming;       //스폰 기점
 
     [SerializeField] protected float sensingRange;      //감지 범위
@@ -36,7 +36,26 @@ public abstract class Monster : MonoBehaviour
     [SerializeField] protected LayerMask turretLayer;   //터렛레이어
     [SerializeField] protected LayerMask monsterLayer;  //몬스터레이어
 
-    protected int wave;                   
+    protected int probabilityGetGear;
+    protected int probabilityNum;
+    public int dropGearNum = 0;
+    protected int _wave = 0;
+    [HideInInspector]
+    public int wave
+    { 
+        get { return _wave; }
+        set 
+        {
+            if (_wave != value)
+            { 
+                _wave = value;
+                UpScaleHp();
+                UpScaleDamage();
+            }  
+        }
+        
+    }
+    protected int dieLayer;
     
     protected Rigidbody rb;
     protected NavMeshAgent nav;
@@ -52,8 +71,11 @@ public abstract class Monster : MonoBehaviour
     public State state = State.IDLE;
 
     protected bool canAttack = true;
-    [HideInInspector] public bool isDead = false;                    
+    [HideInInspector] public bool isDead = false;
     //생존 여부
+
+    public event Action<Monster> OnDeath;
+    protected WaveSystem waveSystem;
  
     protected virtual void Awake()
     {
@@ -66,6 +88,9 @@ public abstract class Monster : MonoBehaviour
         {
             c.enabled = false;
         }
+        GameObject waveObject = GameObject.Find("WaveSystem");
+        waveSystem = waveObject.GetComponent<WaveSystem>();
+
         stateMachine = gameObject.AddComponent<StateMachine>();
 
         stateMachine.AddState(State.IDLE, new IdleState(this));
@@ -85,6 +110,7 @@ public abstract class Monster : MonoBehaviour
         {
             canAttack = true;
         }
+        wave = waveSystem.currentWaveIndex - 1;
     }
 
     protected virtual void LookAt()
@@ -155,7 +181,14 @@ public abstract class Monster : MonoBehaviour
         {   
             turretDistance(turret);
             TargetingTurret();
-            chaseTarget = turret[targetingIndex].transform;
+            if (targetingIndex != -1)
+            {
+                chaseTarget = turret[targetingIndex].transform;
+            }
+            else if (targetingIndex == -1)
+            {
+                chaseTarget = defaultTarget;
+            }
         }
         else
         {
@@ -167,7 +200,7 @@ public abstract class Monster : MonoBehaviour
     {
         float[] distance = new float[array.Length];
         int minIndex = 0;
-        int secondMinIndex = 0;
+        int secondMinIndex = -1;
         for (int i = 0; i < array.Length; i++)
         {
             distance[i] = Vector3.Distance(array[i].transform.position, monsterTr.position);
@@ -195,7 +228,7 @@ public abstract class Monster : MonoBehaviour
 
     protected void TargetingTurret()
     {
-        Collider[] monster = Physics.OverlapBox(transform.position, new Vector3(5f, 5f, 5f), transform.rotation, monsterLayer);
+        Collider[] monster = Physics.OverlapBox(transform.position + Vector3.forward * 2.5f, new Vector3(5f, 5f, 5f), transform.rotation, monsterLayer);
         if (monster.Length > 3)
         {
             targetingIndex = secondTurretIndex;
@@ -208,7 +241,7 @@ public abstract class Monster : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position, new Vector3(5f, 5f, 5f));
+        Gizmos.DrawWireCube(transform.position + Vector3.forward * 2.5f, new Vector3(5f, 5f, 5f));
     }
 
     protected void FreezeVelocity()                     //물리력 제거
@@ -228,22 +261,51 @@ public abstract class Monster : MonoBehaviour
         damage += upScaleDamage * wave;
     }
 
-    protected virtual void UpScaleSpawn()                       //스폰 증가수
-    {
-        if (wave % 10 == 0 && wave / 10 > 0)
-        {
-            startSpawnNum += upScaleSpwanNum;
-        }
-    }
-
     public void Hurt(float damage)                   //플레이어에게 데미지 입을 시
     { 
         hp -= damage;
     }
 
-    public void isDie()                              //죽었을 시
+    public virtual void isDie()                              //죽었을 시
     { 
         isDead = true;
+        RandomGear();
+        gameObject.layer = dieLayer;
+        OnDeath?.Invoke(this);
+        Destroy(gameObject);
+    }
+
+    protected void RandomGear()
+    {
+        probabilityGetGear = UnityEngine.Random.Range(0, 100);
+        if (probabilityGetGear >= 0 && probabilityGetGear < 65)
+        {
+            probabilityNum = UnityEngine.Random.Range(0, 100);
+            if (probabilityNum >= 0 && probabilityNum < 60)
+            {
+                dropGearNum = 1;
+            }
+            else if (probabilityNum >= 60 && probabilityNum < 80)
+            {
+                dropGearNum = 2;
+            }
+            else if (probabilityNum >= 80 && probabilityNum < 92)
+            {
+                dropGearNum = 3;
+            }
+            else if (probabilityNum >= 92 && probabilityNum < 97)
+            {
+                dropGearNum = 4;
+            }
+            else
+            {
+                dropGearNum = 5;
+            }
+        }
+        else
+        {
+            dropGearNum = 0;
+        }
     }
 
     protected void OnCollisionEnter(Collision collision)

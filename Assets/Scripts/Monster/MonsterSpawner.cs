@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class MonsterSpawner : MonoBehaviour
 {
-    [SerializeField] private Transform spawnPoint;    //스폰위치
+    [SerializeField] private Transform[] spawnPoint;    //스폰위치
     private Wave currentWave;
 
     private List<GameObject> monsterList;
     public List<GameObject> MonsterList => monsterList;
+    private int randomS;
 
     private void Awake()
     {
         monsterList = new List<GameObject>();
-        over
     }
 
     public void StartWave(Wave wave)
@@ -31,10 +31,12 @@ public class MonsterSpawner : MonoBehaviour
         {
             while (spawnMonsterCount[i] < currentWave.maxMonsterCount[i])
             {
-                GameObject clone = Instantiate(currentWave.monsterPrefab[i], spawnPoint);
-                GameObject monster = clone.GetComponent<GameObject>();
+                GameObject clone = Instantiate(currentWave.monsterPrefab[i], spawnPoint[RandomSpawn()]);
+                Monster monster = clone.GetComponent<Monster>();
 
-                monsterList.Add(monster);
+                monsterList.Add(clone);
+
+                monster.OnDeath += HandleMosnterDeath;
 
                 spawnMonsterCount[i]++;
 
@@ -42,5 +44,19 @@ public class MonsterSpawner : MonoBehaviour
             }
             yield return new WaitForSeconds(currentWave.spawnTime);
         }
+    }
+
+    private int RandomSpawn()
+    {
+        for (int i = 0; i < spawnPoint.Length; i++)
+        {
+            randomS = Random.Range(0, spawnPoint.Length);
+        }
+        return randomS;
+    }
+
+    private void HandleMosnterDeath(Monster monster)
+    {
+        monsterList.Remove(monster.gameObject);
     }
 }
