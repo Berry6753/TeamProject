@@ -171,6 +171,7 @@ public class Core : MonoBehaviour
             GameObject gameObject = skillObjQue[itemKey].Dequeue();
             skillObjQue[itemKey].Enqueue(gameObject);
             gameObject.SetActive(true);
+            gameObject.transform.position = itemSpawnPos.transform.position;
             gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 10, 10));
         }
     }
