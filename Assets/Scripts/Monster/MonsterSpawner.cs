@@ -13,6 +13,7 @@ public class MonsterSpawner : MonoBehaviour
     private void Awake()
     {
         monsterList = new List<GameObject>();
+        over
     }
 
     public void StartWave(Wave wave)
@@ -21,7 +22,7 @@ public class MonsterSpawner : MonoBehaviour
 
         StartCoroutine(SpawnMonster());
     }
-
+        
     private IEnumerator SpawnMonster()
     {
         int[] spawnMonsterCount = new int[currentWave.maxMonsterCount.Length];
@@ -30,7 +31,7 @@ public class MonsterSpawner : MonoBehaviour
         {
             while (spawnMonsterCount[i] < currentWave.maxMonsterCount[i])
             {
-                GameObject clone = Instantiate(currentWave.monsterPrefab[i]);
+                GameObject clone = Instantiate(currentWave.monsterPrefab[i], spawnPoint);
                 GameObject monster = clone.GetComponent<GameObject>();
 
                 monsterList.Add(monster);
