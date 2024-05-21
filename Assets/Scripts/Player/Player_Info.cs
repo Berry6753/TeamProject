@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player_Info : MonoBehaviour
 {
+    //Level
+    private int Level;
+
     [Header("최대 체력")]
     [SerializeField]
     private float maxHp;
@@ -16,19 +18,35 @@ public class Player_Info : MonoBehaviour
     [Header("공격력")]
     [SerializeField]
     private float ATKDamage;
-    public float Attack { get { return ATKDamage; } }
 
     [Header("최대 탄 수")]
     [SerializeField]
     private float maxBullet;
+
     [Header("최대 탄창 수")]
     [SerializeField]
     private float maxMagazine;
 
+    [Space(10)]
+    [Header("기본 이동 속도")]
+    [SerializeField]
+    private float DefaultSpeed;
+    public float defaultSpeed { get { return DefaultSpeed; } }
+
+    [Space(10)]
+    [Header("달리기 이동 속도")]
+    [SerializeField]
+    private float RunSpeed;
+    public float runSpeed { get { return RunSpeed; } }
+
+    public float Attack { get { return ATKDamage; } }
+
     public float maxEquipedBulletCount {  get; private set; }
+    [HideInInspector]
     public float equipedBulletCount;
 
     public float maxMagazineCount {  get; private set; }
+    [HideInInspector]
     public float magazineCount;
 
     private Animator animator;
@@ -42,14 +60,18 @@ public class Player_Info : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        UI = GetComponent<Player_Info_UI>();
+        UI = GetComponent<Player_Info_UI>();        
+    }
 
+    private void OnEnable()
+    {
         maxEquipedBulletCount = maxBullet;
         maxMagazineCount = maxMagazine;
 
         equipedBulletCount = maxEquipedBulletCount;
         magazineCount = maxMagazineCount;
 
+        Level = 0;
         HP = maxHp;
 
         GearCount = 100;
@@ -110,8 +132,17 @@ public class Player_Info : MonoBehaviour
         }
     }
 
-    public void UpgradeAttack()
+    public void UpgradePlayer()
     {
-
+        Debug.Log("업그레이드 완료");
+        Level++;
+        maxHp += 20;
+        HP = maxHp;
+        ATKDamage += 3;
+        //이동 속도 증가
+        DefaultSpeed += 1f;
+        RunSpeed += 1f;
     }
+
+
 }

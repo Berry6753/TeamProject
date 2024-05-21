@@ -18,6 +18,7 @@ public enum PlayerSkillName
 
 public class Core : MonoBehaviour
 {
+    public static Core instance;
 
     public int repairCost = 100;
     public int upgradeCost = 50;
@@ -41,7 +42,7 @@ public class Core : MonoBehaviour
     private float checkUpgradeTime;
     private int checkCount;
     public Player_Info player;
-    public PlayerMovement playerMovement;
+    public Player_Command playerCommand;
     public bool isPlayer;
 
     private Dictionary<int, int[]> commandDic = new Dictionary<int, int[]>();
@@ -51,15 +52,11 @@ public class Core : MonoBehaviour
     private Queue<GameObject>[] skillObjQue = new Queue<GameObject>[(int)PlayerSkillName.LAST];
 
 
-
-
     private int itemKey;
 
     private void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Info>();
-        playerMovement=GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<PlayerMovement>();
-        InitCommandDic();
+        instance = this;
         //for (int i = 0; i < (int)PlayerSkillName.LAST; i++)
         //{
         //    skillObjQue[i] = new Queue<GameObject>();
@@ -71,6 +68,14 @@ public class Core : MonoBehaviour
 
         //    }
         //}
+    }
+
+    private void OnEnable()
+    {
+        player = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Info>();
+        playerCommand = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Command>();
+        InitCommandDic();
+        isReloading = true;
     }
 
     // Start is called before the first frame update
@@ -94,6 +99,7 @@ public class Core : MonoBehaviour
 
         if (isUpgrading)
         {
+            Debug.Log("업그레이드 중...");
             checkUpgradeTime += Time.deltaTime;
             if (checkUpgradeTime >= upgradeCoolTime)
             {
@@ -118,11 +124,9 @@ public class Core : MonoBehaviour
             //플레이어의 탄창수 채워줌
             player.equipedBulletCount = player.maxEquipedBulletCount;
             player.magazineCount = player.maxMagazineCount;
+            player.GetComponent<Player_Info_UI>().Reload(player.equipedBulletCount, player.magazineCount);
             isReloading = false;
-
         }
-
-
     }
 
     public void Hurt(int damge)
@@ -152,12 +156,12 @@ public class Core : MonoBehaviour
         
     }
 
-    public void CheckeCommand()
+    public bool CheckeCommand()
     {
         foreach (int i in commandDic.Keys)
         {
             commandDic.TryGetValue(i, out int[] Value);
-            if (!Enumerable.SequenceEqual(Value, playerMovement.commandQueue.ToArray()))
+            if (!Enumerable.SequenceEqual(Value, playerCommand.commandQueue.ToArray()))
             {
                 itemKey = -1;
             }
@@ -213,15 +217,23 @@ public class Core : MonoBehaviour
         if (itemKey == -1 || itemKey == (int)PlayerSkillName.LAST)
         {
             Debug.Log("커맨드 틀림");
+            return false;
+        }
+        else if(player.GearCount < skillObj[itemKey].GetComponent<Skill_Item_Info>().Count)
+        {
+            Debug.Log("기어 수 모자람");
+            return false;
         }
         else
         {
+            player.UseGear(skillObj[itemKey].GetComponent<Skill_Item_Info>().Count);            
             GameObject gameObject = ItemObjectPool.SpawnFromPool(skillObj[itemKey].name, itemSpawnPos.transform.position);
             //GameObject gameObject = skillObjQue[itemKey].Dequeue();
             //skillObjQue[itemKey].Enqueue(gameObject);
             //gameObject.SetActive(true);
             //gameObject.transform.position = itemSpawnPos.transform.position;
             gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 10, 10));
+            return true;
         }
     }
 

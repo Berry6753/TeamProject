@@ -141,7 +141,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "TurretUpgrade",
+                    "name": "Upgrade",
                     "type": "Button",
                     "id": "0452a986-408d-4f43-9745-24a5c6966bcf",
                     "expectedControlType": "Button",
@@ -153,6 +153,15 @@
                     "name": "RepairTurret",
                     "type": "Button",
                     "id": "dcb1bedc-3a11-4be3-b389-ec4475b53bf7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Command",
+                    "type": "Button",
+                    "id": "ec0d0d8a-4458-4088-a1d9-f9e4285fc769",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -376,7 +385,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "TurretUpgrade",
+                    "action": "Upgrade",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -388,6 +397,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "RepairTurret",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ccade2fb-57e4-4ff1-a121-57c4f5589943",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Command",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

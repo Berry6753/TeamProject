@@ -34,22 +34,27 @@ public class ExplosionEffect : MonoBehaviour
 
         StartCoroutine(AugmentAttackArea());
         StartCoroutine(PlayAnimation());
-    }
-
-    private void FixedUpdate()
-    {
-        foreach (var target in targets)
-        {
-            Debug.Log($"{target.name}에게 {AttackDamage}만큼의 데미지 부여");
-        }
+        StartCoroutine(Attack());
     }
     
+    IEnumerator Attack()
+    {
+        while (CapsuleCollider.enabled)
+        {
+            yield return new WaitForSeconds(Time.deltaTime);
+            foreach (var target in targets)
+            {
+                Debug.Log($"{target.name}에게 {AttackDamage}만큼의 데미지 부여");
+            }
+        }
+        yield break;
+    }
 
     IEnumerator AugmentAttackArea()
     {
         while(CapsuleCollider.radius < AttackArea)
         {
-            yield return new WaitForSeconds(Time.deltaTime);
+            yield return new WaitForSeconds(Time.deltaTime/3);
             CapsuleCollider.radius += 1.5f * Time.deltaTime;            
         }
         CapsuleCollider.enabled = false;
@@ -77,7 +82,6 @@ public class ExplosionEffect : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name);
         if (other.gameObject.layer == LayerMask.NameToLayer("Ground")) return;
         if (other.gameObject.layer == LayerMask.NameToLayer("Skill")) return;
         if (other.gameObject.layer == LayerMask.NameToLayer("Item")) return;

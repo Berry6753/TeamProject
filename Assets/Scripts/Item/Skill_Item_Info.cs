@@ -27,12 +27,18 @@ public class Skill_Item_Info : MonoBehaviour
     [SerializeField]
     private GameObject effectPrefab;
 
+    [Header("ÇÊ¿ä Gear")]
+    [SerializeField]
+    private int count;
+
+    [HideInInspector]
     public Rigidbody body;
 
     public ItemType getType { get { return type; } }
     public string GetName { get { return itemName; } }
     public GameObject EffectPrefab { get {  return effectPrefab; } }
     public Sprite ItemIcon { get { return itemIcon; } }
+    public int Count {  get { return count; } }
 
     //private void OnCollisionEnter(Collision collision)
     //{
@@ -52,6 +58,8 @@ public class Skill_Item_Info : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player")) return;
+        if (other.gameObject.layer == LayerMask.NameToLayer("Item")) return;
         body.useGravity=false;
         body.velocity = Vector3.zero;
     }
