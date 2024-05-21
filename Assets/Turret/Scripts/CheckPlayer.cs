@@ -4,18 +4,12 @@ using UnityEngine;
 
 public class CheckPlayer : MonoBehaviour
 {
-    [SerializeField]
-    private Core core;
-    private void Awake()
-    {
-        
-    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            core.isPlayer = true;
-            core.playerMovement.isCore = true;
+            Core.instance.isPlayer = true;
+            Core.instance.player_Command.isCore = true;
         }
     }
 
@@ -23,8 +17,8 @@ public class CheckPlayer : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            core.isPlayer = false;
-            core.playerMovement.isCore = false;
+            Core.instance.isPlayer = false;
+            Core.instance.player_Command.isCore = false;
         }
     }
 }

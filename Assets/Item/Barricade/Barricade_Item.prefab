@@ -102,6 +102,8 @@ MonoBehaviour:
   type: 2
   itemIcon: {fileID: 21300000, guid: 9f057b42a9b48c6478fe889fc5247d54, type: 3}
   effectPrefab: {fileID: 8272147208977574949, guid: a5dd381b1d9ff2d4693ab7718edb4f31, type: 3}
+  count: 30
+  body: {fileID: 0}
 --- !u!135 &6753406662142498380
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -129,5 +131,5 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0

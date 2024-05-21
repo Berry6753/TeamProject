@@ -142,7 +142,7 @@ MonoBehaviour:
   isReloading: 0
   itemSpawnPos: {fileID: 6905686651860318082}
   player: {fileID: 0}
-  playerMovement: {fileID: 0}
+  playerCommand: {fileID: 0}
   isPlayer: 0
   skillObj:
   - {fileID: 394133350312265005, guid: 376bad610df10a74281615b03b6aed9b, type: 3}
@@ -250,7 +250,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.8
   m_Center: {x: -0.25, y: 0, z: 3.9}
 --- !u!114 &5971582471935931756
 MonoBehaviour:
@@ -264,7 +264,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5715d985540771f409a849d10d9eb30d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  core: {fileID: 8846272884547099403}
 --- !u!1001 &498757786
 PrefabInstance:
   m_ObjectHideFlags: 0

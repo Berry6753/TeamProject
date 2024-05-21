@@ -8,6 +8,8 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     private Player_Aiming aiming;
+    private Player_Command command;
+    private Player_Info info;
     private CharacterController characterController;
 
     [Header("카메라")]
@@ -24,18 +26,8 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 inputMoveDir;
     private Vector3 playerMoveDir;
 
-    private bool InputBool;
-    private bool isRunning;
-
-    [Space(10)]
-    [Header("기본 이동 속도")]
-    [SerializeField]
-    private float DefaultSpeed;
-
-    [Space(10)]
-    [Header("달리기 이동 속도")]
-    [SerializeField]
-    private float RunSpeed;
+    public bool InputBool {  get; private set; }
+    //private bool isRunning;
 
     [Space(10)]
     [Header("그라운드 확인 overlap")]
@@ -56,14 +48,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private List<AudioClip> walkAudio;
 
-    private AudioSource walkAudioSource;
+    private float moveSpeed;
 
     //중력 값
     private float gravity = -9.81f;
     //현재 중력 가속도
     private float _velocity;
-
-    private float moveSpeed;
 
     private Animator animator;
     private float animationFloat;
@@ -88,37 +78,20 @@ public class PlayerMovement : MonoBehaviour
     //지반 확인용 overlapCollider
     private Collider[] colliders;
 
-    private bool isGround;
-
-    public bool isCommand;
-    public bool isCore;
-
-    public Queue<int> commandQueue = new Queue<int>();
-    public Core core;
-    private bool isPush;
+    //private bool isGround;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
         aiming = GetComponent<Player_Aiming>();
-        walkAudioSource = GetComponent<AudioSource>();
+        info = GetComponent<Player_Info>();
+        command = GetComponent<Player_Command>();
 
         _velocity = 0f;
 
         virtualCamera = followcamera.GetComponent<CinemachineVirtualCamera>();
-        core=GameObject.FindWithTag("Core").gameObject.GetComponent<Core>();
-        //animator = GetComponent<Animator>();
 
-    }
-
-    private void Start()
-    {
-        //if (isLocalPlayer == false) return;
-        //cameraTransform = GameObject.FindWithTag("PlayerCamera").GetComponent<CinemachineFreeLook>();
-
-        //cameraTransform.Follow = this.transform;
-        //cameraTransform.LookAt = cameraLookAt;
     }
 
     // Update is called once per frame
@@ -127,17 +100,11 @@ public class PlayerMovement : MonoBehaviour
         Gravity();
         ChangeSpeed();
         Rotation();
-        Command();
-
-        //Debug.Log(cameraTransform.rotation);
-        //Debug.Log(transform.forward);
     }
 
     private void FixedUpdate()
     {
-        //Gravity();
-        //DecideWalkSound();
-        if (!isCommand)
+        if (!command.isCommand)
             Movement();
     }
 
@@ -154,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
         InputBool = context.ReadValue<float>() > 0.5f;
     }
 
-    //점프 버벅 거림 픽스 필수
+    //점프 버벅 거림 픽스 완료
     public void OnJump(InputAction.CallbackContext context)
     {
         if (aiming.isGameStop > 0) return;
@@ -165,6 +132,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
+    //기즈모를 활용하여 Overlap 육안으로 보기
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.black;
@@ -201,66 +170,20 @@ public class PlayerMovement : MonoBehaviour
             playerMoveDir = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
 
             characterController.Move(playerMoveDir.normalized * moveSpeed * Time.deltaTime);
-            //rb.AddForce(playerMoveDir.normalized * moveSpeed * Time.deltaTime);
-            //transform.position += playerMoveDir.normalized * moveSpeed * Time.deltaTime;
         }
 
         MoveAnimation();
-        animator.SetFloat(hashMoveX, Mathf.Lerp(animator.GetFloat(hashMoveX), InputDir.y * animationFloat, 10f));
-        animator.SetFloat(hashMoveZ, Mathf.Lerp(animator.GetFloat(hashMoveZ), InputDir.x * animationFloat, 10f));
-
-        //animator.SetBool("Move", inputMoveDir.magnitude >= 0.1f);
     }
-
-    //private void DecideWalkSound()
-    //{
-    //    if (animator.GetBool(hashFire)) return;
-
-    //    if (isGround)
-    //    {
-    //        foreach (var ground in colliders)
-    //        {
-    //            if (ground.gameObject.layer != LayerMask.NameToLayer("Ground")) continue;
-    //            if (ground.CompareTag("Desert"))
-    //            {
-    //                walkAudioSource.clip = walkAudio[0];
-    //            }
-    //            else if (ground.CompareTag("StoneRoad"))
-    //            {
-    //                walkAudioSource.clip = walkAudio[1];
-    //            }
-    //            else if (ground.gameObject.layer == LayerMask.NameToLayer("Turret"))
-    //            {
-    //                walkAudioSource.clip = walkAudio[2];
-    //            }
-    //        }
-    //    }
-    //    else
-    //    {
-    //        //walkAudioSource.clip = walkAudio[0];
-    //        walkAudioSource.clip = null;
-    //    }         
-    //}
-
-    //public void JumpSoundPlay()
-    //{
-    //    walkAudioSource.Play();
-    //}
-
-    //public void WalkSoundPlay()
-    //{
-    //    walkAudioSource.Play();
-    //}
 
     private void ChangeSpeed()
     {
         if (InputBool)
         {
-            moveSpeed = RunSpeed;
+            moveSpeed = info.runSpeed;
         }
         else
         {
-            moveSpeed = DefaultSpeed;
+            moveSpeed = info.defaultSpeed;
         }
     }
 
@@ -278,6 +201,9 @@ public class PlayerMovement : MonoBehaviour
         {
             animationFloat = 3;
         }
+
+        animator.SetFloat(hashMoveX, Mathf.Lerp(animator.GetFloat(hashMoveX), InputDir.y * animationFloat, 10f));
+        animator.SetFloat(hashMoveZ, Mathf.Lerp(animator.GetFloat(hashMoveZ), InputDir.x * animationFloat, 10f));
     }
 
     private void Rotation()
@@ -307,93 +233,5 @@ public class PlayerMovement : MonoBehaviour
             // 캐릭터를 해당 회전값으로 회전시킴
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
         }
-
-        //// 카메라의 방향을 캐릭터의 회전값으로 변환
-        //Quaternion targetRotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);
-
-        //// 캐릭터를 해당 회전값으로 회전시킴
-        //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
-    }
-
-    public void Command()
-    {
-        if (isCore&&!isCommand)
-        {
-            if (Input.GetKeyUp(KeyCode.Tab))
-            {
-                isCommand = true;
-                StartCoroutine(PushCommand());
-
-                
-
-            }
-        }
-        
-    }
-
-   public IEnumerator PushCommand()
-    {
-        while (true) 
-        {
-            isPush = false;
-            
-            yield return new WaitUntil(() => Input.anyKeyDown);
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                commandQueue.Enqueue(1);
-            }
-            else if (Input.GetKeyDown(KeyCode.A))
-            {
-                commandQueue.Enqueue(2);
-            }
-            else if (Input.GetKeyDown(KeyCode.S))
-            {
-                commandQueue.Enqueue(3);
-            }
-            else if (Input.GetKeyDown(KeyCode.D))
-            {
-                commandQueue.Enqueue(4);
-            }
-            else
-            {
-                Debug.Log("X");
-                commandQueue.Enqueue(0);
-            }
-            isPush = true;
-            yield return new WaitUntil(() => isPush);
-            
-            
-            //switch (Input.inputString)
-            //{
-            //    case "w":
-            //    case "W":
-            //        commandQueue.Enqueue(1);
-            //        break;
-            //    case "a":
-            //    case "A":
-            //        commandQueue.Enqueue(2);
-            //        break;
-            //    case "s":
-            //    case "S":
-            //        commandQueue.Enqueue(3);
-            //        break;
-            //    case "d":
-            //    case "D":
-            //        commandQueue.Enqueue(4);
-            //        break;
-            //    default:
-            //        break;
-            //}
-
-            if (commandQueue.Count == 4)
-            {
-                core.CheckeCommand();
-                isCommand = false;
-                commandQueue.Clear();
-                yield break;
-                //StopCoroutine(PushCommand());
-            }
-            
-        }
-    }
+    }    
 }

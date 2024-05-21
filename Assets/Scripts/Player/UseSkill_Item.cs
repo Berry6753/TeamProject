@@ -31,7 +31,7 @@ public class UseSkill_Item : MonoBehaviour
 
     private bool readyToThrow;
 
-    private Dictionary<Skill_Item_Info, int> skill_Inven;
+    private Dictionary<string, int> skill_Inven;
     private List<Skill_Item_Info> skill_Item;
 
     private List<GameObject> targetItem;
@@ -50,7 +50,7 @@ public class UseSkill_Item : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        skill_Inven = new Dictionary<Skill_Item_Info, int>();
+        skill_Inven = new Dictionary<string, int>();
         skill_Item = new List<Skill_Item_Info>();
         targetItem = new List<GameObject>();
         SelectGetIndex = 0;
@@ -91,7 +91,7 @@ public class UseSkill_Item : MonoBehaviour
             if (SelectUseIndex >= skill_Inven.Count) return;
             UseItem = skill_Item[SelectUseIndex];
             Item_UI.Instance.ChangeItemIcon(UseItem.ItemIcon);
-            Item_UI.Instance.ChangeItemCount(skill_Inven[UseItem]);
+            Item_UI.Instance.ChangeItemCount(skill_Inven[UseItem.GetName]);
             preIndex = SelectUseIndex;
         }
     }
@@ -106,13 +106,13 @@ public class UseSkill_Item : MonoBehaviour
             Skill_Item_Info PickUpItem = targetItem[SelectGetIndex].GetComponent<Skill_Item_Info>();
 
             if (PickUpItem == null) return;
-            if (skill_Inven.ContainsKey(PickUpItem))
+            if (skill_Inven.ContainsKey(PickUpItem.GetName))
             {
-                skill_Inven[PickUpItem]++;
+                skill_Inven[PickUpItem.GetName]++;
             }
             else
             {
-                skill_Inven.Add(PickUpItem, 1);
+                skill_Inven.Add(PickUpItem.GetName, 1);
                 skill_Item.Add(PickUpItem);                
             }            
 
@@ -122,7 +122,7 @@ public class UseSkill_Item : MonoBehaviour
                 Item_UI.Instance.ChangeItemIcon(skill_Item[SelectUseIndex].ItemIcon);
             }
 
-            Item_UI.Instance.ChangeItemCount(skill_Inven[PickUpItem]);
+            Item_UI.Instance.ChangeItemCount(skill_Inven[PickUpItem.GetName]);
 
             //setActive(false)
             targetItem[SelectGetIndex].SetActive(false);
@@ -136,7 +136,7 @@ public class UseSkill_Item : MonoBehaviour
         if (callback.performed)
         {
             if (UseItem == null) return;
-            if (skill_Inven.ContainsKey(UseItem))
+            if (skill_Inven.ContainsKey(UseItem.GetName))
             {
                 switch (UseItem.getType) 
                 {
@@ -180,10 +180,10 @@ public class UseSkill_Item : MonoBehaviour
 
     private void ConsumeItem()
     {
-        skill_Inven[UseItem]--;
-        if (skill_Inven[UseItem] <= 0)
+        skill_Inven[UseItem.GetName]--;
+        if (skill_Inven[UseItem.GetName] <= 0)
         {
-            skill_Inven.Remove(UseItem);
+            skill_Inven.Remove(UseItem.GetName);
             skill_Item.Remove(UseItem);
         }
 
@@ -200,7 +200,7 @@ public class UseSkill_Item : MonoBehaviour
         else
         {
             UseItem = skill_Item[SelectUseIndex];
-            Item_UI.Instance.ChangeItemCount(skill_Inven[UseItem]);
+            Item_UI.Instance.ChangeItemCount(skill_Inven[UseItem.GetName]);
             Item_UI.Instance.ChangeItemIcon(UseItem.ItemIcon);
         }
     }

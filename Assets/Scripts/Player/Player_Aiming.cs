@@ -176,7 +176,8 @@ public class Player_Aiming : MonoBehaviour
         GameStopping();
         AimingOnOff();
         AimingCamera();
-        //ShootRay();        
+        //ShootRay();
+        Debug.Log(cameraLerftime);
     }
 
     private void FixedUpdate()
