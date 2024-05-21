@@ -9,7 +9,7 @@ public class CheckPlayer : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Core.instance.isPlayer = true;
-            Core.instance.playerCommand.isCore = true;
+            Core.instance.player_Command.isCore = true;
         }
     }
 
@@ -18,7 +18,7 @@ public class CheckPlayer : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Core.instance.isPlayer = false;
-            Core.instance.playerCommand.isCore = false;
+            Core.instance.player_Command.isCore = false;
         }
     }
 }

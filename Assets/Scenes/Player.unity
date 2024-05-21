@@ -1285,7 +1285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 0.7372549}
+  m_Color: {r: 1, g: 0, b: 0, a: 0.5882353}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1764,6 +1764,51 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!1 &634127277
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 634127279}
+  - component: {fileID: 634127278}
+  m_Layer: 0
+  m_Name: Turret_UI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &634127278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634127277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff8938c6501ecee4d9302d85a0cd1064, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 3875163406149374743, guid: 2e38ebbc778b6f548a6e9a49055a9a9a, type: 3}
+--- !u!4 &634127279
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634127277}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 40.340973, y: 72.74185, z: 1.9597291}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 23
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &685215018
 GameObject:
   m_ObjectHideFlags: 0
@@ -4763,6 +4808,14 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 0.8
       objectReference: {fileID: 0}
+    - target: {fileID: 8846272884547099403, guid: 465c505844950da499dcf096a6da4409, type: 3}
+      propertyPath: isReloading
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8846272884547099403, guid: 465c505844950da499dcf096a6da4409, type: 3}
+      propertyPath: ReloadCoolTimeIcon
+      value: 
+      objectReference: {fileID: 512960880}
     - target: {fileID: 8846272884547099403, guid: 465c505844950da499dcf096a6da4409, type: 3}
       propertyPath: skillObj.Array.size
       value: 3

@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public enum PlayerSkillName
@@ -18,12 +20,13 @@ public enum PlayerSkillName
 
 public class Core : MonoBehaviour
 {
+    public static Core instance;
 
     public int repairCost = 100;
     public int upgradeCost = 50;
     public bool isUpgrade = true;
     public bool isUpgrading = false;
-    public bool isReloading = false;
+    public bool isReloading = true;
 
     [SerializeField]
     private GameObject itemSpawnPos;
@@ -41,7 +44,7 @@ public class Core : MonoBehaviour
     private float checkUpgradeTime;
     private int checkCount;
     public Player_Info player;
-    public PlayerMovement playerMovement;
+    public Player_Command player_Command;
     public bool isPlayer;
 
     private Dictionary<int, int[]> commandDic = new Dictionary<int, int[]>();
@@ -50,6 +53,9 @@ public class Core : MonoBehaviour
 
     private Queue<GameObject>[] skillObjQue = new Queue<GameObject>[(int)PlayerSkillName.LAST];
 
+    [Header("쿨타임 확인용 Icon")]
+    [SerializeField]
+    private Image ReloadCoolTimeIcon;
 
     public float upgradeTime { get { return checkUpgradeTime; } }
 
@@ -58,9 +64,8 @@ public class Core : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Info>();
-        playerMovement=GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<PlayerMovement>();
-        InitCommandDic();
+        instance = this;
+
         //for (int i = 0; i < (int)PlayerSkillName.LAST; i++)
         //{
         //    skillObjQue[i] = new Queue<GameObject>();
@@ -74,6 +79,15 @@ public class Core : MonoBehaviour
         //}
     }
 
+    private void OnEnable()
+    {
+        player = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Info>();
+        player_Command = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Command>();
+        checkReloadingTime = realoadCoolTime;
+        ReloadCoolTimeIcon.fillAmount = 0;
+        InitCommandDic();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -85,12 +99,14 @@ public class Core : MonoBehaviour
     {
         if (!isReloading)
         {
-            checkReloadingTime += Time.deltaTime;
-            if (checkReloadingTime >= realoadCoolTime)
+            checkReloadingTime -= Time.deltaTime;            
+            if (checkReloadingTime <= 0)
             {
                 isReloading = true;
-                checkReloadingTime = 0;
+                checkReloadingTime = realoadCoolTime;
+                ReloadCoolTimeIcon.fillAmount = 0;
             }
+            else ReloadCoolTimeIcon.fillAmount = checkReloadingTime / realoadCoolTime;            
         }
 
         if (isUpgrading)
@@ -120,10 +136,8 @@ public class Core : MonoBehaviour
             player.equipedBulletCount = player.maxEquipedBulletCount;
             player.magazineCount = player.maxMagazineCount;
             isReloading = false;
-
+            player.GetComponent<Player_Info_UI>().Reload(player.equipedBulletCount, player.magazineCount);
         }
-
-
     }
 
     public void Hurt(int damge)
@@ -153,12 +167,12 @@ public class Core : MonoBehaviour
         
     }
 
-    public void CheckeCommand()
+    public bool CheckeCommand()
     {
         foreach (int i in commandDic.Keys)
         {
             commandDic.TryGetValue(i, out int[] Value);
-            if (!Enumerable.SequenceEqual(Value, playerMovement.commandQueue.ToArray()))
+            if (!Enumerable.SequenceEqual(Value, player_Command.commandQueue.ToArray()))
             {
                 itemKey = -1;
             }
@@ -214,6 +228,7 @@ public class Core : MonoBehaviour
         if (itemKey == -1 || itemKey == (int)PlayerSkillName.LAST)
         {
             Debug.Log("커맨드 틀림");
+            return false;
         }
         else
         {
@@ -223,6 +238,7 @@ public class Core : MonoBehaviour
             //gameObject.SetActive(true);
             //gameObject.transform.position = itemSpawnPos.transform.position;
             gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 10, 10));
+            return true;
         }
     }
 
