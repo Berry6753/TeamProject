@@ -1,44 +1,78 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AerialMonster : Monster
 {
-    [SerializeField] private float speed;
-    [SerializeField] private float atttackRange;
+    [SerializeField] private ParticleSystem fireball;
 
-    private void Update()
+    protected override void Awake()
+    {
+        base.Awake();
+        defaultTarget = GameObject.FindWithTag("Player").GetComponent<Transform>();
+    }
+    private void Start()
     {
         ChaseTarget();
     }
+    protected override void Update()
+    {
+        base.Update();
+        PriorityTarget();
+        LookAt();
+    }
+
+    protected override void LookAt()
+    {
+        transform.LookAt(chaseTarget);
+    }
+
     protected override void ChaseTarget()
     {
-        distance = Vector3.Distance(transform.position, defaltTarget.position);
-        if (distance <= atttackRange)
+        StartCoroutine(MonsterState());
+    }
+
+    protected override IEnumerator MonsterState()        //몬스터 행동 설정
+    {
+        while (!isDead)
         {
-            rb.velocity = Vector3.zero;
-        }
-        else
-        {
-            PrioTarget();
+            yield return new WaitForSeconds(0.3f);
+            if (hp <= 0)
+            {
+                stateMachine.ChangeState(State.DIE);
+                isDie();
+                yield break;
+            }
+
+            float distance = Vector3.Distance(chaseTarget.position, monsterTr.position);
+            if (distance <= attackRange)
+            {
+                FreezeVelocity();
+                if (canAttack)
+                {
+                    stateMachine.ChangeState(State.ATTACK);
+                }
+                else
+                {
+                    stateMachine.ChangeState(State.IDLE);
+                }
+            }
+            else
+            {
+                stateMachine.ChangeState(State.TRACE);
+            }
         }
     }
 
-    private void PrioTarget()
-    {
-        if(turretTarget != null)
-        {
-            for (int i = 0; i < turretTarget.Count; i++)
-            {
-                transform.LookAt(turretTarget[i]);
-                transform.position = Vector3.MoveTowards(transform.position, turretTarget[i].position, speed * Time.deltaTime);
-                break;
-            }
-        }
-        else if (turretTarget == null)
-        {
-            transform.LookAt(defaltTarget);
-            transform.position = Vector3.MoveTowards(transform.position, defaltTarget.position, speed * Time.deltaTime);
-        }
+    public override void isDie()
+    { 
+        base.isDie();
+        nav.areaMask = 1 << NavMesh.GetAreaFromName("Walkable");
+    }
+
+    private void PlayFireball()
+    { 
+        fireball.Play();
     }
 }

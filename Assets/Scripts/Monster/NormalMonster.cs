@@ -1,25 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class NormalMonster : Monster
 {
-    private void Update()
+    protected override void Awake()
     {
-        Debug.Log(defaltTarget.position);
+        base.Awake();
+        defaultTarget = GameObject.FindWithTag("Player").GetComponent<Transform>();
+    }
+    private void Start()
+    {
         ChaseTarget();
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        PriorityTarget();
+        LookAt();
     }
 
     protected override void ChaseTarget()
     {
-        distance = Vector3.Distance(transform.position, defaltTarget.position);
-        if( distance <= nav.stoppingDistance )
-        {
-            FreezeVelocity();
-        }
-        else
-        {
-            PriorityTarget();
-        }
+        StartCoroutine(MonsterState());
     }
 }
