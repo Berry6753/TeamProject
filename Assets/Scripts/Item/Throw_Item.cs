@@ -36,7 +36,7 @@ public class Throw_Item : MonoBehaviour
 
     private void Attack()
     {
-        ItemObjectPool.SpawnFromPool(skillEffect.name, new Vector3(transform.position.x, YPos, transform.position.z), Quaternion.Euler(0, Player.eulerAngles.y, 0));
+        ItemObjectPool.SpawnFromPool(skillEffect.name, new Vector3(transform.position.x, transform.position.y + YPos, transform.position.z), Quaternion.Euler(0, Player.eulerAngles.y, 0));
     }
 
     void OnDisable()

@@ -74,11 +74,11 @@ public class ExplosionEffect : MonoBehaviour
         yield break;
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, CapsuleCollider.radius);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(transform.position, CapsuleCollider.radius);
+    //}
 
     private void OnTriggerEnter(Collider other)
     {

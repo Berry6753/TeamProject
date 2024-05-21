@@ -254,13 +254,14 @@ public class Core : MonoBehaviour
             return false;
         }
         else
-        {
+        {            
             GameObject gameObject = ItemObjectPool.SpawnFromPool(skillObj[itemKey].name, itemSpawnPos.transform.position);
             //GameObject gameObject = skillObjQue[itemKey].Dequeue();
             //skillObjQue[itemKey].Enqueue(gameObject);
             //gameObject.SetActive(true);
             //gameObject.transform.position = itemSpawnPos.transform.position;
             gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 10, 10));
+            player.UseGear(gameObject.GetComponent<Skill_Item_Info>().Count);
             return true;
         }
     }

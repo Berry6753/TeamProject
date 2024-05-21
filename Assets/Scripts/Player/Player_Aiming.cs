@@ -48,6 +48,10 @@ public class Player_Aiming : MonoBehaviour
     [SerializeField]
     private LayerMask aimColliderLayerMask = new LayerMask();
 
+    [Header("√—±∏ LayerMask")]
+    [SerializeField]
+    private LayerMask FireColliderLayerMask = new LayerMask();
+
     [Header("Rig¿« Target")]
     [SerializeField]
     private Transform debugTransform;
@@ -112,6 +116,12 @@ public class Player_Aiming : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
+    private void OnEnable()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     public void OnAiming(InputAction.CallbackContext context)
     {
         if (isGameStop > 0) return;
@@ -171,9 +181,9 @@ public class Player_Aiming : MonoBehaviour
 
     private void Update()
     {
+        GameStopping();
         CameraRotation();
         //DecideRecoilBack();        
-        GameStopping();
         AimingOnOff();
         AimingCamera();
         //ShootRay();
@@ -277,7 +287,7 @@ public class Player_Aiming : MonoBehaviour
 
             debugTransform.position = hit.point;
 
-            if (Physics.Raycast(GunFireStartPoint.position, (hit.point - GunFireStartPoint.position + new Vector3(errorRange_x, errorRange_y, errorRange_z)).normalized, out RaycastHit hits, 30f, aimColliderLayerMask))
+            if (Physics.Raycast(GunFireStartPoint.position, (hit.point - GunFireStartPoint.position + new Vector3(errorRange_x, errorRange_y, errorRange_z)).normalized, out RaycastHit hits, 30f, FireColliderLayerMask))
             {                
                 Debug.DrawLine(GunFireStartPoint.position, hits.point, Color.red);
 

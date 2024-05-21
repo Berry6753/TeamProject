@@ -54,7 +54,7 @@ public class Player_Command : MonoBehaviour
 
             isPush = false;
 
-            yield return new WaitUntil(() => Input.anyKey);
+            yield return new WaitUntil(() => Input.anyKeyDown);
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 Debug.Log("커멘드 명령");
@@ -185,6 +185,7 @@ public class Player_Command : MonoBehaviour
     IEnumerator PushCommand()
     {
         commandQueue.Clear();
+
         while (true)
         {
             isPush = false;
@@ -214,8 +215,7 @@ public class Player_Command : MonoBehaviour
 
             isPush = true;
             yield return new WaitUntil(() => isPush);
-
-            //조건식 변경할 것을 요청
+        
             if (commandQueue.Count == 4)
             {
                 if (Core.instance.CheckeCommand())
