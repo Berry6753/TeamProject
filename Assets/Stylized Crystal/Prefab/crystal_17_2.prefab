@@ -140,14 +140,19 @@ MonoBehaviour:
   upgradeCost: 50
   isUpgrade: 1
   isUpgrading: 0
-  isReloading: 0
+  isReloading: 1
   itemSpawnPos: {fileID: 6905686651860318082}
   player: {fileID: 0}
   player_Command: {fileID: 0}
   isPlayer: 0
   skillObj:
-  - {fileID: 394133350312265005, guid: 376bad610df10a74281615b03b6aed9b, type: 3}
+  - {fileID: 8402480941508049593, guid: b98214da466b6334f94e079f410f10ce, type: 3}
+  - {fileID: 2719358599205244606, guid: c9c2b9f5ce460f44dbf15593ade6cbca, type: 3}
+  - {fileID: 6996260740986040176, guid: e9e1a65fdf147844bb088af9abef8e8a, type: 3}
+  CoreHPBar: {fileID: 0}
+  CoreHPText: {fileID: 0}
   ReloadCoolTimeIcon: {fileID: 0}
+  tabUI: {fileID: 7390848151219906132}
 --- !u!54 &8820245671452518935
 Rigidbody:
   m_ObjectHideFlags: 0

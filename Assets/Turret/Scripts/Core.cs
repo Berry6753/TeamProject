@@ -66,6 +66,8 @@ public class Core : MonoBehaviour
     [SerializeField]
     private Image ReloadCoolTimeIcon;
 
+    [SerializeField]
+    private Canvas tabUI;
     public float upgradeTime { get { return checkUpgradeTime; } }
 
 
@@ -74,7 +76,7 @@ public class Core : MonoBehaviour
     private void Awake()
     {
         instance = this;
-
+        tabUI.enabled = false;
         //for (int i = 0; i < (int)PlayerSkillName.LAST; i++)
         //{
         //    skillObjQue[i] = new Queue<GameObject>();
@@ -135,6 +137,14 @@ public class Core : MonoBehaviour
             isUpgrade = false;
         }
 
+        if (isPlayer)
+        {
+            tabUI.enabled = true;
+        }
+        else
+        {
+            tabUI.enabled = false;
+        }
         //파괴될시 게임매니저의 코어가있음을 뜻하는 변수를 false로
     }
 
