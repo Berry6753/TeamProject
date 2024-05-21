@@ -17,6 +17,8 @@ public class WaveSystem : MonoBehaviour
     SuicideMonster suicide;
     private bool isWave = false;
 
+    private float checkTime;
+
     private void Awake()
     {    
         for (int i = 0; i < waves.Length; i++)
@@ -75,7 +77,16 @@ public class WaveSystem : MonoBehaviour
         }
         else
         {
-            StartCoroutine(BreakWave(breakTime));
+            if (monsterSpawner.MonsterList.Count == 0 && currentWaveIndex < waves.Length)
+            {
+
+                checkTime += Time.deltaTime;
+                if (checkTime >= breakTime)
+                {
+                    checkTime = 0;
+                    isWave = false;
+                }
+            }
         }
     }
 
@@ -88,6 +99,8 @@ public class WaveSystem : MonoBehaviour
             currentWaveIndex++;
         }
     }
+
+
 
     private IEnumerator BreakWave(float time)
     {
