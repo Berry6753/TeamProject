@@ -13,7 +13,6 @@ public class TurretUpgradeState : TurretBaseState
         turret.OffRenderer();
         turret.sliderGage.gameObject.SetActive(true);
         turret.sliderGage.maxValue = turret.turretUpgradeTime;
-        turret.sliderGage.transform.position = turret.transform.position;
         //만드는 이펙트 생성
         turret.makingEfect.SetActive(true);
     }

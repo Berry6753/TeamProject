@@ -12,7 +12,6 @@ public class TurretMakingState : TurretBaseState
         turret.turretStateName = TurretStateName.MAKING;
         turret.sliderGage.gameObject.SetActive(true);
         turret.sliderGage.maxValue = turret.turretMakingTime;
-        turret.sliderGage.transform.position = turret.transform.position;
         //만드는 이펙트 생성
         turret.makingEfect.SetActive(true);
         

@@ -18,6 +18,7 @@ public class Player_BuildSystem : MonoBehaviour
 
     GameObject build;
     GameObject deleteBuild;
+    public GameObject selectBuild { get { return deleteBuild; } }
 
     private Vector3 buildPos;
     private Ray ray;
@@ -26,6 +27,8 @@ public class Player_BuildSystem : MonoBehaviour
 
     private bool isUpgradeAble;
     private bool isRepairAble;
+    public bool isUpgrade { get { return isUpgradeAble; } }
+    public bool isRepair { get { return isRepairAble; } }
 
     private void Awake()
     {

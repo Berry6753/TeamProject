@@ -51,6 +51,7 @@ public class Core : MonoBehaviour
     private Queue<GameObject>[] skillObjQue = new Queue<GameObject>[(int)PlayerSkillName.LAST];
 
 
+    public float upgradeTime { get { return checkUpgradeTime; } }
 
 
     private int itemKey;
