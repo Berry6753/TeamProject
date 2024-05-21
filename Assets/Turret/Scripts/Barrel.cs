@@ -64,9 +64,9 @@ public class Barrel : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
         bodyColleder = GetComponent<BoxCollider>();
         turretLayer = LayerMask.NameToLayer("Turret");
+        monsterLayer = LayerMask.NameToLayer("Monster");
         sliderGage.maxValue = makingTime;
         makingAudio=makingEffect.GetComponent<AudioSource>();
-        
     }
 
     private void OnEnable()

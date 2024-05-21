@@ -133,12 +133,12 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    //기즈모를 활용하여 Overlap 육안으로 보기
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.black;
-        Gizmos.DrawCube(overlapPos.position, new Vector3(0.3f, 0.1f, 0.3f));
-    }
+    ////기즈모를 활용하여 Overlap 육안으로 보기
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.black;
+    //    Gizmos.DrawCube(overlapPos.position, new Vector3(0.3f, 0.1f, 0.3f));
+    //}
 
     private void Gravity()
     {
