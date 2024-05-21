@@ -16,8 +16,9 @@ public class Player_BuildSystem : MonoBehaviour
 
     public float BuildModeOn {  get; private set; }
 
-    public GameObject build {  get; private set; }
-    public GameObject deleteBuild {  get; private set; }
+    GameObject build;
+    GameObject deleteBuild;
+    public GameObject selectBuild { get { return deleteBuild; } }
 
     private Vector3 buildPos;
     private Ray ray;
@@ -26,6 +27,8 @@ public class Player_BuildSystem : MonoBehaviour
 
     private bool isUpgradeAble;
     private bool isRepairAble;
+    public bool isUpgrade { get { return isUpgradeAble; } }
+    public bool isRepair { get { return isRepairAble; } }
 
     private void Awake()
     {
@@ -116,7 +119,6 @@ public class Player_BuildSystem : MonoBehaviour
         {
             //if (BuildModeOn < 0f) return;
             //if (deleteBuild == null) return;
-            if (aiming.isGameStop > 0) return;
             if (BuildModeOn < 0f) return;
             if (!isUpgradeAble) return;
 
@@ -136,7 +138,9 @@ public class Player_BuildSystem : MonoBehaviour
 
             deleteBuild.GetComponent<Turret>().TurretRepair();
             info.UseGear((int)deleteBuild.GetComponent<Turret>().turretRepairCost);
-        }              
+        }
+        
+        
     }
 
     private void Update()

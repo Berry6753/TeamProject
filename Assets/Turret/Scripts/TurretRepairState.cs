@@ -12,11 +12,18 @@ public class TurretRepairState : TurretBaseState
     {
         turret.turretStateName = TurretStateName.REPAIR;
         //게이지 표시
+        turret.sliderGage.gameObject.SetActive(true);
+        turret.repairAudio.Play();
+        turret.sliderGage.maxValue = turret.turretRepairTime;
     }
 
     public override void Update()
     {
         checkTime += Time.deltaTime;
+        turret.sliderGage.value = checkTime;
+        turret.sliderGage.transform.parent.forward = Camera.main.transform.forward;
+        
+        turret.repairAudio.pitch = Time.timeScale;
         if (checkTime >= turret.turretRepairTime)
         {
             //적찾기로 변경
@@ -27,6 +34,8 @@ public class TurretRepairState : TurretBaseState
     public override void Exit()
     {
         checkTime = 0;
+        turret.repairAudio.Stop();
+        turret.sliderGage.gameObject.SetActive(false);
         turret.Repair();
     }
 }

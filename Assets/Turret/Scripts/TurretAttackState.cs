@@ -20,11 +20,12 @@ public class TurretAttackState : TurretBaseState
 
         turret.spinPos.transform.LookAt(turret.turretTargetTransform);
 
-
+        turret.fireAudio.pitch = Time.timeScale;
         if (attackCheckTime >= 1/turret.turretAttackSpeed)
         {
             
             turret.Attack();
+            
             attackCheckTime = 0;
         }
 

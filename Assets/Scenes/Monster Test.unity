@@ -593,6 +593,63 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &412494377
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1957557469086090257, guid: 1f9d41e2cc4a48e49b48aa960b1fb49e, type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 1957557469086090257, guid: 1f9d41e2cc4a48e49b48aa960b1fb49e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1957557469086090257, guid: 1f9d41e2cc4a48e49b48aa960b1fb49e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1957557469086090257, guid: 1f9d41e2cc4a48e49b48aa960b1fb49e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1957557469086090257, guid: 1f9d41e2cc4a48e49b48aa960b1fb49e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1957557469086090257, guid: 1f9d41e2cc4a48e49b48aa960b1fb49e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1957557469086090257, guid: 1f9d41e2cc4a48e49b48aa960b1fb49e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1957557469086090257, guid: 1f9d41e2cc4a48e49b48aa960b1fb49e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1957557469086090257, guid: 1f9d41e2cc4a48e49b48aa960b1fb49e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1957557469086090257, guid: 1f9d41e2cc4a48e49b48aa960b1fb49e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1957557469086090257, guid: 1f9d41e2cc4a48e49b48aa960b1fb49e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1963476244292297367, guid: 1f9d41e2cc4a48e49b48aa960b1fb49e, type: 3}
+      propertyPath: m_Name
+      value: SiegeMonster
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1f9d41e2cc4a48e49b48aa960b1fb49e, type: 3}
 --- !u!1 &571744699
 GameObject:
   m_ObjectHideFlags: 0
@@ -1063,7 +1120,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57ab4a7c81c06004ab15a3a87f14455d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPoint: []
+  spawnPoint:
+  - {fileID: 571744700}
 --- !u!4 &1287531296
 Transform:
   m_ObjectHideFlags: 0

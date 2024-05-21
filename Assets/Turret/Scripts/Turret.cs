@@ -73,9 +73,11 @@ public abstract class Turret : MonoBehaviour
     public AudioSource fireAudio;
     [HideInInspector]
     public AudioSource makeAudio;
+    [HideInInspector]
+    public AudioSource repairAudio;
 
     [HideInInspector]
-    public CapsuleCollider turretCollider;
+    public SphereCollider turretCollider;
 
     public GameObject spinPos;
     [HideInInspector]
@@ -112,7 +114,7 @@ public abstract class Turret : MonoBehaviour
         headMeshFilter = turretHead.GetComponent<MeshFilter>();
         bodyRenderer = turretBody.GetComponent<MeshRenderer>();
         headRenderer = turretHead.GetComponent<MeshRenderer>();
-        turretCollider = transform.GetComponent<CapsuleCollider>();
+        turretCollider = transform.GetComponent<SphereCollider>();
         gameObject.AddComponent<StateMachine>();
         turretStatemachine = GetComponent<StateMachine>();
         SetState();
@@ -120,10 +122,10 @@ public abstract class Turret : MonoBehaviour
         firePaticle= fireEfect.GetComponent<ParticleSystem>();
         fireAudio = fireEfect.GetComponent<AudioSource>();
         makeAudio = makingEfect.GetComponent<AudioSource>();
+        repairAudio = GetComponent<AudioSource>();
         turretLayer = LayerMask.NameToLayer("Turret");
         monsterLayer = LayerMask.NameToLayer("Monster");
         ignoreLayer = 1 << LayerMask.NameToLayer("Item") | 1 << LayerMask.NameToLayer("Ignore Raycast") | 1 << LayerMask.NameToLayer("Player");
-        
     }
 
     protected virtual void OnEnable()
@@ -228,7 +230,6 @@ public abstract class Turret : MonoBehaviour
             isMake = false;
             bodyRenderer.material.color = Color.red;
             headRenderer.material.color = Color.red;
-            Debug.Log(turretColliders[0].name);
         }
         else
         {
