@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 
 public enum PlayerSkillName
@@ -53,6 +54,14 @@ public class Core : MonoBehaviour
 
     private Queue<GameObject>[] skillObjQue = new Queue<GameObject>[(int)PlayerSkillName.LAST];
 
+    [Header("Core 체력 UI")]
+    [SerializeField]
+    private Image CoreHPBar;
+
+    [Header("Core 체력 Text")]
+    [SerializeField]
+    private TMP_Text CoreHPText;
+
     [Header("쿨타임 확인용 Icon")]
     [SerializeField]
     private Image ReloadCoolTimeIcon;
@@ -85,6 +94,7 @@ public class Core : MonoBehaviour
         player_Command = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Command>();
         checkReloadingTime = realoadCoolTime;
         ReloadCoolTimeIcon.fillAmount = 0;
+        CoreHPBar.fillAmount = 1;
         InitCommandDic();
     }
 
@@ -143,11 +153,15 @@ public class Core : MonoBehaviour
     public void Hurt(int damge)
     {
         nowHp -= damge;
+        CoreHPBar.fillAmount = nowHp / maxHp;
+        CoreHPText.text = $"{nowHp} / {maxHp}";
     }
 
     public void Repair()
     {
         nowHp = maxHp;
+        CoreHPBar.fillAmount = nowHp / maxHp;
+        CoreHPText.text = $"{nowHp} / {maxHp}";
     }
 
     public void Upgrade()
