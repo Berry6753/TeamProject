@@ -48,14 +48,15 @@ public class MiniGunTurret : Turret
                 fireAudio.pitch = Time.timeScale;
                 //몬스터 데미지 주는 부분
                 //몬스터 함수 불러온단 소리
+                hit.collider.gameObject.GetComponent<Monster>().Hurt(base.turretAttackDamge);
                 Debug.Log("연사 터렛 공격");
 
             }
-            //else if ()
-            //{
-            ////드럼통 폭발시키기도 있어야함
-
-            //}
+            else if (hit.collider.CompareTag("Barrel"))
+            {
+                //드럼통 폭발시키기도 있어야함
+                hit.collider.gameObject.GetComponent<Barrel>().Hurt();
+            }
         }
     }
 

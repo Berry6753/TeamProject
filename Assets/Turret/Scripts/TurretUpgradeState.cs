@@ -23,6 +23,7 @@ public class TurretUpgradeState : TurretBaseState
         checkTime += Time.deltaTime;
         turret.sliderGage.value = checkTime;
         turret.sliderGage.transform.parent.forward = Camera.main.transform.forward;
+        turret.makeAudio.pitch = Time.timeScale;
         if (checkTime >= turret.turretUpgradeTime)
         {
             //적찾기 상태로  변경

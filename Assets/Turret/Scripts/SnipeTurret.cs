@@ -47,25 +47,25 @@ public class SnipeTurret : Turret
                 foreach (RaycastHit monster in raycastHits)
                 {
 
-                    //if(/*벽이나 터렛에 부딫힐때*/)
-                    //{ 
-                    //    //벽이나 터렛에 부딫힌 이펙트
-                    //    return;
-                    //
-                    //}
-                    //else 
-                    if (hit.collider.CompareTag("Monster"))
+                    if (!hit.collider.CompareTag("Monster"))
+                    {
+                        //벽이나 터렛에 부딫힌 이펙트
+                        return;
+
+                    }
+                    else if (hit.collider.CompareTag("Monster")) 
                     {
                         Debug.Log("관통 터렛 공격");
                         //이펙트 생성
                         //몬스터 데미지 주는 부분
+                        hit.collider.gameObject.GetComponent<Monster>().Hurt(base.turretAttackDamge);
                         //몬스터 함수 불러온단 소리
                     }
-                    //else if(hit.collider.CompareTag(""))//드럼통일경우
-                    //{
-                    //    //드럼통 폭발시키기도 있어야함
-                    //    hit.collider.gameObject.GetComponent<Barrel>().Hurt();
-                    //}
+                    else if (hit.collider.CompareTag("Barrel"))//드럼통일경우
+                    {
+                        //드럼통 폭발시키기도 있어야함
+                        hit.collider.gameObject.GetComponent<Barrel>().Hurt();
+                    }
                 }
             }
         }
