@@ -78,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
     //지반 확인용 overlapCollider
     private Collider[] colliders;
 
-    //private bool isGround;
+    private bool isGround;
 
     private void Awake()
     {
@@ -147,12 +147,12 @@ public class PlayerMovement : MonoBehaviour
         if (colliders.Length > 0 && _velocity <= 0.0f)
         {
             _velocity = -1f;
-            //isGround = true;
+            isGround = true;
         }
         else
         {
             _velocity += gravity * Time.deltaTime;
-            //isGround = false;
+            isGround = false;
         }
 
         characterController.Move(new Vector3(0,_velocity,0) * Time.deltaTime);
@@ -160,6 +160,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Movement()
     {
+        if (!isGround) return;
         inputMoveDir = new Vector3(InputDir.x, 0, InputDir.y).normalized;
 
         if (inputMoveDir.magnitude >= 0.1f)

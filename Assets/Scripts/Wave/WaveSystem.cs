@@ -79,7 +79,6 @@ public class WaveSystem : MonoBehaviour
         {
             if (monsterSpawner.MonsterList.Count == 0 && currentWaveIndex < waves.Length)
             {
-
                 checkTime += Time.deltaTime;
                 if (checkTime >= breakTime)
                 {
@@ -89,6 +88,7 @@ public class WaveSystem : MonoBehaviour
             }
         }
     }
+
 
     public void StartWave()
     {
@@ -102,14 +102,14 @@ public class WaveSystem : MonoBehaviour
 
 
 
-    private IEnumerator BreakWave(float time)
-    {
-        if (monsterSpawner.MonsterList.Count == 0 && currentWaveIndex < waves.Length)
-        {
-            yield return new WaitForSeconds(time);
-            isWave = false;
-        }
-    }
+    //private IEnumerator BreakWave(float time)
+    //{
+    //    if (monsterSpawner.MonsterList.Count == 0 && currentWaveIndex < waves.Length)
+    //    {
+    //        yield return new WaitForSeconds(time);
+    //        isWave = false;
+    //    }
+    //}
 }
 
 [System.Serializable]
