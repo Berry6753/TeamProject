@@ -108,7 +108,7 @@ public abstract class Monster : MonoBehaviour
 
     protected void OnEnable()
     {
-        gameObject.layer = monsterLayer;
+        gameObject.layer = LayerMask.NameToLayer("Monster");
     }
 
     protected virtual void Update()
@@ -282,7 +282,7 @@ public abstract class Monster : MonoBehaviour
     { 
         isDead = true;
         RandomGear();
-        gameObject.layer = dieLayer;
+        gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         OnDeath?.Invoke(this);
         gameObject.SetActive(false);
     }
