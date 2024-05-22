@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class WaveSystem : MonoBehaviour
 {
@@ -9,8 +11,13 @@ public class WaveSystem : MonoBehaviour
     private float breakTime = 60.0f;
     [SerializeField] private Wave[] waves = new Wave[maxWave];               //현재 웨이브 정보
     [SerializeField] private MonsterSpawner monsterSpawner;
+
+    [HideInInspector]
     public int currentWaveIndex = 0;
-    public GameObject[] monster = new GameObject[4];
+
+    [SerializeField]
+    private GameObject[] monster = new GameObject[4];
+
     NormalMonster normal;
     AerialMonster aerial;
     SiegeMonster siege;
@@ -18,6 +25,16 @@ public class WaveSystem : MonoBehaviour
     private bool isWave = false;
 
     private float checkTime;
+
+    [Header("Wave Count UI")]
+    [SerializeField]
+    private TMP_Text WaveCount_Text;
+
+    [Header("Wave Timer UI")]
+    [SerializeField]
+    private TMP_Text WaveTimer;
+
+    private int waveCount;  
 
     private void Awake()
     {    
@@ -67,6 +84,7 @@ public class WaveSystem : MonoBehaviour
                 }
             }
         }
+        waveCount = 0;
     }
 
     private void Update()
@@ -79,12 +97,13 @@ public class WaveSystem : MonoBehaviour
         {
             if (monsterSpawner.MonsterList.Count == 0 && currentWaveIndex < waves.Length)
             {
-                checkTime += Time.deltaTime;
-                if (checkTime >= breakTime)
+                checkTime -= Time.deltaTime;
+                if (checkTime <= 0)
                 {
-                    checkTime = 0;
+                    checkTime = breakTime;
                     isWave = false;
                 }
+                else WaveTimer.text = $"{(int)checkTime}";
             }
         }
     }
@@ -93,6 +112,8 @@ public class WaveSystem : MonoBehaviour
     public void StartWave()
     {
         isWave = true;
+        waveCount++;
+        WaveCount_Text.text = $"{waveCount}";
         if (monsterSpawner.MonsterList.Count == 0 && currentWaveIndex < waves.Length)
         {
             monsterSpawner.StartWave(waves[currentWaveIndex]);

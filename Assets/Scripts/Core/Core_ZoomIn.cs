@@ -32,10 +32,14 @@ public class Core_ZoomIn : MonoBehaviour
         }
         else
         {
-            player_Mesh.enabled = true;
-            cam.enabled = false;
-            cam.Priority = 9;
             animator.SetBool(hashZoom, false);
         }
+    }
+
+    public void ZoomOutEnd()
+    {
+        player_Mesh.enabled = true;
+        cam.enabled = false;
+        cam.Priority = 9;
     }
 }
