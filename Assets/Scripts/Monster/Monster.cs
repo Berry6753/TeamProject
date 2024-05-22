@@ -137,7 +137,7 @@ public abstract class Monster : MonoBehaviour
 
     protected virtual void Update()
     {
-        ReTargeting();
+        //ReTargeting();
 
         if (time > 0 && !anim.GetBool("isAttack"))
         {
@@ -150,6 +150,7 @@ public abstract class Monster : MonoBehaviour
         }
         wave = waveSystem.currentWaveIndex - 1;
         Debug.Log(chaseTarget.name + "Asasasasa");
+        AttackCheck();
     }
 
     protected virtual void LookAt()
@@ -185,14 +186,14 @@ public abstract class Monster : MonoBehaviour
                         c.enabled = true;
                     }
                 }
-                else
-                {
-                    stateMachine.ChangeState(State.IDLE);
-                    foreach (Collider c in attack)
-                    {
-                        c.enabled = false;
-                    }
-                }
+                //else
+                //{
+                //    stateMachine.ChangeState(State.IDLE);
+                //    foreach (Collider c in attack)
+                //    {
+                //        c.enabled = false;
+                //    }
+                //}
             }
             else
             {
@@ -234,6 +235,8 @@ public abstract class Monster : MonoBehaviour
         Collider[] turret = Physics.OverlapSphere(transform.position, sensingRange, turretLayer);
         SearchTarget.Clear();
 
+        Transform t = null;
+
         foreach (Collider c in turret)
         {            
             if (c.CompareTag("Player") || c.CompareTag("Turret") || c.CompareTag("Core") || c.CompareTag("Item"))
@@ -274,16 +277,17 @@ public abstract class Monster : MonoBehaviour
             
             if(sortedData.Last().Value != (int)PriorityTag.Turret)
             {
-                chaseTarget = sortedData.Last().Key.transform;
+                //chaseTarget = sortedData.Last().Key.transform;
+                t = sortedData.Last().Key.transform;
             }
             else
             {
                 
-                foreach(var t in sortedData)
+                foreach(var d in sortedData)
                 {
-                    if(t.Value == (int)PriorityTag.Turret && !TurretPriority.Contains(t.Key))
+                    if(d.Value == (int)PriorityTag.Turret && !TurretPriority.Contains(d.Key))
                     {
-                        TurretPriority.Add(t.Key);
+                        TurretPriority.Add(d.Key);
                     }
                 }
             }
@@ -322,13 +326,23 @@ public abstract class Monster : MonoBehaviour
             {
                 turretDistance(TurretPriority);
                 //TargetingTurret();
-                chaseTarget = TurretPriority[targetingIndex].transform;
+                //chaseTarget = TurretPriority[targetingIndex].transform;
+                t = TurretPriority[targetingIndex].transform;
             }
         }
         else
         {
-            chaseTarget = defaultTarget;
+            //chaseTarget = defaultTarget;
+            t = defaultTarget;
         }
+
+        if(chaseTarget != t)
+        {
+            chaseTarget = t;
+            //stateMachine.ChangeState(State.TRACE);
+            isAttackAble = false;
+        }
+
     }
 
     protected void turretDistance(List<GameObject> array)
@@ -381,7 +395,7 @@ public abstract class Monster : MonoBehaviour
 
     protected void FreezeVelocity()                     //물리력 제거
     {
-        //nav.isStopped = true;
+        nav.isStopped = true;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
@@ -449,9 +463,34 @@ public abstract class Monster : MonoBehaviour
         }
     }
 
+    protected void AttackCheck()
+    {
+        if(chaseTarget.gameObject.layer != LayerMask.NameToLayer("Turret"))
+        {
+            if (chaseTarget.gameObject.layer == LayerMask.NameToLayer("Player") && Vector3.Distance(transform.position, chaseTarget.position) <= 3)
+            {
+                //rb.isKinematic = false;
+                //if (chaseTarget.gameObject == collision.transform.root.gameObject)
+                {
+                    nav.isStopped = true;
+                    //obstacle.enabled = true;
+                    //nav.enabled = false;
+
+
+                }
+                isAttackAble = true;
+            }
+            else
+            {
+                isAttackAble = false;
+            }
+        }
+         
+    }
+
     protected void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground")) return;
+        
 
         //// Checking
         //if (collision.gameObject.CompareTag("Monster"))
@@ -460,31 +499,30 @@ public abstract class Monster : MonoBehaviour
         //    ChaseTarget();
         //}
 
+        
+
         if (collision.gameObject.layer == LayerMask.NameToLayer("Turret"))
         {
             //rb.isKinematic = false;
             if (collision.transform.CompareTag("Core"))
             {
-                
+
                 if (chaseTarget.gameObject == collision.gameObject)
                 {
-                    nav.isStopped = true;                    
+                    nav.isStopped = true;
                     //nav.enabled = false;
                     //obstacle.enabled = true;
-                    isAttackAble = true;
                 }
             }
             else if (collision.transform.CompareTag("Item"))
             {
                 if (chaseTarget.gameObject == collision.gameObject)
                 {
-                    nav.isStopped = true;                    
+                    nav.isStopped = true;
                     //nav.enabled = false;
                     //obstacle.enabled = true;
-                    isAttackAble = true;
                 }
             }
-
             else
             {
                 if (chaseTarget.gameObject == collision.transform.parent.gameObject)
@@ -492,25 +530,30 @@ public abstract class Monster : MonoBehaviour
                     nav.isStopped = true;
                     //nav.enabled = false;
                     //obstacle.enabled = true;
-                    isAttackAble = true;
                 }
             }
-            
+
+            isAttackAble = true;
         }
-        else if(collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-            rb.isKinematic = false;
-            if (chaseTarget.gameObject == collision.transform.root.gameObject)
-            {
-                nav.isStopped = true;
-                //obstacle.enabled = true;
-                //nav.enabled = false;
+        //else if(/*collision.gameObject.layer == LayerMask.NameToLayer("Player")*/chaseTarget.gameObject.layer==LayerMask.NameToLayer("Player")/*&&Vector3.Distance(transform.position,chaseTarget.position)<=5*/)
+        //{
+        //    //rb.isKinematic = false;
+        //    //if (chaseTarget.gameObject == collision.transform.root.gameObject)
+        //    {
+        //        nav.isStopped = true;
+        //        //obstacle.enabled = true;
+        //        //nav.enabled = false;
                 
-                isAttackAble = true;
-            }
-        }
-            
+                
+        //    }
+        //    Debug.Log("sadw12121jkjf:Jol");
+        //    isAttackAble = true;
+        //}
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground")) return;
     }
+
+    
+
     protected void OnCollisionExit(Collision collision)
     {
         //Checking
@@ -522,11 +565,17 @@ public abstract class Monster : MonoBehaviour
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("Turret") || collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            obstacle.enabled = false;
+            //obstacle.enabled = false;
             nav.enabled = true;
             nav.isStopped = false;
             rb.isKinematic = true;
             isAttackAble = false;
+        }
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        {
+            nav.isStopped = false;
+            rb.isKinematic = true;
         }
     }
 
