@@ -15,7 +15,7 @@ public class TurretUIManger : MonoBehaviour
     {
         
         canvesPrefab= Instantiate(canvas);
-        Debug.Log(canvesPrefab.name);
+        //Debug.Log(canvesPrefab.name);
         canvesPrefab.enabled = false;
         
         player = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_BuildSystem>();

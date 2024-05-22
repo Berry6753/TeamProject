@@ -220,7 +220,7 @@ public class Player_BuildSystem : MonoBehaviour
         else isUpgradeAble = false;
 
 
-        Debug.Log($"업그레이드 가능 여부 : {isUpgradeAble}");
+        //Debug.Log($"업그레이드 가능 여부 : {isUpgradeAble}");
     }
 
     private void PrintTurretRepairAble()

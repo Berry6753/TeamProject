@@ -84,6 +84,7 @@ public class WaveSystem : MonoBehaviour
                 }
             }
         }
+        checkTime = breakTime;
         waveCount = 0;
     }
 
@@ -97,6 +98,7 @@ public class WaveSystem : MonoBehaviour
         {
             if (monsterSpawner.MonsterList.Count == 0 && currentWaveIndex < waves.Length)
             {
+                WaveTimer.transform.parent.gameObject.SetActive(true);
                 checkTime -= Time.deltaTime;
                 if (checkTime <= 0)
                 {
@@ -111,6 +113,7 @@ public class WaveSystem : MonoBehaviour
 
     public void StartWave()
     {
+        WaveTimer.transform.parent.gameObject.SetActive(false);
         isWave = true;
         waveCount++;
         WaveCount_Text.text = $"{waveCount}";

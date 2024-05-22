@@ -38,7 +38,7 @@ public abstract class Monster : MonoBehaviour
     protected Transform monsterTr;                      //몬스터 위치
     protected Transform defaultTarget;                  //기본 타겟
     protected Transform chaseTarget;
-    /*[SerializeField] */ protected LayerMask turretLayer;   //터렛레이어
+    [SerializeField] protected LayerMask turretLayer;   //감지 레이어
     [SerializeField] protected LayerMask monsterLayer;  //몬스터레이어
     //[SerializeField] protected LayerMask dieLayer;
 
@@ -84,9 +84,14 @@ public abstract class Monster : MonoBehaviour
 
     public event Action<Monster> OnDeath;
     protected WaveSystem waveSystem;
- 
+
+    protected List<GameObject> SearchTarget;
+    protected List<GameObject> TurretPriority;
+
     protected virtual void Awake()
     {
+        SearchTarget = new List<GameObject>();
+        TurretPriority = new List<GameObject>();
         capsuleCollider = GetComponent<CapsuleCollider>();
         monsterTr = GetComponent<Transform>();
         rb = GetComponent<Rigidbody>();
@@ -111,8 +116,10 @@ public abstract class Monster : MonoBehaviour
 
     protected void OnEnable()
     {
+        SearchTarget.Clear();
+        TurretPriority.Clear();
         gameObject.layer = LayerMask.NameToLayer("Monster");
-        turretLayer = LayerMask.NameToLayer("Turret");
+        //turretLayer = LayerMask.NameToLayer("Turret");
         isAttackAble = false;
     }
 
@@ -132,6 +139,7 @@ public abstract class Monster : MonoBehaviour
 
     protected virtual void LookAt()
     {
+        Debug.Log(chaseTarget.name);
         transform.LookAt(new Vector3(chaseTarget.position.x, transform.position.y, chaseTarget.position.z));
     }
 
@@ -192,20 +200,52 @@ public abstract class Monster : MonoBehaviour
         time = attackSpeed;       
     }
 
+
+
     protected void PriorityTarget()                     //타겟 우선순위 설정
     {
-        Collider[] turret = Physics.OverlapSphere(transform.position, sensingRange, 1 << turretLayer);
-        if (turret.Length > 0)
-        {   
-            turretDistance(turret);
-            TargetingTurret();
-            if (targetingIndex != -1)
+        Collider[] turret = Physics.OverlapSphere(transform.position, sensingRange, turretLayer);
+        SearchTarget.Clear();
+
+        foreach (Collider c in turret)
+        {
+            if (!SearchTarget.Contains(c.transform.root.gameObject))
             {
-                chaseTarget = turret[targetingIndex].transform;
+                SearchTarget.Add(c.transform.root.gameObject);
             }
-            else if (targetingIndex == -1)
+        }
+
+        if (SearchTarget.Count > 0)
+        {
+            TurretPriority.Clear();
+            foreach (GameObject g in SearchTarget)
             {
-                chaseTarget = defaultTarget;
+                if(g == null)
+                {
+                    chaseTarget = defaultTarget;
+                    return;
+                }
+
+                if (g.CompareTag("Turret"))
+                {
+                    TurretPriority.Add(g);
+                    break;
+                }
+                else if (g.CompareTag("Core"))
+                {
+                    chaseTarget = g.transform;
+                }
+                else if(g.CompareTag("Player"))
+                {
+                    chaseTarget = g.transform;
+                }
+            }
+
+            if(TurretPriority.Count > 0)
+            {
+                turretDistance(TurretPriority);
+                TargetingTurret();
+                chaseTarget = TurretPriority[targetingIndex].transform;
             }
         }
         else
@@ -214,12 +254,12 @@ public abstract class Monster : MonoBehaviour
         }
     }
 
-    protected void turretDistance(Collider[] array)
+    protected void turretDistance(List<GameObject> array)
     {
-        float[] distance = new float[array.Length];
+        float[] distance = new float[array.Count];
         int minIndex = 0;
         int secondMinIndex = -1;
-        for (int i = 0; i < array.Length; i++)
+        for (int i = 0; i < array.Count; i++)
         {
             distance[i] = Vector3.Distance(array[i].transform.position, monsterTr.position);
         }
@@ -341,10 +381,15 @@ public abstract class Monster : MonoBehaviour
             ChaseTarget();
         }
 
-        if(chaseTarget.gameObject.layer == LayerMask.NameToLayer("Turret") && collision.gameObject.layer == LayerMask.NameToLayer("Turret"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Turret") || collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            isAttackAble = true;
+            if (chaseTarget.gameObject == collision.gameObject)
+            {
+                rb.isKinematic = false;
+                isAttackAble = true;
+            }
         }
+            
     }
     protected void OnCollisionExit(Collision collision)
     {
@@ -354,8 +399,9 @@ public abstract class Monster : MonoBehaviour
             ChaseTarget();
         }
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Turret"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Turret") || collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
+            rb.isKinematic = true;
             isAttackAble = false;
         }
     }
@@ -373,6 +419,7 @@ public abstract class Monster : MonoBehaviour
         {
             owner.nav.isStopped = true;
             owner.anim.SetBool(owner.hashTrace, false);
+            owner.state = State.IDLE;
         }
     }
     protected class TraceState : BaseMonsterState
@@ -384,6 +431,7 @@ public abstract class Monster : MonoBehaviour
             owner.nav.isStopped = false;
             owner.anim.SetBool(owner.hashTrace, true);
             owner.anim.SetBool(owner.hashAttack, false);
+            owner.state = State.TRACE;
         }
     }
     protected class AttackState : BaseMonsterState
@@ -392,6 +440,7 @@ public abstract class Monster : MonoBehaviour
         public override void Enter()
         {
             owner.anim.SetBool(owner.hashAttack, true);
+            owner.state = State.ATTACK;
         }
     }
     protected class DieState : BaseMonsterState
@@ -400,6 +449,7 @@ public abstract class Monster : MonoBehaviour
         public override void Enter()
         {
             owner.anim.SetTrigger(owner.hashDie);
+            owner.state = State.DIE;
         }
     }
 }

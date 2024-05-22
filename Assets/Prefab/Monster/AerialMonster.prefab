@@ -28138,13 +28138,10 @@ MonoBehaviour:
   sensingRange: 20
   turretLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 320
   monsterLayer:
     serializedVersion: 2
     m_Bits: 512
-  dieLayer:
-    serializedVersion: 2
-    m_Bits: 0
   dropGearNum: 0
   state: 0
   isDead: 0

@@ -20,6 +20,8 @@ public class NormalMonster : Monster
         base.Update();
         PriorityTarget();
         LookAt();
+
+        Debug.Log($"{gameObject.name} ป๓ลย : {state}");
     }
 
     protected override void ChaseTarget()
