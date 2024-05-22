@@ -121,6 +121,7 @@ public abstract class Monster : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Monster");
         //turretLayer = LayerMask.NameToLayer("Turret");
         isAttackAble = false;
+        chaseTarget = defaultTarget;
     }
 
     protected virtual void Update()
