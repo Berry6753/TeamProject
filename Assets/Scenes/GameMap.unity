@@ -9829,7 +9829,7 @@ PrefabInstance:
       objectReference: {fileID: 1951961950}
     - target: {fileID: 4793912332375539876, guid: d3b6abaa5a2a49243b6970409f474bce, type: 3}
       propertyPath: aimColliderLayerMask.m_Bits
-      value: 4726
+      value: 630
       objectReference: {fileID: 0}
     - target: {fileID: 4793912332375539876, guid: d3b6abaa5a2a49243b6970409f474bce, type: 3}
       propertyPath: FireColliderLayerMask.m_Bits
