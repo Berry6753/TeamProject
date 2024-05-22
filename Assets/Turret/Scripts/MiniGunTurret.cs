@@ -50,7 +50,7 @@ public class MiniGunTurret : Turret
                 }
                 //몬스터 데미지 주는 부분
                 //몬스터 함수 불러온단 소리
-                //hit.collider.gameObject.GetComponent<Monster>().Hurt(base.turretAttackDamge);
+                hit.collider.gameObject.GetComponent<Monster>().Hurt(base.turretAttackDamge);
                 Debug.Log("연사 터렛 공격");
 
             }

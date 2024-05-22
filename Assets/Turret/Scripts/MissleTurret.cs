@@ -30,12 +30,14 @@ public class MissleTurret : Turret
     private GameObject explosionEffect;
     private AudioSource explosionAudio;
     private ParticleSystem explosionPaticle;
+    private LayerMask barrelLayer;
 
     protected override void Awake()
     {
         base.Awake();
         explosionAudio = explosionEffect.GetComponent<AudioSource>();
         explosionPaticle = explosionEffect.GetComponent<ParticleSystem>();
+        barrelLayer = LayerMask.NameToLayer("Turret");
     }
 
     protected override void OnEnable()
@@ -57,7 +59,7 @@ public class MissleTurret : Turret
             }
             else
             {
-                Collider[] targets = Physics.OverlapSphere(targetTransform.position, missleTurretNowAttackRadius, (1 << monsterLayer));
+                Collider[] targets = Physics.OverlapSphere(targetTransform.position, missleTurretNowAttackRadius, (1 << monsterLayer) | (1 << barrelLayer));
                 //이펙트 생성
                 fireEfect.SetActive(true);
                 explosionEffect.SetActive(true);
@@ -77,7 +79,7 @@ public class MissleTurret : Turret
 
                     }
                     //드럼통 터지는 부분
-                    else if (target.CompareTag("Barrel"))//드럼통일경우
+                    if (target.CompareTag("Barrel"))//드럼통일경우
                     {
                         //드럼통 폭발시키기도 있어야함
                         target.gameObject.GetComponent<Barrel>().Hurt();

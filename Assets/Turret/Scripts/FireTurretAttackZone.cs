@@ -30,7 +30,7 @@ public class FireTurretAttackZone : MonoBehaviour
             if (checkTime >= 1 / turret.turretAttackSpeed) 
             {
                 checkTime = 0;
-               // other.gameObject.GetComponent<Monster>().Hurt(turret.turretAttackDamge);
+                other.gameObject.GetComponent<Monster>().Hurt(turret.turretAttackDamge);
                 Debug.Log("범위 터렛공격");
             }
             

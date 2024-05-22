@@ -166,7 +166,7 @@ public class Player_BuildSystem : MonoBehaviour
                     return;
                 }
 
-                if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Turret"))
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Turret"))
                 {
                     Debug.Log("설치된 터렛 찾음");
                     deleteBuild = hit.transform.gameObject;
