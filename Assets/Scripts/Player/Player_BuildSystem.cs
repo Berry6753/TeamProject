@@ -160,12 +160,12 @@ public class Player_BuildSystem : MonoBehaviour
             ray = Camera.main.ScreenPointToRay(screenCenterPoint);
             if (Physics.Raycast(ray, out RaycastHit hit, 8f, mask))
             {
-                if (Mathf.Abs(Vector3.Dot(hit.normal, Vector3.up)) <= 0.5f) 
-                {
-                    DeleteBuild();
-                    //return;
-                }
-
+                //if (Mathf.Abs(Vector3.Dot(hit.normal, Vector3.up)) <= 0.5f) 
+                //{
+                //    DeleteBuild();
+                //    //return;
+                //}
+                
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Turret"))
                 {
                     Debug.Log("설치된 터렛 찾음");
@@ -177,18 +177,35 @@ public class Player_BuildSystem : MonoBehaviour
                 else if (build != null)
                 {
                     deleteBuild = null;
-                    build.transform.position = GetMouseWorldPosition();
-                    build.transform.rotation = transform.rotation;
+                    Debug.Log("aaaaa");
+                    if (Mathf.Abs(Vector3.Dot(hit.normal, Vector3.up)) <= 0.5f)
+                    {
+                        DeleteBuild();
+                        //return;
+                    }
+                    else
+                    {
+                        build.transform.position = GetMouseWorldPosition();
+                        build.transform.rotation = transform.rotation;
+                    }
+                    
                 }
                 else
                 {
                     deleteBuild = null;
+                    if (Mathf.Abs(Vector3.Dot(hit.normal, Vector3.up)) <= 0.5f)
+                    {
+                        DeleteBuild();
+                        //return;
+                    }
+                    else
                     build = MultiObjectPool.SpawnFromPool(poolDicTag[SelectBuildTurretIndex], GetMouseWorldPosition());
                 }
             }
             else
             {
                 deleteBuild = null;
+                Debug.Log("ccccc");
                 DeleteBuild();
             }        
         }
