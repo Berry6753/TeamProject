@@ -38,9 +38,9 @@ public abstract class Monster : MonoBehaviour
     protected Transform monsterTr;                      //몬스터 위치
     protected Transform defaultTarget;                  //기본 타겟
     protected Transform chaseTarget;
-    [SerializeField] protected LayerMask turretLayer;   //터렛레이어
+    /*[SerializeField] */ protected LayerMask turretLayer;   //터렛레이어
     [SerializeField] protected LayerMask monsterLayer;  //몬스터레이어
-    [SerializeField] protected LayerMask dieLayer;
+    //[SerializeField] protected LayerMask dieLayer;
 
     protected int probabilityGetGear;
     protected int probabilityNum;
@@ -62,11 +62,13 @@ public abstract class Monster : MonoBehaviour
         
     }
 
+    protected bool isAttackAble;
     
     protected Rigidbody rb;
     protected NavMeshAgent nav;
     protected Animator anim;
     protected StateMachine stateMachine;
+    protected CapsuleCollider capsuleCollider;
 
     protected readonly int hashTrace = Animator.StringToHash("isTrace");
     protected readonly int hashAttack = Animator.StringToHash("isAttack");
@@ -85,6 +87,7 @@ public abstract class Monster : MonoBehaviour
  
     protected virtual void Awake()
     {
+        capsuleCollider = GetComponent<CapsuleCollider>();
         monsterTr = GetComponent<Transform>();
         rb = GetComponent<Rigidbody>();
         nav = GetComponent<NavMeshAgent>();
@@ -109,6 +112,8 @@ public abstract class Monster : MonoBehaviour
     protected void OnEnable()
     {
         gameObject.layer = LayerMask.NameToLayer("Monster");
+        turretLayer = LayerMask.NameToLayer("Turret");
+        isAttackAble = false;
     }
 
     protected virtual void Update()
@@ -144,8 +149,9 @@ public abstract class Monster : MonoBehaviour
                 yield break;
             }
 
-            float distance = Vector3.Distance(chaseTarget.position, monsterTr.position);
-            if (distance <= attackRange)
+
+            //float distance = Vector3.Distance(chaseTarget.position, monsterTr.position);
+            if (/*distance <= attackRange*/ isAttackAble)
             {
                 FreezeVelocity();
                 if (canAttack)
@@ -188,7 +194,7 @@ public abstract class Monster : MonoBehaviour
 
     protected void PriorityTarget()                     //타겟 우선순위 설정
     {
-        Collider[] turret = Physics.OverlapSphere(transform.position, sensingRange, turretLayer);
+        Collider[] turret = Physics.OverlapSphere(transform.position, sensingRange, 1 << turretLayer);
         if (turret.Length > 0)
         {   
             turretDistance(turret);
@@ -258,6 +264,7 @@ public abstract class Monster : MonoBehaviour
 
     protected void FreezeVelocity()                     //물리력 제거
     {
+        nav.isStopped = true;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
@@ -327,10 +334,16 @@ public abstract class Monster : MonoBehaviour
 
     protected void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground")) return;
         if (collision.gameObject.CompareTag("Monster"))
         {
             FreezeVelocity();
             ChaseTarget();
+        }
+
+        if(chaseTarget.gameObject.layer == LayerMask.NameToLayer("Turret") && collision.gameObject.layer == LayerMask.NameToLayer("Turret"))
+        {
+            isAttackAble = true;
         }
     }
     protected void OnCollisionExit(Collision collision)
@@ -339,6 +352,11 @@ public abstract class Monster : MonoBehaviour
         {
             FreezeVelocity();
             ChaseTarget();
+        }
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Turret"))
+        {
+            isAttackAble = false;
         }
     }
 
