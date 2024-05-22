@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18055615, g: 0.2260416, b: 0.30707356, a: 1}
+  m_IndirectSpecularColor: {r: 0.18055668, g: 0.2260421, b: 0.30707493, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -15430,6 +15430,38 @@ PrefabInstance:
     - target: {fileID: 4359274798616428227, guid: 2841551abc539a044a0c2bc9787df937, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4359274798616428228, guid: 2841551abc539a044a0c2bc9787df937, type: 3}
+      propertyPath: m_Carve
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4359274798616428228, guid: 2841551abc539a044a0c2bc9787df937, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4359274798616428228, guid: 2841551abc539a044a0c2bc9787df937, type: 3}
+      propertyPath: m_Center.z
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4359274798616428228, guid: 2841551abc539a044a0c2bc9787df937, type: 3}
+      propertyPath: m_Extents.x
+      value: 1.775
+      objectReference: {fileID: 0}
+    - target: {fileID: 4359274798616428228, guid: 2841551abc539a044a0c2bc9787df937, type: 3}
+      propertyPath: m_Extents.z
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4359274798616428229, guid: 2841551abc539a044a0c2bc9787df937, type: 3}
+      propertyPath: m_Size.x
+      value: 3.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 4359274798616428229, guid: 2841551abc539a044a0c2bc9787df937, type: 3}
+      propertyPath: m_Size.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4359274798616428229, guid: 2841551abc539a044a0c2bc9787df937, type: 3}
+      propertyPath: m_Center.z
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 4359274798616428231, guid: 2841551abc539a044a0c2bc9787df937, type: 3}
       propertyPath: CoreHPBar

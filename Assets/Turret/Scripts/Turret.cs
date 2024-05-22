@@ -69,7 +69,6 @@ public abstract class Turret : MonoBehaviour
     private bool isRepair;
 
     public Slider sliderGage;
-    [HideInInspector]
     public AudioSource fireAudio;
     [HideInInspector]
     public AudioSource makeAudio;
@@ -120,7 +119,7 @@ public abstract class Turret : MonoBehaviour
         SetState();
         turretStatemachine.InitState(TurretStateName.BLUESCREEN);
         firePaticle= fireEfect.GetComponent<ParticleSystem>();
-        fireAudio = fireEfect.GetComponent<AudioSource>();
+        
         makeAudio = makingEfect.GetComponent<AudioSource>();
         repairAudio = GetComponent<AudioSource>();
         turretLayer = LayerMask.NameToLayer("Turret");

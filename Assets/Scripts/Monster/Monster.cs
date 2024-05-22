@@ -72,7 +72,7 @@ public abstract class Monster : MonoBehaviour
         
     }
 
-    protected bool isAttackAble;
+    public bool isAttackAble;
     
     protected Rigidbody rb;
     protected NavMeshAgent nav;
@@ -150,7 +150,7 @@ public abstract class Monster : MonoBehaviour
         }
         wave = waveSystem.currentWaveIndex - 1;
         Debug.Log(chaseTarget.name + "Asasasasa");
-        AttackCheck();
+        //AttackCheck();
     }
 
     protected virtual void LookAt()
@@ -340,7 +340,7 @@ public abstract class Monster : MonoBehaviour
         {
             chaseTarget = t;
             //stateMachine.ChangeState(State.TRACE);
-            isAttackAble = false;
+            //isAttackAble = false;
         }
 
     }
@@ -395,9 +395,9 @@ public abstract class Monster : MonoBehaviour
 
     protected void FreezeVelocity()                     //물리력 제거
     {
-        nav.isStopped = true;
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        //nav.isStopped = true;
+        //rb.velocity = Vector3.zero;
+        //rb.angularVelocity = Vector3.zero;
     }
     //protected abstract void SpawnTiming();              //스폰 타이밍
 
@@ -463,30 +463,30 @@ public abstract class Monster : MonoBehaviour
         }
     }
 
-    protected void AttackCheck()
-    {
-        if(chaseTarget.gameObject.layer != LayerMask.NameToLayer("Turret"))
-        {
-            if (chaseTarget.gameObject.layer == LayerMask.NameToLayer("Player") && Vector3.Distance(transform.position, chaseTarget.position) <= 3)
-            {
-                //rb.isKinematic = false;
-                //if (chaseTarget.gameObject == collision.transform.root.gameObject)
-                {
-                    nav.isStopped = true;
-                    //obstacle.enabled = true;
-                    //nav.enabled = false;
+    //protected void AttackCheck()
+    //{
+    //    if(chaseTarget.gameObject.layer != LayerMask.NameToLayer("Turret"))
+    //    {
+    //        if (chaseTarget.gameObject.layer == LayerMask.NameToLayer("Player") && Vector3.Distance(transform.position, chaseTarget.position) <= 3)
+    //        {
+    //            //rb.isKinematic = false;
+    //            //if (chaseTarget.gameObject == collision.transform.root.gameObject)
+    //            {
+    //                nav.isStopped = true;
+    //                //obstacle.enabled = true;
+    //                //nav.enabled = false;
 
 
-                }
-                isAttackAble = true;
-            }
-            else
-            {
-                isAttackAble = false;
-            }
-        }
+    //            }
+    //            isAttackAble = true;
+    //        }
+    //        else
+    //        {
+    //            isAttackAble = false;
+    //        }
+    //    }
          
-    }
+    //}
 
     protected void OnCollisionEnter(Collision collision)
     {
@@ -501,55 +501,56 @@ public abstract class Monster : MonoBehaviour
 
         
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Turret"))
-        {
-            //rb.isKinematic = false;
-            if (collision.transform.CompareTag("Core"))
-            {
-
-                if (chaseTarget.gameObject == collision.gameObject)
-                {
-                    nav.isStopped = true;
-                    //nav.enabled = false;
-                    //obstacle.enabled = true;
-                }
-            }
-            else if (collision.transform.CompareTag("Item"))
-            {
-                if (chaseTarget.gameObject == collision.gameObject)
-                {
-                    nav.isStopped = true;
-                    //nav.enabled = false;
-                    //obstacle.enabled = true;
-                }
-            }
-            else
-            {
-                if (chaseTarget.gameObject == collision.transform.parent.gameObject)
-                {
-                    nav.isStopped = true;
-                    //nav.enabled = false;
-                    //obstacle.enabled = true;
-                }
-            }
-
-            isAttackAble = true;
-        }
-        //else if(/*collision.gameObject.layer == LayerMask.NameToLayer("Player")*/chaseTarget.gameObject.layer==LayerMask.NameToLayer("Player")/*&&Vector3.Distance(transform.position,chaseTarget.position)<=5*/)
+        //if (collision.gameObject.layer == LayerMask.NameToLayer("Turret"))
         //{
         //    //rb.isKinematic = false;
-        //    //if (chaseTarget.gameObject == collision.transform.root.gameObject)
+        //    nav.avoidancePriority = 99;
+        //    if (collision.transform.CompareTag("Core"))
         //    {
-        //        nav.isStopped = true;
-        //        //obstacle.enabled = true;
-        //        //nav.enabled = false;
-                
-                
+
+        //        if (chaseTarget.gameObject == collision.gameObject)
+        //        {
+        //            nav.isStopped = true;
+        //            //nav.enabled = false;
+        //            //obstacle.enabled = true;
+        //        }
         //    }
-        //    Debug.Log("sadw12121jkjf:Jol");
+        //    else if (collision.transform.CompareTag("Item"))
+        //    {
+        //        if (chaseTarget.gameObject == collision.gameObject)
+        //        {
+        //            nav.isStopped = true;
+        //            //nav.enabled = false;
+        //            //obstacle.enabled = true;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (chaseTarget.gameObject == collision.transform.parent.gameObject)
+        //        {
+        //            nav.isStopped = true;
+        //            //nav.enabled = false;
+        //            //obstacle.enabled = true;
+        //        }
+        //    }
+
         //    isAttackAble = true;
         //}
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground")) return;
+        ////else if(/*collision.gameObject.layer == LayerMask.NameToLayer("Player")*/chaseTarget.gameObject.layer==LayerMask.NameToLayer("Player")/*&&Vector3.Distance(transform.position,chaseTarget.position)<=5*/)
+        ////{
+        ////    //rb.isKinematic = false;
+        ////    //if (chaseTarget.gameObject == collision.transform.root.gameObject)
+        ////    {
+        ////        nav.isStopped = true;
+        ////        //obstacle.enabled = true;
+        ////        //nav.enabled = false;
+                
+                
+        ////    }
+        ////    Debug.Log("sadw12121jkjf:Jol");
+        ////    isAttackAble = true;
+        ////}
+        //if (collision.gameObject.layer == LayerMask.NameToLayer("Ground")) return;
     }
 
     
@@ -563,20 +564,21 @@ public abstract class Monster : MonoBehaviour
         //    ChaseTarget();
         //}
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Turret") || collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-            //obstacle.enabled = false;
-            nav.enabled = true;
-            nav.isStopped = false;
-            rb.isKinematic = true;
-            isAttackAble = false;
-        }
+        //if (collision.gameObject.layer == LayerMask.NameToLayer("Turret") || collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        //{
+        //    //obstacle.enabled = false;
+        //    nav.enabled = true;
+        //    nav.isStopped = false;
+        //    rb.isKinematic = true;
+        //    isAttackAble = false;
+        //    nav.avoidancePriority = 0;
+        //}
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Monster"))
-        {
-            nav.isStopped = false;
-            rb.isKinematic = true;
-        }
+        //if (collision.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        //{
+        //    nav.isStopped = false;
+        //    rb.isKinematic = true;
+        //}
     }
 
     protected class BaseMonsterState : BaseState
