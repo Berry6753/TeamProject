@@ -183,6 +183,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6465504166363201454}
+  - {fileID: 3548458483058752860}
   m_Father: {fileID: 2312199924405237286}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: -90}
@@ -499,7 +500,8 @@ MonoBehaviour:
   - {fileID: 4300000, guid: e2711c43d1dd73e498dde7cebd35fa73, type: 3}
   turretHead: {fileID: 3107424174797135001}
   turretBody: {fileID: 3107424174797135007}
-  firePos: {fileID: 4616274875906075207}
+  fireEffectPos: {fileID: 4616274875906075207}
+  firePos: {fileID: 7388922249872671872}
   sliderGage: {fileID: 1205209778187151205}
   fireAudio: {fileID: 0}
   makeAudio: {fileID: 0}
@@ -639,6 +641,37 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.55
   m_Center: {x: 0, y: 0.35, z: 0}
+--- !u!1 &7388922249872671872
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3548458483058752860}
+  m_Layer: 0
+  m_Name: RealFirePos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3548458483058752860
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7388922249872671872}
+  m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: -0.00061, y: -0.00174, z: 0}
+  m_LocalScale: {x: 0.0020000006, y: 0.002, z: 0.002}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3107424174796767417}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7967508147744251195
 GameObject:
   m_ObjectHideFlags: 0

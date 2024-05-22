@@ -174,6 +174,7 @@ public abstract class Monster : MonoBehaviour
             else
             {
                 stateMachine.ChangeState(State.TRACE);
+                
                 foreach (Collider c in attack)
                 {
                     c.enabled = false;
@@ -265,6 +266,7 @@ public abstract class Monster : MonoBehaviour
     protected void FreezeVelocity()                     //물리력 제거
     {
         nav.isStopped = true;
+        
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
@@ -344,6 +346,7 @@ public abstract class Monster : MonoBehaviour
         if(chaseTarget.gameObject.layer == LayerMask.NameToLayer("Turret") && collision.gameObject.layer == LayerMask.NameToLayer("Turret"))
         {
             isAttackAble = true;
+            rb.isKinematic = false;
         }
     }
     protected void OnCollisionExit(Collision collision)
@@ -356,6 +359,7 @@ public abstract class Monster : MonoBehaviour
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("Turret"))
         {
+            rb.isKinematic = true;
             isAttackAble = false;
         }
     }
@@ -393,6 +397,7 @@ public abstract class Monster : MonoBehaviour
         {
             owner.anim.SetBool(owner.hashAttack, true);
         }
+
     }
     protected class DieState : BaseMonsterState
     {
