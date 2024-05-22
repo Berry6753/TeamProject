@@ -36,6 +36,7 @@ public class SnipeTurret : Turret
         {
             if (!hit.collider.CompareTag("Monster"))
             {
+                Debug.Log("adsad");
                 return;
             }
             else

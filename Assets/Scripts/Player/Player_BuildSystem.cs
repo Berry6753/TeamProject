@@ -163,13 +163,14 @@ public class Player_BuildSystem : MonoBehaviour
                 if (Mathf.Abs(Vector3.Dot(hit.normal, Vector3.up)) <= 0.5f) 
                 {
                     DeleteBuild();
-                    return;
+                    //return;
                 }
 
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Turret"))
                 {
                     Debug.Log("설치된 터렛 찾음");
                     deleteBuild = hit.transform.gameObject;
+                    Debug.Log(deleteBuild.name);
                     
                     DeleteBuild();
                 }
@@ -187,11 +188,13 @@ public class Player_BuildSystem : MonoBehaviour
             }
             else
             {
+                deleteBuild = null;
                 DeleteBuild();
             }        
         }
         else
         {
+            deleteBuild = null;
             DeleteBuild();
         }
     }
