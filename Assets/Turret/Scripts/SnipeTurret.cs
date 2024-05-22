@@ -32,10 +32,13 @@ public class SnipeTurret : Turret
 
     public override void Attack()
     {
+        Debug.DrawRay(firePos.transform.position, (targetTransform.position - firePos.transform.position) * 100, Color.red, 100);
         if(Physics.Raycast(firePos.transform.position, targetTransform.position - firePos.transform.position,out RaycastHit hit, snipeTurretAttackRange,~(ignoreLayer)))
         {
+            Debug.Log(hit.collider.name);
             if (!hit.collider.CompareTag("Monster"))
             {
+                
                 return;
             }
             else

@@ -183,6 +183,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5548785461934420802}
+  - {fileID: 2049398393450886051}
   m_Father: {fileID: 5090895559434542435}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: -90}
@@ -368,6 +369,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2697777662454366443
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2049398393450886051}
+  m_Layer: 0
+  m_Name: realFirePos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2049398393450886051
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2697777662454366443}
+  m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: -0.00095, y: -0.00381, z: 0}
+  m_LocalScale: {x: 0.002, y: 0.002, z: 0.002}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2102919445623474625}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3493744042189580832
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,7 +576,8 @@ MonoBehaviour:
   - {fileID: 4300002, guid: a8dcf308c391de14180e9ead38296ced, type: 3}
   turretHead: {fileID: 2102919445623182817}
   turretBody: {fileID: 2102919445623182823}
-  firePos: {fileID: 5397238567561986648}
+  fireEffectPos: {fileID: 5397238567561986648}
+  firePos: {fileID: 2697777662454366443}
   sliderGage: {fileID: 7993985867416139191}
   fireAudio: {fileID: 0}
   makeAudio: {fileID: 0}

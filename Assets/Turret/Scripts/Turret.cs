@@ -32,6 +32,8 @@ public abstract class Turret : MonoBehaviour
     private GameObject turretBody;
 
     [SerializeField]
+    protected GameObject fireEffectPos;
+    [SerializeField]
     protected GameObject firePos;
 
     protected Transform targetTransform;
@@ -271,13 +273,17 @@ public abstract class Turret : MonoBehaviour
             float nierTargetDistance = Mathf.Infinity;
             foreach (Collider collider in enemyCollider)
             {
-                float distance = Vector3.SqrMagnitude(transform.position - collider.transform.position);
-
-                if (/*!collider.GetComponent<Monster>().isDead&&*/distance < nierTargetDistance)
+                if (collider.CompareTag("Monster"))
                 {
-                    nierTargetDistance = distance;
-                    nierTargetTransform = collider.transform;
+                    float distance = Vector3.SqrMagnitude(transform.position - collider.transform.position);
+
+                    if (/*!collider.GetComponent<Monster>().isDead&&*/distance < nierTargetDistance)
+                    {
+                        nierTargetDistance = distance;
+                        nierTargetTransform = collider.transform;
+                    }
                 }
+                
             }
         }
 

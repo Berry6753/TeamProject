@@ -11,7 +11,10 @@ public class TurretAttackState : TurretBaseState
     public override void Enter()
     {
         turret.turretStateName = TurretStateName.ATTACK;
-        turret.Attack();
+        if (attackCheckTime >= 1 / turret.turretAttackSpeed)
+        {
+            turret.Attack();
+        }
     }
 
     public override void Update()
@@ -19,7 +22,6 @@ public class TurretAttackState : TurretBaseState
         attackCheckTime += Time.deltaTime;
 
         turret.spinPos.transform.LookAt(turret.turretTargetTransform);
-
         turret.fireAudio.pitch = Time.timeScale;
         if (attackCheckTime >= 1/turret.turretAttackSpeed)
         {
@@ -40,7 +42,6 @@ public class TurretAttackState : TurretBaseState
 
     public override void Exit()
     {
-        attackCheckTime = 0;
         turret.turretTargetTransform = null;
         turret.fireEfect.SetActive(false);
     }

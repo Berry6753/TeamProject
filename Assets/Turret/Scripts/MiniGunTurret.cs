@@ -50,7 +50,7 @@ public class MiniGunTurret : Turret
                 }
                 //몬스터 데미지 주는 부분
                 //몬스터 함수 불러온단 소리
-                //hit.collider.gameObject.GetComponent<Monster>().Hurt(base.turretAttackDamge);
+                hit.collider.gameObject.GetComponent<Monster>().Hurt(base.turretAttackDamge);
                 Debug.Log("연사 터렛 공격");
 
             }
@@ -65,7 +65,7 @@ public class MiniGunTurret : Turret
     public override void Upgrade()
     {
         if (base.turretUpgradeCount < 1) 
-        firePos.transform.localPosition = firePos.transform.localPosition+ new Vector3(0, -0.001f, 0);
+        fireEffectPos.transform.localPosition = fireEffectPos.transform.localPosition+ new Vector3(0, -0.001f, 0);
         base.Upgrade();
     }
 
