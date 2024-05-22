@@ -2463,6 +2463,7 @@ GameObject:
   - component: {fileID: 1902818144060598747}
   - component: {fileID: 1902818144060598745}
   - component: {fileID: 1902818144060598744}
+  - component: {fileID: 5588367513299373797}
   m_Layer: 9
   m_Name: SiegeMonster
   m_TagString: Monster
@@ -2593,6 +2594,22 @@ MonoBehaviour:
   dropGearNum: 0
   state: 0
   isDead: 0
+--- !u!208 &5588367513299373797
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1963476244292297367}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 1.4, y: 1.6, z: 1.4}
+  m_MoveThreshold: 0.3
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.6, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1963485309810411145
 GameObject:
   m_ObjectHideFlags: 0

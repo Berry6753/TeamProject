@@ -17,6 +17,7 @@ public class TurretBlueScreenState : TurretBaseState
         turret.turretCollider.enabled = false;
         //터렛의 태그와 레이어 없애기
         turret.transform.parent.gameObject.tag = "Untagged";
+            turret.transform.parent.gameObject.layer = LayerMask.NameToLayer("debug");
         turret.gameObject.tag = "Untagged";
         turret.gameObject.layer = LayerMask.NameToLayer("debug");
         turret.turretCollider.gameObject.tag = "Untagged";
@@ -39,6 +40,7 @@ public class TurretBlueScreenState : TurretBaseState
         turret.turretCollider.enabled = true;
         //터렛의 태그와 레이어 설정
         turret.transform.parent.gameObject.tag = "Turret";
+        turret.transform.parent.gameObject.layer = LayerMask.NameToLayer("Turret");
         turret.gameObject.tag = "Turret";
         turret.gameObject.layer = LayerMask.NameToLayer("Turret");
         turret.turretCollider.gameObject.tag = "Turret";

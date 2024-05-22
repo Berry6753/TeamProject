@@ -7,6 +7,14 @@ using UnityEngine;
 using UnityEngine.AI;
 using static UnityEngine.UI.GridLayoutGroup;
 
+enum PriorityTag
+{
+    Player,
+    Core,
+    Turret,
+    Item
+}
+
 public abstract class Monster : MonoBehaviour
 {
     [Header("Monster")]
@@ -41,6 +49,8 @@ public abstract class Monster : MonoBehaviour
     [SerializeField] protected LayerMask turretLayer;   //감지 레이어
     [SerializeField] protected LayerMask monsterLayer;  //몬스터레이어
     //[SerializeField] protected LayerMask dieLayer;
+
+    protected NavMeshObstacle obstacle;
 
     protected int probabilityGetGear;
     protected int probabilityNum;
@@ -85,17 +95,18 @@ public abstract class Monster : MonoBehaviour
     public event Action<Monster> OnDeath;
     protected WaveSystem waveSystem;
 
-    protected List<GameObject> SearchTarget;
+    protected Dictionary<GameObject, int> SearchTarget;
     protected List<GameObject> TurretPriority;
 
     protected virtual void Awake()
     {
-        SearchTarget = new List<GameObject>();
+        SearchTarget = new Dictionary<GameObject, int>();
         TurretPriority = new List<GameObject>();
         capsuleCollider = GetComponent<CapsuleCollider>();
         monsterTr = GetComponent<Transform>();
         rb = GetComponent<Rigidbody>();
         nav = GetComponent<NavMeshAgent>();
+        obstacle = GetComponent<NavMeshObstacle>();
         anim = GetComponent<Animator>();
         attack = GetComponentsInChildren<SphereCollider>();
         foreach (Collider c in attack)
@@ -126,6 +137,8 @@ public abstract class Monster : MonoBehaviour
 
     protected virtual void Update()
     {
+        ReTargeting();
+
         if (time > 0 && !anim.GetBool("isAttack"))
         {
             time -= Time.deltaTime;
@@ -136,6 +149,7 @@ public abstract class Monster : MonoBehaviour
             canAttack = true;
         }
         wave = waveSystem.currentWaveIndex - 1;
+        Debug.Log(chaseTarget.name + "Asasasasa");
     }
 
     protected virtual void LookAt()
@@ -201,6 +215,18 @@ public abstract class Monster : MonoBehaviour
         time = attackSpeed;       
     }
 
+    private void ReTargeting()
+    {
+        if (!chaseTarget.gameObject.activeSelf)
+        {
+            chaseTarget = defaultTarget;
+            obstacle.enabled = false;
+            nav.enabled = true;
+            nav.isStopped = false;
+            rb.isKinematic = true;
+            isAttackAble = false;
+        }
+    }
 
 
     protected void PriorityTarget()                     //타겟 우선순위 설정
@@ -210,17 +236,32 @@ public abstract class Monster : MonoBehaviour
 
         foreach (Collider c in turret)
         {            
-            if (c.CompareTag("Player") || c.CompareTag("Turret") || c.CompareTag("Core"))
+            if (c.CompareTag("Player") || c.CompareTag("Turret") || c.CompareTag("Core") || c.CompareTag("Item"))
             {
                 if (c.CompareTag("Turret"))
                 {
-                    if(!SearchTarget.Contains(c.transform.parent.gameObject))
-                        SearchTarget.Add(c.transform.parent.gameObject);
+                    if(!SearchTarget.ContainsKey(c.transform.parent.gameObject))
+                        SearchTarget.Add(c.transform.parent.gameObject, (int)PriorityTag.Turret);
                 }
-                else
+                else 
                 {
-                    if (!SearchTarget.Contains(c.gameObject))
-                        SearchTarget.Add(c.gameObject);
+                    int Score = 0;
+                    if (c.CompareTag("Player"))
+                    {
+                        Score = (int)PriorityTag.Player;
+                    }
+                    else if (c.CompareTag("Core"))
+                    {
+                        Score = (int)PriorityTag.Core;
+                    }
+                    else if (c.CompareTag("Item"))
+                    {
+                        Score = (int)PriorityTag.Item;
+                    }
+                                       
+                    
+                    if (!SearchTarget.ContainsKey(c.gameObject))
+                             SearchTarget.Add(c.gameObject, Score);
                 }
                 
             }
@@ -229,32 +270,58 @@ public abstract class Monster : MonoBehaviour
         if (SearchTarget.Count > 0)
         {
             TurretPriority.Clear();
-            foreach (GameObject g in SearchTarget)
+            var sortedData = SearchTarget.OrderBy(x => x.Value);
+            
+            if(sortedData.Last().Value != (int)PriorityTag.Turret)
             {
-                if(g == null)
+                chaseTarget = sortedData.Last().Key.transform;
+            }
+            else
+            {
+                
+                foreach(var t in sortedData)
                 {
-                    chaseTarget = defaultTarget;
-                    return;
-                }
-
-                if (g.CompareTag("Turret"))
-                {
-                    TurretPriority.Add(g);                    
-                }
-                else if (g.CompareTag("Core"))
-                {
-                    chaseTarget = g.transform;
-                }
-                else if(g.CompareTag("Player"))
-                {
-                    chaseTarget = g.transform;
+                    if(t.Value == (int)PriorityTag.Turret && !TurretPriority.Contains(t.Key))
+                    {
+                        TurretPriority.Add(t.Key);
+                    }
                 }
             }
+            //TurretPriority.Clear();
 
-            if(TurretPriority.Count > 0)
+            //foreach (GameObject g in SearchTarget)
+            //{
+            //    if(g == null)
+            //    {
+            //        chaseTarget = defaultTarget;
+            //        return;
+            //    }
+
+            //    if (g.CompareTag("Item"))
+            //    {
+            //        chaseTarget = g.transform;
+            //        break;
+            //    }
+            //    else if (g.CompareTag("Turret"))
+            //    {
+            //        TurretPriority.Add(g);                    
+            //    }
+            //    else if (g.CompareTag("Core"))
+            //    {
+            //        chaseTarget = g.transform;
+            //        break;
+            //    }
+            //    else if(g.CompareTag("Player"))
+            //    {
+            //        chaseTarget = g.transform;
+            //        break;
+            //    }
+            //}
+
+            if (TurretPriority.Count > 0)
             {
                 turretDistance(TurretPriority);
-                TargetingTurret();
+                //TargetingTurret();
                 chaseTarget = TurretPriority[targetingIndex].transform;
             }
         }
@@ -268,44 +335,44 @@ public abstract class Monster : MonoBehaviour
     {
         float[] distance = new float[array.Count];
         int minIndex = 0;
-        int secondMinIndex = 0;
+        //int secondMinIndex = 0;
         for (int i = 0; i < array.Count; i++)
         {
             distance[i] = Vector3.Distance(array[i].transform.position, monsterTr.position);
         }
         float minDistance = distance[0];
-        float secondDistance = distance.Max();
+        //float secondDistance = distance.Max();
         for (int i = 0; i < distance.Length; i++)
         {
             if (distance[i] < minDistance)
             {
-                secondDistance = minDistance;
-                secondMinIndex = minIndex;
+                //secondDistance = minDistance;
+                //secondMinIndex = minIndex;
                 minDistance = distance[i];
                 minIndex = i;
             }
-            else if(distance[i] < secondDistance)
-            {
-                secondDistance = distance[i];
-                secondMinIndex = i;
-            }
+            //else if(distance[i] < secondDistance)
+            //{
+            //    secondDistance = distance[i];
+            //    secondMinIndex = i;
+            //}
         }
-        turretIndex = minIndex;
-        secondTurretIndex = secondMinIndex;
+        targetingIndex = minIndex;
+        //secondTurretIndex = secondMinIndex;
     }
 
-    protected void TargetingTurret()
-    {
-        Collider[] monster = Physics.OverlapBox(transform.position + Vector3.forward * 2.5f, new Vector3(5f, 5f, 5f), transform.rotation, monsterLayer);
-        if (monster.Length > 3)
-        {
-            targetingIndex = secondTurretIndex;
-        }
-        else
-        {
-            targetingIndex = turretIndex;
-        }
-    }
+    //protected void TargetingTurret()
+    //{
+    //    Collider[] monster = Physics.OverlapBox(transform.position + Vector3.forward * 2.5f, new Vector3(5f, 5f, 5f), transform.rotation, monsterLayer);
+    //    if (monster.Length > 3)
+    //    {
+    //        targetingIndex = secondTurretIndex;
+    //    }
+    //    else
+    //    {
+    //        targetingIndex = turretIndex;
+    //    }
+    //}
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -314,7 +381,7 @@ public abstract class Monster : MonoBehaviour
 
     protected void FreezeVelocity()                     //물리력 제거
     {
-        nav.isStopped = true;
+        //nav.isStopped = true;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
@@ -395,19 +462,36 @@ public abstract class Monster : MonoBehaviour
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("Turret"))
         {
+            //rb.isKinematic = false;
             if (collision.transform.CompareTag("Core"))
             {
+                
                 if (chaseTarget.gameObject == collision.gameObject)
                 {
-                    rb.isKinematic = false;
+                    nav.isStopped = true;                    
+                    //nav.enabled = false;
+                    //obstacle.enabled = true;
                     isAttackAble = true;
                 }
             }
+            else if (collision.transform.CompareTag("Item"))
+            {
+                if (chaseTarget.gameObject == collision.gameObject)
+                {
+                    nav.isStopped = true;                    
+                    //nav.enabled = false;
+                    //obstacle.enabled = true;
+                    isAttackAble = true;
+                }
+            }
+
             else
             {
                 if (chaseTarget.gameObject == collision.transform.parent.gameObject)
                 {
-                    rb.isKinematic = false;
+                    nav.isStopped = true;
+                    //nav.enabled = false;
+                    //obstacle.enabled = true;
                     isAttackAble = true;
                 }
             }
@@ -415,9 +499,13 @@ public abstract class Monster : MonoBehaviour
         }
         else if(collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
+            rb.isKinematic = false;
             if (chaseTarget.gameObject == collision.transform.root.gameObject)
             {
-                rb.isKinematic = false;
+                nav.isStopped = true;
+                //obstacle.enabled = true;
+                //nav.enabled = false;
+                
                 isAttackAble = true;
             }
         }
@@ -434,6 +522,9 @@ public abstract class Monster : MonoBehaviour
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("Turret") || collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
+            obstacle.enabled = false;
+            nav.enabled = true;
+            nav.isStopped = false;
             rb.isKinematic = true;
             isAttackAble = false;
         }
@@ -450,7 +541,7 @@ public abstract class Monster : MonoBehaviour
         public IdleState(Monster owner) : base(owner) { }
         public override void Enter()
         {
-            owner.nav.isStopped = true;
+            //owner.nav.isStopped = true;
             owner.anim.SetBool(owner.hashTrace, false);
             owner.state = State.IDLE;
         }

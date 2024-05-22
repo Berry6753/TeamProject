@@ -28036,6 +28036,7 @@ GameObject:
   - component: {fileID: 7466082775651054921}
   - component: {fileID: 7466082775651054967}
   - component: {fileID: 7466082775651054966}
+  - component: {fileID: 3235395462630857471}
   m_Layer: 9
   m_Name: AerialMonster
   m_TagString: Monster
@@ -28168,6 +28169,22 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!208 &3235395462630857471
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7408092878229374756}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.7, y: 0.5, z: 0.7}
+  m_MoveThreshold: 0.3
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.7, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &7408092878292678094
 GameObject:
   m_ObjectHideFlags: 0

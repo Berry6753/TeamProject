@@ -86,6 +86,7 @@ public class WaveSystem : MonoBehaviour
         }
         checkTime = breakTime;
         waveCount = 0;
+        //isWave = true;
     }
 
     private void Update()

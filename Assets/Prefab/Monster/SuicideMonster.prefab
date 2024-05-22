@@ -20895,6 +20895,7 @@ GameObject:
   - component: {fileID: 8029574558146404937}
   - component: {fileID: 8029574558146404943}
   - component: {fileID: 8029574558146404940}
+  - component: {fileID: 1556092585451817751}
   m_Layer: 9
   m_Name: SuicideMonster
   m_TagString: Monster
@@ -21023,14 +21024,27 @@ MonoBehaviour:
   monsterLayer:
     serializedVersion: 2
     m_Bits: 512
-  dieLayer:
-    serializedVersion: 2
-    m_Bits: 0
   dropGearNum: 0
   state: 0
   isDead: 0
   exlosionEffect: {fileID: 1723354810779775139}
   form: {fileID: 7942195475710838211}
+--- !u!208 &1556092585451817751
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7942864211657280271}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.5, y: 0.9, z: 0.5}
+  m_MoveThreshold: 0.3
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.9, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &7942868892731370013
 GameObject:
   m_ObjectHideFlags: 0

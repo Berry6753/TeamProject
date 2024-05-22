@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Brricade : MonoBehaviour
 {
@@ -16,15 +17,19 @@ public class Brricade : MonoBehaviour
     private bool isGroound;
     private Rigidbody body;
 
+    private NavMeshObstacle obstacle;
+    
     private void Awake()
     {
         target = new List<GameObject>();
         body = GetComponent<Rigidbody>();
+        obstacle = GetComponent<NavMeshObstacle>();
     }
 
     private void OnEnable()
     {
         isGroound = false;
+        obstacle.enabled = false;
     }
 
     public void Hurt(float damage)
@@ -90,12 +95,13 @@ public class Brricade : MonoBehaviour
             {
                 isGroound = true;
                 body.constraints = RigidbodyConstraints.FreezeAll;
+                obstacle.enabled = true;
                 return;
             }
             if (collision.gameObject.layer == LayerMask.NameToLayer("Skill")) return;
             target.Add(collision.gameObject);
-        }
-       
+            
+        }        
     }
 
     
