@@ -209,10 +209,20 @@ public abstract class Monster : MonoBehaviour
         SearchTarget.Clear();
 
         foreach (Collider c in turret)
-        {
-            if (!SearchTarget.Contains(c.transform.root.gameObject))
+        {            
+            if (c.CompareTag("Player") || c.CompareTag("Turret") || c.CompareTag("Core"))
             {
-                SearchTarget.Add(c.transform.root.gameObject);
+                if (c.CompareTag("Turret"))
+                {
+                    if(!SearchTarget.Contains(c.transform.parent.gameObject))
+                        SearchTarget.Add(c.transform.parent.gameObject);
+                }
+                else
+                {
+                    if (!SearchTarget.Contains(c.gameObject))
+                        SearchTarget.Add(c.gameObject);
+                }
+                
             }
         }
 
@@ -229,8 +239,7 @@ public abstract class Monster : MonoBehaviour
 
                 if (g.CompareTag("Turret"))
                 {
-                    TurretPriority.Add(g);
-                    break;
+                    TurretPriority.Add(g);                    
                 }
                 else if (g.CompareTag("Core"))
                 {
@@ -259,7 +268,7 @@ public abstract class Monster : MonoBehaviour
     {
         float[] distance = new float[array.Count];
         int minIndex = 0;
-        int secondMinIndex = -1;
+        int secondMinIndex = 0;
         for (int i = 0; i < array.Count; i++)
         {
             distance[i] = Vector3.Distance(array[i].transform.position, monsterTr.position);
@@ -376,15 +385,37 @@ public abstract class Monster : MonoBehaviour
     protected void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground")) return;
-        if (collision.gameObject.CompareTag("Monster"))
-        {
-            FreezeVelocity();
-            ChaseTarget();
-        }
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Turret") || collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        //// Checking
+        //if (collision.gameObject.CompareTag("Monster"))
+        //{
+        //    FreezeVelocity();
+        //    ChaseTarget();
+        //}
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Turret"))
         {
-            if (chaseTarget.gameObject == collision.gameObject)
+            if (collision.transform.CompareTag("Core"))
+            {
+                if (chaseTarget.gameObject == collision.gameObject)
+                {
+                    rb.isKinematic = false;
+                    isAttackAble = true;
+                }
+            }
+            else
+            {
+                if (chaseTarget.gameObject == collision.transform.parent.gameObject)
+                {
+                    rb.isKinematic = false;
+                    isAttackAble = true;
+                }
+            }
+            
+        }
+        else if(collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            if (chaseTarget.gameObject == collision.transform.root.gameObject)
             {
                 rb.isKinematic = false;
                 isAttackAble = true;
@@ -394,11 +425,12 @@ public abstract class Monster : MonoBehaviour
     }
     protected void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Monster"))
-        {
-            FreezeVelocity();
-            ChaseTarget();
-        }
+        //Checking
+        //if (collision.gameObject.CompareTag("Monster"))
+        //{
+        //    FreezeVelocity();
+        //    ChaseTarget();
+        //}
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("Turret") || collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
