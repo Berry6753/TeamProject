@@ -160,7 +160,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Movement()
     {
-        if (!isGround) return;
+        //if (!isGround) return;
         inputMoveDir = new Vector3(InputDir.x, 0, InputDir.y).normalized;
 
         if (inputMoveDir.magnitude >= 0.1f)

@@ -2211,6 +2211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac579f2bf1fca84db9c411b8f4ddd3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterName: NormalMonster
   attackSpeed: 1
   hp: 100
   damage: 5

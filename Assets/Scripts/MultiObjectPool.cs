@@ -4,28 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-
-#if UNITY_EDITOR
-using UnityEditor;
-
-[CustomEditor(typeof(MultiObjectPool))]
-public class ObjectPoolerEditor : Editor
+public class MonsterObjectPool : MonoBehaviour
 {
-    const string INFO = "풀링한 오브젝트에 다음을 적으세요 \nvoid OnDisable()\n{\n" +
-        "    ObjectPooler.ReturnToPool(gameObject);    // 한 객체에 한번만 \n" +
-        "    CancelInvoke();    // Monobehaviour에 Invoke가 있다면 \n}";
-
-    public override void OnInspectorGUI()
-    {
-        EditorGUILayout.HelpBox(INFO, MessageType.Info);
-        base.OnInspectorGUI();
-    }
-}
-#endif
-
-public class MultiObjectPool : MonoBehaviour
-{
-    public static MultiObjectPool inst;
+    public static MonsterObjectPool inst;
     void Awake() => inst = this;
 
     [Serializable]

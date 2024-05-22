@@ -9,6 +9,11 @@ using static UnityEngine.UI.GridLayoutGroup;
 
 public abstract class Monster : MonoBehaviour
 {
+    [Header("Monster")]
+    [SerializeField] protected string monsterName;
+
+    public string GetMonsterName {  get { return monsterName; } }
+
     [Header("몬스터 스탯")]
     protected float time = 0;
     [SerializeField] protected float attackSpeed;       //공격 속도
@@ -35,6 +40,7 @@ public abstract class Monster : MonoBehaviour
     protected Transform chaseTarget;
     [SerializeField] protected LayerMask turretLayer;   //터렛레이어
     [SerializeField] protected LayerMask monsterLayer;  //몬스터레이어
+    [SerializeField] protected LayerMask dieLayer;
 
     protected int probabilityGetGear;
     protected int probabilityNum;
@@ -55,7 +61,7 @@ public abstract class Monster : MonoBehaviour
         }
         
     }
-    protected int dieLayer;
+
     
     protected Rigidbody rb;
     protected NavMeshAgent nav;
@@ -99,6 +105,12 @@ public abstract class Monster : MonoBehaviour
         stateMachine.AddState(State.DIE, new DieState(this));
         stateMachine.InitState(State.IDLE);
     }
+
+    protected void OnEnable()
+    {
+        gameObject.layer = monsterLayer;
+    }
+
     protected virtual void Update()
     {
         if (time > 0 && !anim.GetBool("isAttack"))
@@ -272,7 +284,12 @@ public abstract class Monster : MonoBehaviour
         RandomGear();
         gameObject.layer = dieLayer;
         OnDeath?.Invoke(this);
-        Destroy(gameObject);
+        gameObject.SetActive(false);
+    }
+
+    private void OnDisable()
+    {
+        MonsterObjectPool.ReturnToPool(gameObject);
     }
 
     protected void RandomGear()

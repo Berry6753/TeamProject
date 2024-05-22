@@ -2572,6 +2572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03570354b3742c34d81e093c3d366fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterName: SiegeMonster
   attackSpeed: 3
   hp: 200
   damage: 0

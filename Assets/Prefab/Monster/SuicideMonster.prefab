@@ -21005,6 +21005,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e21cbac1bc3d4a840891021277d3509d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterName: SuicideMonster
   attackSpeed: 0
   hp: 500
   damage: 100

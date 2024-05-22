@@ -31,7 +31,9 @@ public class MonsterSpawner : MonoBehaviour
         {
             while (spawnMonsterCount[i] < currentWave.maxMonsterCount[i])
             {
-                GameObject clone = Instantiate(currentWave.monsterPrefab[i], spawnPoint[RandomSpawn()]);
+                GameObject clone = MonsterObjectPool.SpawnFromPool(currentWave.monsterPrefab[i].GetComponent<Monster>().GetMonsterName, spawnPoint[RandomSpawn()].position);
+                
+                /*Instantiate(currentWave.monsterPrefab[i], spawnPoint[RandomSpawn()]);*/
                 Monster monster = clone.GetComponent<Monster>();
 
                 monsterList.Add(clone);
