@@ -9,7 +9,8 @@ using static UnityEngine.UI.GridLayoutGroup;
 public class BossMonster : MonoBehaviour
 {
     [Header("스탯")]
-    [SerializeField] private float hp;                //체력
+    [SerializeField] private float maxHp;                //체력
+    private float hp;
     [SerializeField] private float damage;            //공격력
     [SerializeField] private float hitNum;            //타격 횟수
     [SerializeField] private float attackRange;       //사거리
@@ -22,7 +23,23 @@ public class BossMonster : MonoBehaviour
     private float dashTime;
     private float time;
 
-    private int wave = 0;
+    private WaveSystem waveSystem;
+
+    private int _wave = 0;
+    [HideInInspector]
+    public int wave
+    {
+        get { return _wave; }
+        set
+        {
+            if (_wave != value)
+            {
+                _wave = value;
+                UpScaleHp();
+            }
+        }
+
+    }
     private int lastWave = 0;
 
     private Transform defaultTarget;
@@ -41,9 +58,9 @@ public class BossMonster : MonoBehaviour
     [SerializeField] protected LayerMask turretLayer;   //터렛레이어
     [SerializeField] protected LayerMask monsterLayer;  //몬스터레이어
     [SerializeField] protected float sensingRange;      //감지 범위
-    protected int turretIndex = 0;                      //가장 가까운 터렛인덱스
-    protected int secondTurretIndex = 0;                //두 번째 가까운 터렛인덱스
-    protected int targetingIndex = 0;                   //타겟으로 삼을 터렛인덱스
+    private int turretIndex = 0;                      //가장 가까운 터렛인덱스
+    private int secondTurretIndex = 0;                //두 번째 가까운 터렛인덱스
+    private int targetingIndex = 0;                   //타겟으로 삼을 터렛인덱스
 
     private StateMachine stateMachine;
 
@@ -90,7 +107,11 @@ public class BossMonster : MonoBehaviour
 
         amongRange = (attackRange + specialAttackRange) / 2;
     }
-
+    private void OnEnable()
+    {
+        stateMachine.ChangeState(State.IDLE);
+        hp = maxHp;
+    }
     private void Start()
     {
         StartCoroutine(BossState());
@@ -129,6 +150,7 @@ public class BossMonster : MonoBehaviour
                 StartCoroutine(JumpAttackMove());   
             }
         }
+        wave = waveSystem.currentWaveIndex - 1;
     }
 
     protected virtual void LookAt()
@@ -399,7 +421,7 @@ public class BossMonster : MonoBehaviour
 
     private void UpScaleHp()                          //체력 증가량
     {
-        hp += upScaleHp * wave;
+        maxHp += upScaleHp * wave;
     }
 
     public void Hurt(float damage)                   //플레이어에게 데미지 입을 시

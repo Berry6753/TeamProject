@@ -21007,7 +21007,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterName: SuicideMonster
   attackSpeed: 0
-  hp: 500
+  maxHp: 500
   damage: 100
   hitNum: 50
   attackRange: 2
@@ -21023,9 +21023,6 @@ MonoBehaviour:
   monsterLayer:
     serializedVersion: 2
     m_Bits: 512
-  dieLayer:
-    serializedVersion: 2
-    m_Bits: 0
   dropGearNum: 0
   state: 0
   isDead: 0

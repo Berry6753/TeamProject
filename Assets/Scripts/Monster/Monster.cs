@@ -17,7 +17,8 @@ public abstract class Monster : MonoBehaviour
     [Header("몬스터 스탯")]
     protected float time = 0;
     [SerializeField] protected float attackSpeed;       //공격 속도
-    [SerializeField] protected float hp;                //체력
+    [SerializeField] protected float maxHp;             //체력
+    protected float hp;
     [SerializeField] protected float damage;            //공격력
     [SerializeField] protected float hitNum;            //타격 횟수
     [SerializeField] protected float attackRange;       //사거리
@@ -114,13 +115,16 @@ public abstract class Monster : MonoBehaviour
         stateMachine.InitState(State.IDLE);
     }
 
-    protected void OnEnable()
+    protected virtual void OnEnable()
     {
         SearchTarget.Clear();
         TurretPriority.Clear();
         gameObject.layer = LayerMask.NameToLayer("Monster");
         //turretLayer = LayerMask.NameToLayer("Turret");
         isAttackAble = false;
+        isDead = false;
+        rb.isKinematic = true;
+        hp = maxHp;
         chaseTarget = defaultTarget;
     }
 
@@ -313,7 +317,7 @@ public abstract class Monster : MonoBehaviour
 
     protected void UpScaleHp()                          //체력 증가량
     {
-        hp += upScaleHp * wave;
+        maxHp += upScaleHp * wave;
     }
 
     protected virtual void UpScaleDamage()              //데미지 증가량
