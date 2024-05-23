@@ -10,6 +10,11 @@ public class NomalMonsterAttackCheckZone : MonoBehaviour
         monster = transform.GetComponentInParent<Monster>();
     }
 
+    private void OnEnable()
+    {
+        this.gameObject.layer = LayerMask.NameToLayer("CheckZone");
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.layer==LayerMask.NameToLayer("Turret")/*|| other.gameObject.layer == LayerMask.NameToLayer("Player")*/)

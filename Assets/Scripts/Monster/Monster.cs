@@ -137,6 +137,10 @@ public abstract class Monster : MonoBehaviour
         rb.isKinematic = true;
         hp = maxHp;
         chaseTarget = defaultTarget;
+        isAttackAble = false;
+        obstacle.enabled = false;
+        nav.enabled = true;
+        nav.isStopped = false;
     }
 
     protected virtual void Update()
@@ -153,7 +157,6 @@ public abstract class Monster : MonoBehaviour
             canAttack = true;
         }
         wave = waveSystem.currentWaveIndex - 1;
-        Debug.Log(chaseTarget.name + "Asasasasa");
         //AttackCheck();
     }
 
