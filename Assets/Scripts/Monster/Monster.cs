@@ -186,14 +186,14 @@ public abstract class Monster : MonoBehaviour
                         c.enabled = true;
                     }
                 }
-                //else
-                //{
-                //    stateMachine.ChangeState(State.IDLE);
-                //    foreach (Collider c in attack)
-                //    {
-                //        c.enabled = false;
-                //    }
-                //}
+                else
+                {
+                    stateMachine.ChangeState(State.IDLE);
+                    foreach (Collider c in attack)
+                    {
+                        c.enabled = false;
+                    }
+                }
             }
             else
             {
