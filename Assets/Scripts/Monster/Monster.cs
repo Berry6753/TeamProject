@@ -12,7 +12,7 @@ enum PriorityTag
     Player,
     Core,
     Turret,
-    Item
+    Barricade
 }
 
 public abstract class Monster : MonoBehaviour
@@ -247,7 +247,7 @@ public abstract class Monster : MonoBehaviour
 
         foreach (Collider c in turret)
         {            
-            if (c.CompareTag("Player") || c.CompareTag("Turret") || c.CompareTag("Core") || c.CompareTag("Item"))
+            if (c.CompareTag("Player") || c.CompareTag("Turret") || c.CompareTag("Core") || c.CompareTag("Barricade"))
             {
                 if (c.CompareTag("Turret"))
                 {
@@ -265,9 +265,9 @@ public abstract class Monster : MonoBehaviour
                     {
                         Score = (int)PriorityTag.Core;
                     }
-                    else if (c.CompareTag("Item"))
+                    else if (c.CompareTag("Barricade"))
                     {
-                        Score = (int)PriorityTag.Item;
+                        Score = (int)PriorityTag.Barricade;
                     }
                                        
                     
