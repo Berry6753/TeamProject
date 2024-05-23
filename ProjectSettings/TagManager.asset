@@ -12,6 +12,7 @@ TagManager:
   - Desert
   - StoneRoad
   - Core
+  - MonsterHead
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - Item
   - Skill
   - Ground
-  - 
+  - CheckZone
   - 
   - 
   - 
