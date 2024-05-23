@@ -406,7 +406,7 @@ public abstract class Monster : MonoBehaviour
         Gizmos.DrawWireCube(transform.position + Vector3.forward * 2.5f, new Vector3(5f, 5f, 5f));
     }
 
-    protected void FreezeVelocity()                     //물리력 제거
+    protected virtual void FreezeVelocity()                     //물리력 제거
     {
         nav.isStopped = true;
         rb.velocity = Vector3.zero;
@@ -628,6 +628,7 @@ public abstract class Monster : MonoBehaviour
         public override void Enter()
         {
             owner.anim.SetBool(owner.hashAttack, true);
+            //owner.nav.isStopped = true;
             owner.state = State.ATTACK;
         }
     }
