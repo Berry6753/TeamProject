@@ -1825,7 +1825,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3866181257823826853}
   - component: {fileID: 4828648448806052925}
-  m_Layer: 9
+  m_Layer: 13
   m_Name: head
   m_TagString: MonsterHead
   m_Icon: {fileID: 0}
@@ -1937,7 +1937,7 @@ GameObject:
   - component: {fileID: 3871141753501283845}
   - component: {fileID: 3871141753501283844}
   - component: {fileID: 7261576867416940576}
-  m_Layer: 9
+  m_Layer: 13
   m_Name: hand_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1999,7 +1999,7 @@ GameObject:
   - component: {fileID: 3870941733126838971}
   - component: {fileID: 3870941733126838970}
   - component: {fileID: 22973048778289098}
-  m_Layer: 9
+  m_Layer: 13
   m_Name: hand_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}

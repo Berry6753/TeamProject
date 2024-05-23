@@ -33,21 +33,20 @@ public class MiniGunTurret : Turret
 
     public override void Attack()
     {
+        if (targetIndex >= turretTargetList.Count)
+        {
+            return;
+        }
+
+        targetTransform = targetList[targetIndex].transform;
+
         if (Physics.Raycast(firePos.transform.position, targetTransform.position - firePos.transform.position, out RaycastHit hit, miniGunAttackRange,~(ignoreLayer)))
         {
             
             if (!hit.collider.CompareTag("Monster"))
             {
-
-                if (targetCollider.Length >= 2 && targetCollider[targetIndex + 1] != null)
-                {
-                    targetTransform = targetCollider[targetIndex].transform;
-                    targetIndex++;
-                }
-                else
-                {
-                    return;
-                }
+                targetIndex++;
+                return;
             }
             else if (hit.collider.CompareTag("Monster"))
             {
@@ -70,10 +69,6 @@ public class MiniGunTurret : Turret
             
         }
 
-        if (targetCollider[targetIndex].transform == null || !targetCollider[targetIndex].gameObject.activeSelf)
-        {
-            targetIndex = 0;
-        }
     }
 
     public override void Upgrade()
