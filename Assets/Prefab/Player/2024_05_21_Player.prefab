@@ -532,7 +532,6 @@ GameObject:
   - component: {fileID: 4887469090366197752}
   - component: {fileID: 4887469090366197755}
   - component: {fileID: 4887469090366197754}
-  - component: {fileID: 4887469090366197753}
   m_Layer: 2
   m_Name: Cylinder
   m_TagString: Untagged
@@ -605,20 +604,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &4887469090366197753
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4887469090366197759}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1 &4887469090578089478
 GameObject:
   m_ObjectHideFlags: 0
@@ -848,7 +833,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4887469090836261592}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 14.3, z: 0}
+  m_LocalPosition: {x: 0, y: 40, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1008,7 +993,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4887469091405766098}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2410,7 +2395,7 @@ MonoBehaviour:
   turnSmoothTime: 1
   gravityLayermask:
     serializedVersion: 2
-    m_Bits: 4097
+    m_Bits: 4161
 --- !u!114 &4887469090915990921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2826,7 +2811,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 617d9dd3ec6b3f340bd823042e1b94f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Camera2: {fileID: 0}
+  Camera2: {fileID: 7529577957276502998}
   CameraLookAt: {fileID: 4887469090058767646}
   gun: {fileID: 4882545460332580312}
   GunFireStartPoint: {fileID: 4887469090742784050}
@@ -2869,10 +2854,10 @@ MonoBehaviour:
       m_LegacyVelocityFilterStrength: 0
   aimColliderLayerMask:
     serializedVersion: 2
-    m_Bits: 4727
+    m_Bits: 150
   FireColliderLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 37495
   debugTransform: {fileID: 0}
   AttackDelayTime: 0.07
   attackAccuracy: 0.2
@@ -2881,8 +2866,9 @@ MonoBehaviour:
   aimingrecoilback: 0.3
   ParticleSystem: {fileID: 1074736077893381812}
   shootAudioClip:
-  - {fileID: 8300000, guid: c9078c3724d980347b7b29c5e846c2bb, type: 3}
+  - {fileID: 8300000, guid: 13a19d51bbc14a24db723db8b5b11911, type: 3}
   - {fileID: 8300000, guid: 8c89f6a0dab807c48860e2a110c703d6, type: 3}
+  - {fileID: 8300000, guid: 270c21cf95ead9547b50cb99a03d9b44, type: 3}
 --- !u!114 &4793912332375539875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2930,7 +2916,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 100
-  ATKDamage: 0
+  ATKDamage: 50
   maxBullet: 30
   maxMagazine: 8
   DefaultSpeed: 3
@@ -4305,7 +4291,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7529577957276502998}
   m_LocalRotation: {x: 0.0459591, y: -0.9439075, z: 0.14904465, w: 0.29105353}
-  m_LocalPosition: {x: 0.88999987, y: 1.7, z: 0.52501965}
+  m_LocalPosition: {x: 0.8900001, y: 1.7000008, z: -3.5000007}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

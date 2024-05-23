@@ -144,7 +144,7 @@ public class Player_Aiming : MonoBehaviour
             if(info.magazineCount > 0)
             {
                 //재장전 모션 실행
-                animator.SetBool(hashReload, true);
+                animator.SetBool(hashReload, true);                
             }            
         }
     }
@@ -203,10 +203,10 @@ public class Player_Aiming : MonoBehaviour
 
     private void CameraRotation()
     {
-        x_Axis.Update(Time.fixedDeltaTime);
-        y_Axis.Update(Time.fixedDeltaTime);
+        x_Axis.Update(Time.deltaTime);
+        y_Axis.Update(Time.deltaTime);
 
-        mouseRotation = Quaternion.Euler(y_Axis.Value, x_Axis.Value, 0);
+        mouseRotation = Quaternion.Euler(y_Axis.Value, x_Axis.Value, transform.rotation.z);
 
         CameraLookAt.rotation = Quaternion.Lerp(CameraLookAt.rotation, mouseRotation, cameraLerftime);
         /*mouseRotation;*/
@@ -401,6 +401,13 @@ public class Player_Aiming : MonoBehaviour
             info.magazineCount--;
             info.equipedBulletCount = info.maxEquipedBulletCount;            
         }
+    }
+
+    public void ReloadSoundPlay()
+    {
+        //재장전 오디오 실행
+        audioSource.clip = shootAudioClip[2];
+        audioSource.Play();
     }
 
     private void AttackDelay()

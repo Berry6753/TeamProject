@@ -57,9 +57,9 @@ public class Core : MonoBehaviour
     [SerializeField]
     private Image CoreHPBar;
 
-    [Header("Core 체력 Text")]
-    [SerializeField]
-    private TMP_Text CoreHPText;
+    //[Header("Core 체력 Text")]
+    //[SerializeField]
+    //private TMP_Text CoreHPText;
 
     [Header("쿨타임 확인용 Icon")]
     [SerializeField]
@@ -163,14 +163,14 @@ public class Core : MonoBehaviour
     {
         nowHp -= damge;
         CoreHPBar.fillAmount = (float)((float)nowHp / (float)maxHp);
-        CoreHPText.text = $"{nowHp} / {maxHp}";
+        //CoreHPText.text = $"{nowHp} / {maxHp}";
     }
 
     public void Repair()
     {
         nowHp = maxHp;
         CoreHPBar.fillAmount = nowHp / maxHp;
-        CoreHPText.text = $"{nowHp} / {maxHp}";
+        //CoreHPText.text = $"{nowHp} / {maxHp}";
     }
 
     public void Upgrade()

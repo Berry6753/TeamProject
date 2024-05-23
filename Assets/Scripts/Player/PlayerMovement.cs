@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
     private Player_Command command;
     private Player_Info info;
     private CharacterController characterController;
+
+    private Quaternion startRotation;
 
     [Header("Ä«¸Þ¶ó")]
     [SerializeField]
@@ -92,6 +95,21 @@ public class PlayerMovement : MonoBehaviour
 
         virtualCamera = followcamera.GetComponent<CinemachineVirtualCamera>();
 
+        startRotation = transform.rotation;
+        //Camera.main.transform.rotation = startRotation;
+    }
+
+    private void OnEnable()
+    {
+        //transform.rotation = startRotation;
+
+        //cameraLookAt.rotation = startRotation;  
+        //Camera.main.transform.rotation = startRotation;
+        //virtualCamera.transform.rotation = startRotation;
+
+        virtualCamera.transform.position = transform.position - transform.forward * 3.5f;
+        Camera.main.transform.position = virtualCamera.transform.position;
+        //virtualCamera.transform.rotation = transform.rotation;
     }
 
     // Update is called once per frame
