@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,6 +13,7 @@ public class Command_Input_Mark : MonoBehaviour
     [SerializeField] private Sprite xImage;
     [SerializeField] private Button button;
     [SerializeField] private Button exit;
+    private bool isPush;
 
     private void OnEnable()
     {
@@ -19,6 +21,7 @@ public class Command_Input_Mark : MonoBehaviour
         {
             item.sprite = null;
         }
+        isPush = false;
     }
     public void CommandMark()
     { 
@@ -29,6 +32,8 @@ public class Command_Input_Mark : MonoBehaviour
         int Count = 0;
         while(Count < inputImage.Length)
         {
+            isPush = true;
+            yield return new WaitUntil(() => isPush);
             yield return new WaitUntil(() => Input.anyKeyDown);
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
@@ -51,15 +56,31 @@ public class Command_Input_Mark : MonoBehaviour
                 inputImage[Count].sprite = xImage;
             }
             Count++;
+            isPush = false;
+            yield return new WaitUntil(() => !isPush);
+            Debug.Log("c"+Count);
         }
-        if (Count == inputImage.Length)
+        while (true)
         {
-            yield return new WaitUntil(() => Input.anyKeyDown);
-            if(Input.GetKeyDown(KeyCode.KeypadEnter))
+            if (Count >= inputImage.Length)
             {
-                button.interactable = true;
-                exit.interactable = true;
-                Focus(button);
+                yield return new WaitUntil(() => Input.anyKeyDown);
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    button.interactable = true;
+                    exit.interactable = true;
+                    Focus(button);
+                    foreach (Image item in inputImage)
+                    {
+                        item.sprite = null;
+                    }
+                    Debug.Log("a"+button.interactable);
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
             }
         }
     }

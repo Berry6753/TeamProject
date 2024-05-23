@@ -3556,7 +3556,7 @@ GameObject:
   - component: {fileID: 8725900986068547082}
   - component: {fileID: 8725900986068547081}
   m_Layer: 5
-  m_Name: 'CoreHP : ??/??'
+  m_Name: 'UpScaleHP : ??'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3610,7 +3610,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'CoreHP : ??/??'
+  m_text: 'UpScaleHP : ??'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5848,13 +5848,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8725900986696048655}
+  - component: {fileID: 500413654}
   m_Layer: 5
   m_Name: Command
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8725900986696048655
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5882,6 +5883,31 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &500413654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8725900986696048654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f917c4766c32fd74ca53b097cc7e34ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputImage:
+  - {fileID: 3338711767758120641}
+  - {fileID: 5208979241965036770}
+  - {fileID: 8483532516753340341}
+  - {fileID: 5319661401453202731}
+  directImage:
+  - {fileID: 21300000, guid: aa2d0ac3589e6cc48817165c983fa037, type: 3}
+  - {fileID: 21300000, guid: 3f2b9c5b30f814e4e87e1fabf940a409, type: 3}
+  - {fileID: 21300000, guid: 63037561c0249454b834bed3b5074c98, type: 3}
+  - {fileID: 21300000, guid: 3f12d3adb8c33b0459eebf9034dc0b2c, type: 3}
+  xImage: {fileID: 21300000, guid: 0dd913f83ec327f429946d02cf33954e, type: 3}
+  button: {fileID: 8725900986923083438}
+  exit: {fileID: 8725900986517652150}
 --- !u!1 &8725900986698310050
 GameObject:
   m_ObjectHideFlags: 0
@@ -6126,7 +6152,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: CoreHeal
+  m_text: CoreUpgrade
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6640,7 +6666,43 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8725900986923083439}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8725900986923083438}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: set_interactable
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8725900986517652150}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: set_interactable
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 500413654}
+        m_TargetAssemblyTypeName: Command_Input_Mark, Assembly-CSharp
+        m_MethodName: CommandMark
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8725900986953018946
 GameObject:
   m_ObjectHideFlags: 0
@@ -6776,7 +6838,7 @@ GameObject:
   - component: {fileID: 8725900987015467707}
   - component: {fileID: 8725900987015467706}
   m_Layer: 5
-  m_Name: CoreHeal
+  m_Name: CoreUpgrade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8608,7 +8670,7 @@ GameObject:
   - component: {fileID: 8725900987664557544}
   - component: {fileID: 8725900987664557543}
   m_Layer: 5
-  m_Name: CoreHeal
+  m_Name: CoreUpgrade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8662,7 +8724,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: CoreHeal
+  m_text: CoreUpgrade
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -8741,7 +8803,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8725900987697343358}
   m_Layer: 5
-  m_Name: CoreHeal
+  m_Name: CoreUpgrade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
