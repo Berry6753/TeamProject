@@ -160,7 +160,7 @@ public class Player_BuildSystem : MonoBehaviour
             ray = Camera.main.ScreenPointToRay(screenCenterPoint);
             if (Physics.Raycast(ray, out RaycastHit hit, 8f, mask))
             {
-                if (Mathf.Abs(Vector3.Dot(hit.normal, Vector3.up)) <= 0.5f) 
+                if (Vector3.Dot(hit.normal, Vector3.up) <= 0.5f) 
                 {
                     DeleteBuild();
                     //return;

@@ -46,6 +46,7 @@ public class AerialMonster : Monster
             }
 
             float distance = Vector3.Distance(chaseTarget.position, monsterTr.position);
+
             if (distance <= attackRange)
             {
                 FreezeVelocity();
@@ -63,6 +64,13 @@ public class AerialMonster : Monster
                 stateMachine.ChangeState(State.TRACE);
             }
         }
+    }
+
+    private void FreezeVelocity()                     //물리력 제거
+    {
+        nav.isStopped = true;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
     }
 
     public override void isDie()

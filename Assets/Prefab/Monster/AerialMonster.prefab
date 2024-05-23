@@ -28130,20 +28130,23 @@ MonoBehaviour:
   hp: 80
   damage: 10
   hitNum: 1
-  attackRange: 10
+  attackRange: 20
   upScaleHp: 8
   upScaleDamage: 5
   startSpawnNum: 3
   upScaleSpwanNum: 10
   spawnTiming: 1
-  sensingRange: 20
+  sensingRange: 30
   turretLayer:
     serializedVersion: 2
     m_Bits: 320
   monsterLayer:
     serializedVersion: 2
     m_Bits: 512
+  obstacle: {fileID: 0}
   dropGearNum: 0
+  isAttackAble: 0
+  nav: {fileID: 0}
   state: 0
   isDead: 0
   fireball: {fileID: 6206036315837363858}
@@ -28161,7 +28164,7 @@ NavMeshAgent:
   m_Acceleration: 10
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 9
+  m_StoppingDistance: 19
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

@@ -177,7 +177,7 @@ public abstract class Monster : MonoBehaviour
             //float distance = Vector3.Distance(chaseTarget.position, monsterTr.position);
             if (/*distance <= attackRange*/ isAttackAble)
             {
-                FreezeVelocity();
+                //FreezeVelocity();
                 if (canAttack)
                 {
                     stateMachine.ChangeState(State.ATTACK);
@@ -395,9 +395,9 @@ public abstract class Monster : MonoBehaviour
 
     protected void FreezeVelocity()                     //물리력 제거
     {
-        //nav.isStopped = true;
-        //rb.velocity = Vector3.zero;
-        //rb.angularVelocity = Vector3.zero;
+        nav.isStopped = true;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
     }
     //protected abstract void SpawnTiming();              //스폰 타이밍
 
