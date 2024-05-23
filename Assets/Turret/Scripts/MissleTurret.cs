@@ -63,7 +63,7 @@ public class MissleTurret : Turret
                 //이펙트 생성
                 fireEfect.SetActive(true);
                 explosionEffect.SetActive(true);
-                explosionEffect.transform.position = targets[0].gameObject.transform.position;
+                explosionEffect.transform.position = targetTransform.gameObject.transform.position;
                 explosionPaticle.Play();
                 explosionAudio.Play();
                 firePaticle.Play();

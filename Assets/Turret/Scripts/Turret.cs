@@ -119,12 +119,11 @@ public abstract class Turret : MonoBehaviour
         SetState();
         turretStatemachine.InitState(TurretStateName.BLUESCREEN);
         firePaticle= fireEfect.GetComponent<ParticleSystem>();
-        
         makeAudio = makingEfect.GetComponent<AudioSource>();
         repairAudio = GetComponent<AudioSource>();
         turretLayer = LayerMask.NameToLayer("Turret");
         monsterLayer = LayerMask.NameToLayer("Monster");
-        ignoreLayer = 1 << LayerMask.NameToLayer("Item") | 1 << LayerMask.NameToLayer("Ignore Raycast") | 1 << LayerMask.NameToLayer("Player");
+        ignoreLayer = 1 << LayerMask.NameToLayer("Item") | 1 << LayerMask.NameToLayer("Ignore Raycast") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("CheckZone");
     }
 
     protected virtual void OnEnable()

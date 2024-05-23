@@ -12,10 +12,12 @@ public class AerialMonster : Monster
         base.Awake();
         defaultTarget = GameObject.FindWithTag("Core").GetComponent<Transform>();
     }
-    private void Start()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         ChaseTarget();
     }
+
     protected override void Update()
     {
         base.Update();

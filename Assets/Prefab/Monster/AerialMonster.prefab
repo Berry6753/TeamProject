@@ -28127,7 +28127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterName: AerialMonster
   attackSpeed: 1
-  hp: 80
+  maxHp: 80
   damage: 10
   hitNum: 1
   attackRange: 20

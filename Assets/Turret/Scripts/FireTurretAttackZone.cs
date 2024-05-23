@@ -31,7 +31,6 @@ public class FireTurretAttackZone : MonoBehaviour
             {
                 checkTime = 0;
                 other.gameObject.GetComponent<Monster>().Hurt(turret.turretAttackDamge);
-                Debug.Log("범위 터렛공격");
             }
             
         }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4427661196426997820}
   - component: {fileID: 3521299028835716229}
   - component: {fileID: 4130746923921396672}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: AttackCheckZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2290,7 +2290,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterName: NormalMonster
   attackSpeed: 1
-  hp: 100
+  maxHp: 100
   damage: 5
   hitNum: 0.5
   attackRange: 2
@@ -2306,8 +2306,10 @@ MonoBehaviour:
   monsterLayer:
     serializedVersion: 2
     m_Bits: 512
+  obstacle: {fileID: 0}
   dropGearNum: 0
   isAttackAble: 0
+  nav: {fileID: 0}
   state: 0
   isDead: 0
 --- !u!195 &3817533725461811248

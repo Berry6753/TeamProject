@@ -21008,7 +21008,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterName: SuicideMonster
   attackSpeed: 0
-  hp: 500
+  maxHp: 500
   damage: 100
   hitNum: 50
   attackRange: 2
