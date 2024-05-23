@@ -33,7 +33,7 @@ public class SnipeTurret : Turret
     public override void Attack()
     {
         Debug.DrawRay(firePos.transform.position, (targetTransform.position - firePos.transform.position) * 100, Color.red, 100);
-        if(Physics.Raycast(firePos.transform.position, targetTransform.position - firePos.transform.position,out RaycastHit hit, snipeTurretAttackRange,~(ignoreLayer)))
+        if(Physics.Raycast(firePos.transform.position, fireEffectPos.transform.position - firePos.transform.position,out RaycastHit hit, snipeTurretAttackRange,~(ignoreLayer)))
         {
             Debug.Log(hit.collider.name);
             if (!hit.collider.CompareTag("Monster"))
@@ -43,7 +43,7 @@ public class SnipeTurret : Turret
             }
             else
             {
-                RaycastHit[] raycastHits = Physics.RaycastAll(firePos.transform.position, targetTransform.position - firePos.transform.position, snipeTurretAttackRange);
+                RaycastHit[] raycastHits = Physics.RaycastAll(firePos.transform.position, fireEffectPos.transform.position - firePos.transform.position, snipeTurretAttackRange);
                 fireEfect.SetActive(true);
                 firePaticle.Play();
                 fireAudio.Play();
@@ -52,13 +52,11 @@ public class SnipeTurret : Turret
 
                     if (!hit.collider.CompareTag("Monster"))
                     {
-                        //벽이나 터렛에 부딫힌 이펙트
                         return;
 
                     }
                     else if (hit.collider.CompareTag("Monster")) 
                     {
-                        Debug.Log("관통 터렛 공격");
                         //이펙트 생성
                         //몬스터 데미지 주는 부분
                         hit.collider.gameObject.GetComponent<Monster>().Hurt(base.turretAttackDamge);

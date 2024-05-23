@@ -99,6 +99,7 @@ public abstract class Monster : MonoBehaviour
     protected Dictionary<GameObject, int> SearchTarget;
     protected List<GameObject> TurretPriority;
 
+    public Transform checkChasehaseTarget { get { return chaseTarget; } }
     protected virtual void Awake()
     {
         SearchTarget = new Dictionary<GameObject, int>();

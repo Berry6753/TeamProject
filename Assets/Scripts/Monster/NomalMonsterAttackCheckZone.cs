@@ -24,6 +24,13 @@ public class NomalMonsterAttackCheckZone : MonoBehaviour
             monster.nav.enabled = false;
             monster.obstacle.enabled = true;
         }
+        else if (other.gameObject.layer == LayerMask.NameToLayer("Player")&&monster.checkChasehaseTarget.gameObject.layer== LayerMask.NameToLayer("Player")&&!monster.isAttackAble)
+        {
+            monster.isAttackAble = true;
+            monster.nav.isStopped = true;
+            monster.nav.enabled = false;
+            monster.obstacle.enabled = true;
+        }
     }
     //private void OnTriggerStay(Collider other)
     //{
@@ -35,7 +42,14 @@ public class NomalMonsterAttackCheckZone : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Turret") || other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Turret"))
+        {
+            monster.isAttackAble = false;
+            monster.obstacle.enabled = false;
+            monster.nav.enabled = true;
+            monster.nav.isStopped = false;
+        }
+        else if (other.gameObject.layer == LayerMask.NameToLayer("Player") && monster.checkChasehaseTarget.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             monster.isAttackAble = false;
             monster.obstacle.enabled = false;
