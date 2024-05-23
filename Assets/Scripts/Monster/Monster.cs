@@ -12,7 +12,7 @@ enum PriorityTag
     Player,
     Core,
     Turret,
-    Item
+    Barricade
 }
 
 public abstract class Monster : MonoBehaviour
@@ -101,6 +101,7 @@ public abstract class Monster : MonoBehaviour
     protected Dictionary<GameObject, int> SearchTarget;
     protected List<GameObject> TurretPriority;
 
+    public Transform checkChasehaseTarget { get { return chaseTarget; } }
     protected virtual void Awake()
     {
         SearchTarget = new Dictionary<GameObject, int>();
@@ -248,7 +249,7 @@ public abstract class Monster : MonoBehaviour
 
         foreach (Collider c in turret)
         {            
-            if (c.CompareTag("Player") || c.CompareTag("Turret") || c.CompareTag("Core") || c.CompareTag("Item"))
+            if (c.CompareTag("Player") || c.CompareTag("Turret") || c.CompareTag("Core") || c.CompareTag("Barricade"))
             {
                 if (c.CompareTag("Turret"))
                 {
@@ -266,9 +267,9 @@ public abstract class Monster : MonoBehaviour
                     {
                         Score = (int)PriorityTag.Core;
                     }
-                    else if (c.CompareTag("Item"))
+                    else if (c.CompareTag("Barricade"))
                     {
-                        Score = (int)PriorityTag.Item;
+                        Score = (int)PriorityTag.Barricade;
                     }
                                        
                     
