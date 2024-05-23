@@ -22,7 +22,12 @@ public class TurretAttackState : TurretBaseState
         attackCheckTime += Time.deltaTime;
 
         turret.spinPos.transform.LookAt(turret.turretTargetTransform);
+
+        //게임 정지 시 소리도 정지
+        //Audio Manager에서 처리 
+        //현재 디버그용
         turret.fireAudio.pitch = Time.timeScale;
+
         if (attackCheckTime >= 1/turret.turretAttackSpeed)
         {
             
@@ -43,6 +48,7 @@ public class TurretAttackState : TurretBaseState
     public override void Exit()
     {
         turret.turretTargetTransform = null;
+        turret.fireAudio.Stop();
         turret.fireEfect.SetActive(false);
     }
 

@@ -47,7 +47,7 @@ public class SuicideMonster : Monster
             float distance = Vector3.Distance(chaseTarget.position, monsterTr.position);
             if (distance <= attackRange)
             {
-                FreezeVelocity();
+                //FreezeVelocity();
                 stateMachine.ChangeState(State.IDLE);
                 yield return new WaitForSeconds(explosionTime);
                 stateMachine.ChangeState(State.ATTACK);

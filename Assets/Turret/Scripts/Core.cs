@@ -162,7 +162,7 @@ public class Core : MonoBehaviour
     public void Hurt(int damge)
     {
         nowHp -= damge;
-        CoreHPBar.fillAmount = nowHp / maxHp;
+        CoreHPBar.fillAmount = (float)((float)nowHp / (float)maxHp);
         CoreHPText.text = $"{nowHp} / {maxHp}";
     }
 
