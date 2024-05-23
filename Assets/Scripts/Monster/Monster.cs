@@ -50,7 +50,7 @@ public abstract class Monster : MonoBehaviour
     [SerializeField] protected LayerMask monsterLayer;  //몬스터레이어
     //[SerializeField] protected LayerMask dieLayer;
 
-    protected NavMeshObstacle obstacle;
+    public NavMeshObstacle obstacle;
 
     protected int probabilityGetGear;
     protected int probabilityNum;
@@ -75,7 +75,7 @@ public abstract class Monster : MonoBehaviour
     public bool isAttackAble;
     
     protected Rigidbody rb;
-    protected NavMeshAgent nav;
+    public NavMeshAgent nav;
     protected Animator anim;
     protected StateMachine stateMachine;
     protected CapsuleCollider capsuleCollider;

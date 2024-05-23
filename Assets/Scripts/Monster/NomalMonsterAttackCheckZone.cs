@@ -15,6 +15,9 @@ public class NomalMonsterAttackCheckZone : MonoBehaviour
         if(other.gameObject.layer==LayerMask.NameToLayer("Turret")/*|| other.gameObject.layer == LayerMask.NameToLayer("Player")*/)
         {
             monster.isAttackAble = true;
+            monster.nav.isStopped = true;
+            monster.nav.enabled = false;
+            monster.obstacle.enabled = true;
         }
     }
     //private void OnTriggerStay(Collider other)
@@ -29,8 +32,10 @@ public class NomalMonsterAttackCheckZone : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Turret") || other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Debug.Log("777777777777777777777777777777777777777");
             monster.isAttackAble = false;
+            monster.obstacle.enabled = false;
+            monster.nav.enabled = true;
+            monster.nav.isStopped = false;
         }
     }
 }
