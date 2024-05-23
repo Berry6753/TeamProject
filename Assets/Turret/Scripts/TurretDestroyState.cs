@@ -16,15 +16,16 @@ public class TurretDestroyState : TurretBaseState
 
     public override void Update()
     {
-        checkTime += Time.deltaTime;
-        if(checkTime > 1)
+        checkTime += Time.deltaTime;       
+        
+        if(checkTime > 1.5f) 
+        {
+            turret.transform.parent.gameObject.SetActive(false);
+        }
+        else if (checkTime > 1)
         {
             turret.OffRenderer();
             turret.deathEffect.SetActive(true);
-        }
-        else if(checkTime > 1.5f) 
-        {
-            turret.transform.parent.gameObject.SetActive(false);
         }
     }
 }

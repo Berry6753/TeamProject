@@ -177,7 +177,7 @@ public class Player_BuildSystem : MonoBehaviour
                 else if (build != null)
                 {
                     deleteBuild = null;
-                    if (Mathf.Abs(Vector3.Dot(hit.normal, Vector3.up)) <= 0.5f)
+                    if (Vector3.Dot(hit.normal, Vector3.up) <= 0.5f)
                     {
                         DeleteBuild();
                         //return;
@@ -192,7 +192,7 @@ public class Player_BuildSystem : MonoBehaviour
                 else
                 {
                     deleteBuild = null;
-                    if (Mathf.Abs(Vector3.Dot(hit.normal, Vector3.up)) <= 0.5f)
+                    if (Vector3.Dot(hit.normal, Vector3.up) <= 0.5f)
                     {
                         DeleteBuild();
                         //return;

@@ -28,7 +28,9 @@ public abstract class Monster : MonoBehaviour
     [SerializeField] protected float maxHp;             //체력
     protected float hp;
     [SerializeField] protected float damage;            //공격력
-    [SerializeField] protected float hitNum;            //타격 횟수
+    public float monsterDamage {  get { return damage; } }
+    [SerializeField] protected int hitNum;            //타격 횟수
+    public int monsterPower { get { return hitNum; } }
     [SerializeField] protected float attackRange;       //사거리
     [Header("스탯 성장치")]
     [SerializeField] protected float upScaleHp;         //체력 성장치
@@ -348,7 +350,10 @@ public abstract class Monster : MonoBehaviour
         {
             chaseTarget = t;
             //stateMachine.ChangeState(State.TRACE);
-            //isAttackAble = false;
+            isAttackAble = false;
+            obstacle.enabled = false;
+            nav.enabled = true;
+            nav.isStopped = false;
         }
 
     }

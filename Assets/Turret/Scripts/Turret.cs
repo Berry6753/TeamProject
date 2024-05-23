@@ -143,13 +143,12 @@ public abstract class Turret : MonoBehaviour
         {
             UpgradeCheck();
             RepairCheck();
-        }
-        if (nowHp <= 0)
-        {
-            turretStatemachine.ChangeState(TurretStateName.DESTROIY);
-        }
 
-
+            if (nowHp <= 0)
+            {
+                turretStatemachine.ChangeState(TurretStateName.DESTROIY);
+            }
+        }   
     }
 
     private void SetState()

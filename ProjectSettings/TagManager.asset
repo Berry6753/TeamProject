@@ -13,6 +13,7 @@ TagManager:
   - StoneRoad
   - Core
   - MonsterHead
+  - Barricade
   layers:
   - Default
   - TransparentFX

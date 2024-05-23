@@ -32,9 +32,9 @@ public class Brricade : MonoBehaviour
         obstacle.enabled = false;
     }
 
-    public void Hurt(float damage)
+    public void Hurt(int damage)
     {
-        HP -= (int)damage;
+        HP -= damage;
 
         if(HP <= 0)
         {
