@@ -32,59 +32,63 @@ public class SnipeTurret : Turret
 
     public override void Attack()
     {
-        if(Physics.Raycast(firePos.transform.position, fireEffectPos.transform.position - firePos.transform.position,out RaycastHit hit, snipeTurretAttackRange,~(ignoreLayer)))
+        if (targetIndex >= turretTargetList.Count)
+        {
+            return;
+        }
+
+        targetTransform = targetList[targetIndex].transform;
+
+        if (Physics.Raycast(firePos.transform.position, fireEffectPos.transform.position - firePos.transform.position,out RaycastHit hit, snipeTurretAttackRange,~(ignoreLayer)))
         {
             if (!hit.collider.CompareTag("Monster"))
             {
-                if (targetCollider.Length >= 2 && targetCollider[targetIndex + 1] != null)
-                {
-                    targetTransform = targetCollider[targetIndex].transform;
-                    targetIndex++;
-                }
-                else
-                {
-                    return;
-                }
+                targetIndex++;
+                return;
+                //if (targetIndex >= targetList.Count )
+                //{
+                //    turretStatemachine.ChangeState(TurretStateName.SEARCH);
+                //}
+                //if (targetIndex < targetList.Count) 
+                //{
+                //    targetTransform = targetList[targetIndex].transform;
+                //}
+
             }
-            else
+
+            RaycastHit[] raycastHits = Physics.RaycastAll(firePos.transform.position, fireEffectPos.transform.position - firePos.transform.position, snipeTurretAttackRange);
+            fireEfect.SetActive(true);
+            firePaticle.Play();
+            fireAudio.Play();
+            foreach (RaycastHit monster in raycastHits)
             {
-                RaycastHit[] raycastHits = Physics.RaycastAll(firePos.transform.position, fireEffectPos.transform.position - firePos.transform.position, snipeTurretAttackRange);
-                fireEfect.SetActive(true);
-                firePaticle.Play();
-                fireAudio.Play();
-                foreach (RaycastHit monster in raycastHits)
+
+
+                if (hit.collider.CompareTag("Monster"))
                 {
-
-                    if (!hit.collider.CompareTag("Monster"))
-                    {
-                        return;
-
-                    }
-                    else if (hit.collider.CompareTag("Monster")) 
-                    {
-                        //이펙트 생성
-                        //몬스터 데미지 주는 부분
-                        hit.collider.gameObject.GetComponent<Monster>().Hurt(base.turretAttackDamge);
-                        //몬스터 함수 불러온단 소리
-                    }
-                    else if (hit.collider.CompareTag("Barrel"))//드럼통일경우
-                    {
-                        //드럼통 폭발시키기도 있어야함
-                        hit.collider.gameObject.GetComponent<Barrel>().Hurt();
-                    }
+                    //이펙트 생성
+                    //몬스터 데미지 주는 부분
+                    hit.collider.gameObject.GetComponent<Monster>().Hurt(base.turretAttackDamge);
+                    //몬스터 함수 불러온단 소리
                 }
-
-                
-
+                else if (hit.collider.CompareTag("Barrel"))//드럼통일경우
+                {
+                    //드럼통 폭발시키기도 있어야함
+                    hit.collider.gameObject.GetComponent<Barrel>().Hurt();
+                }
             }
 
-           
-        }
 
-        if (targetCollider[targetIndex].transform == null || !targetCollider[targetIndex].gameObject.activeSelf)
-        {
-            targetIndex = 0;
+
+
+
+
+
         }
+        
+        
+        
+        
 
 
     }

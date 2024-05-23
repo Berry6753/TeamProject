@@ -12,6 +12,7 @@ public class TurretSearchState : TurretBaseState
     public override void Enter()
     {
         turret.turretStateName = TurretStateName.SEARCH;
+        turret.turretTargetTransform = null;
     }
 
     public override void Update()
@@ -19,15 +20,11 @@ public class TurretSearchState : TurretBaseState
         checkSearchTime += Time.deltaTime;
         if(checkSearchTime > searchTime)
         {
-            turret.SearchEnemy();
             checkSearchTime = 0;
+            turret.SearchEnemy();
         }
 
-        if(turret.turretTargetTransform != null)
-        {
-            //공격 상태로 변환
-            turret.turretStatemachine.ChangeState(TurretStateName.ATTACK);
-        }
+        
     }
 
     public override void Exit()

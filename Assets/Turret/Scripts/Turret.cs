@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using System.Linq;
 
 public enum TurretStateName
 {
@@ -41,8 +41,9 @@ public abstract class Turret : MonoBehaviour
     protected LayerMask monsterLayer;
     private LayerMask turretLayer;
 
-    protected Collider[] targetCollider;
-    protected int targetIndex;
+    protected Dictionary<GameObject, float> targetCollider = new Dictionary<GameObject, float>();
+    protected List<GameObject> targetList = new List<GameObject>();
+    public int targetIndex;
 
     private int nowUpgradeCount;
     private int nowHp;
@@ -96,6 +97,7 @@ public abstract class Turret : MonoBehaviour
     public ParticleSystem firePaticle;
     protected LayerMask ignoreLayer;
     public Transform turretTargetTransform { get { return targetTransform; } set { targetTransform = value; } }
+    public List<GameObject> turretTargetList { get { return targetList; } }
     public float turretAttackDamge { get { return nowAttackDamge; } }
     public float turretAttackRange { get { return attackRange; } }
     public float turretAttackSpeed { get { return nowAttackSpeed; } }
@@ -265,32 +267,44 @@ public abstract class Turret : MonoBehaviour
     //상태 패턴을 이용해서 삭제하는거랑 공격이런거 정리해보자
     public void SearchEnemy()
     {
-
+        targetCollider.Clear();
+        targetList.Clear();
+        targetIndex = 0;
         Collider[] enemyCollider = Physics.OverlapSphere(transform.position, attackRange, (1 << monsterLayer));//레이어 마스크 몬스터 추가
-        Transform nierTargetTransform = null;
-        targetCollider = enemyCollider;
+        //Transform nierTargetTransform = null;
         if (enemyCollider.Length > 0)
         {
-            float nierTargetDistance = Mathf.Infinity;
+            //float nierTargetDistance = Mathf.Infinity;
             foreach (Collider collider in enemyCollider)
             {
-                if (collider.CompareTag("Monster"))
+                if (collider.CompareTag("Monster") && !targetCollider.ContainsKey(collider.gameObject))
                 {
                     float distance = Vector3.SqrMagnitude(transform.position - collider.transform.position);
 
-                    if (/*!collider.GetComponent<Monster>().isDead&&*/distance < nierTargetDistance)
-                    {
-                        nierTargetDistance = distance;
-                        nierTargetTransform = collider.transform;
-                    }
+                    targetCollider.Add(collider.gameObject, distance);
+                    //if (/*!collider.GetComponent<Monster>().isDead&&*/distance < nierTargetDistance)
+                    //{
+                    //    nierTargetDistance = distance;
+                    //    nierTargetTransform = collider.transform;
+                    //}
                 }
                 
             }
+
+            var soltDic = targetCollider.OrderBy(x => x.Value);
+
+
+            foreach (var nearTarget in soltDic)
+            {
+                targetList.Add(nearTarget.Key);
+            }
+
+            targetTransform = targetList[targetIndex].transform;
+
+            turretStatemachine.ChangeState(TurretStateName.ATTACK);
         }
 
-
-        targetTransform = nierTargetTransform;
-
+        
 
     }
 
