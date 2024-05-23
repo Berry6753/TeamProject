@@ -1333,9 +1333,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.8
-  m_Height: 4
+  m_Height: 3
   m_Direction: 1
-  m_Center: {x: 0, y: 2, z: 0}
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!195 &4282014666433548173
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1370,7 +1370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ddb35e6b1a9d384fa0ac1b2185e6d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 1000
+  maxHp: 0
   damage: 80
   hitNum: 50
   attackRange: 3

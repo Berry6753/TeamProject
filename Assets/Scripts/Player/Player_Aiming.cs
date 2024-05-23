@@ -203,7 +203,6 @@ public class Player_Aiming : MonoBehaviour
 
     private void CameraRotation()
     {
-        if (info.isDead) return;
         x_Axis.Update(Time.fixedDeltaTime);
         y_Axis.Update(Time.fixedDeltaTime);
 
@@ -297,7 +296,16 @@ public class Player_Aiming : MonoBehaviour
 
                 Debug.Log(hits.transform.gameObject.name);
                 //데미지 부여
-                if (hits.transform.gameObject.layer == LayerMask.NameToLayer("Monster"))
+                if (hits.transform.gameObject.layer == LayerMask.NameToLayer("Boss"))
+                {
+                    if (hits.transform.CompareTag("MonsterHead"))
+                    {
+                        hits.transform.GetComponent<BossMonster>().Hurt(info.Attack);
+                    }
+
+                    hits.transform.GetComponent<BossMonster>().Hurt(info.Attack);
+                }
+                else if (hits.transform.gameObject.layer == LayerMask.NameToLayer("Monster"))
                 {
                     if (hits.transform.CompareTag("MonsterHead"))
                     {

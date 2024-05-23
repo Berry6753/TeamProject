@@ -16,6 +16,7 @@ public class BossMonster : MonoBehaviour
     [SerializeField] private float attackRange;       //사거리
     [SerializeField] private float specialAttackRange;//특수 공격 사거리
     private float amongRange;
+
     [Header("스탯 성장치")]
     [SerializeField] protected float upScaleHp;         //체력 성장치
 
@@ -23,9 +24,8 @@ public class BossMonster : MonoBehaviour
     private float dashTime;
     private float time;
 
-    private WaveSystem waveSystem;
-
     private int _wave = 0;
+
     [HideInInspector]
     public int wave
     {
@@ -40,9 +40,10 @@ public class BossMonster : MonoBehaviour
         }
 
     }
-    private int lastWave = 0;
+    private int lastWave = 30;
 
-    private Transform defaultTarget;
+    private Transform Core;
+    private Transform Player;
     private Transform bossTr;
     private Transform chaseTarget;
 
@@ -52,15 +53,15 @@ public class BossMonster : MonoBehaviour
     private SkinnedMeshRenderer[] renderer;
     private SphereCollider[] attackC;
     private BoxCollider jumpAttackC;
-    [SerializeField] private CapsuleCollider dashAttackC;
+    private Vector3 dashDir;
 
-    [Header("")]
+   [SerializeField] private CapsuleCollider dashAttackC;
     [SerializeField] protected LayerMask turretLayer;   //터렛레이어
     [SerializeField] protected LayerMask monsterLayer;  //몬스터레이어
     [SerializeField] protected float sensingRange;      //감지 범위
     private int turretIndex = 0;                      //가장 가까운 터렛인덱스
-    private int secondTurretIndex = 0;                //두 번째 가까운 터렛인덱스
-    private int targetingIndex = 0;                   //타겟으로 삼을 터렛인덱스
+    //private int secondTurretIndex = 0;                //두 번째 가까운 터렛인덱스
+    //private int targetingIndex = 0;                   //타겟으로 삼을 터렛인덱스
 
     private StateMachine stateMachine;
 
@@ -84,14 +85,17 @@ public class BossMonster : MonoBehaviour
     { IDLE, TRACE, JumpA, DashA, DefaultA, DefaultA2, DIE }
     public State state = State.IDLE;
 
+    private List<GameObject> targetList;
+
     private void Awake()
     {
+        targetList = new List<GameObject>();
         anim = GetComponent<Animator>();
         nav = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
         renderer = GetComponentsInChildren<SkinnedMeshRenderer>();
         bossTr = GetComponent<Transform>();
-        defaultTarget = GameObject.FindWithTag("Player").GetComponent<Transform>();
+
         attackC = GetComponentsInChildren<SphereCollider>();
         jumpAttackC = GetComponentInChildren<BoxCollider>();
         stateMachine = gameObject.AddComponent<StateMachine>();
@@ -109,6 +113,9 @@ public class BossMonster : MonoBehaviour
     }
     private void OnEnable()
     {
+        Core = GameObject.FindWithTag("Core").GetComponent<Transform>();
+        Player = GameObject.FindWithTag("Player").transform;
+
         stateMachine.ChangeState(State.IDLE);
         hp = maxHp;
     }
@@ -119,7 +126,9 @@ public class BossMonster : MonoBehaviour
 
     private void Update()
     {
-        PriorityTarget();
+
+        //일시적으로 주석처리
+
         if (time > 0 && !anim.GetBool("isAttack"))
         {
             time -= Time.deltaTime;
@@ -130,7 +139,7 @@ public class BossMonster : MonoBehaviour
             canAttack = true;
         }
         if (isBackward)
-        { 
+        {
             BackWards();
         }
         if (anim.GetBool(hashDash))
@@ -147,32 +156,34 @@ public class BossMonster : MonoBehaviour
         {
             if (canJump)
             {
-                StartCoroutine(JumpAttackMove());   
+                StartCoroutine(JumpAttackMove());
             }
         }
-        wave = waveSystem.currentWaveIndex - 1;
+        wave = WaveSystem.instance.currentWaveIndex - 1;
     }
 
     protected virtual void LookAt()
     {
-        transform.LookAt(new Vector3(chaseTarget.position.x, transform.position.y, chaseTarget.position.z));
+        if(chaseTarget != null)
+             transform.LookAt(new Vector3(chaseTarget.position.x, transform.position.y, chaseTarget.position.z));
     }
 
     private IEnumerator BossState()
     {
         while (!isDead)
-        {
+        {           
             yield return new WaitForSeconds(0.3f);
-            if (hp <= 0)
-            {
-                stateMachine.ChangeState(State.DIE);
-                isDie();
-                yield break;
-            }
 
-            if (wave == lastWave)
+            PriorityTarget();
+
+            if (chaseTarget == null)
+            {
+                stateMachine.ChangeState(State.IDLE);
+            }
+            else
             {
                 float distance = Vector3.Distance(chaseTarget.position, bossTr.position);
+
                 if (distance <= attackRange)
                 {
                     FreezeVelocity();
@@ -180,8 +191,8 @@ public class BossMonster : MonoBehaviour
                     {
                         CloseAttack();
                         foreach (SphereCollider coll in attackC)
-                        { 
-                            coll.enabled = true; 
+                        {
+                            coll.enabled = true;
                         }
                         jumpAttackC.enabled = false;
                         dashAttackC.enabled = false;
@@ -228,18 +239,9 @@ public class BossMonster : MonoBehaviour
                     dashAttackC.enabled = false;
                 }
             }
-            else
-            {
-                nav.enabled = true;
-                stateMachine.ChangeState(State.IDLE);
-                foreach (SphereCollider coll in attackC)
-                {
-                    coll.enabled = false;
-                }
-                jumpAttackC.enabled = false;
-                dashAttackC.enabled = false;
-            }
         }
+
+        yield break;
     }
 
     private void CloseAttack()
@@ -315,20 +317,28 @@ public class BossMonster : MonoBehaviour
     private void DashAttack()
     {
         anim.SetBool(hashDash, true);
+        dashDir = (chaseTarget.position - transform.position).normalized;
+        
         isBackward = false;
     }
 
     private void DashAttackMove()
     {
-        dashAttackC.enabled = true;      
+        dashAttackC.enabled = true;
         float speed = 0f;
         isDash = true;
-        if (isDash == true)
+        if (isDash)
         {
-            dashSpeed += 0.001f;
-            float distance = Vector3.Distance(chaseTarget.position, bossTr.position);
-            Vector3 attackPos = transform.position + transform.forward * distance;
-            transform.position = Vector3.MoveTowards(transform.position, attackPos, (speed + dashSpeed/2) + Time.deltaTime);
+
+            //dashSpeed += 0.001f;
+            //float distance = Vector3.Distance(chaseTarget.position, bossTr.position);
+            //Vector3 attackPos = transform.position + transform.forward * distance;
+
+            //transform.position = Vector3.MoveTowards(transform.position, attackPos, (speed + dashSpeed / 2) + Time.deltaTime);
+
+
+
+            rb.AddForce(dashDir * 150f, ForceMode.Acceleration);
             dashTime += Time.deltaTime;
             if (dashTime > 2f)
             {
@@ -352,66 +362,77 @@ public class BossMonster : MonoBehaviour
 
     private void PriorityTarget()                     //타겟 우선순위 설정
     {
-        Collider[] turret = Physics.OverlapSphere(transform.position, sensingRange, turretLayer);
-        if (turret.Length > 0)
+        Targeting();
+
+        if (wave == lastWave && chaseTarget == null)
         {
-            turretDistance(turret);
-            TargetingTurret();
-            chaseTarget = turret[targetingIndex].transform;
-        }
-        else
-        {
-            chaseTarget = defaultTarget;
+            chaseTarget = Core;
         }
     }
 
-    protected void turretDistance(Collider[] array)
+    private void Targeting()
     {
-        float[] distance = new float[array.Length];
+        targetList.Clear();
+        Collider[] Targets = Physics.OverlapSphere(transform.position, sensingRange, turretLayer);
+
+        if (Targets.Length <= 0) return;
+
+        foreach (Collider target in Targets)
+        {
+            if (target.gameObject.layer == LayerMask.NameToLayer("Turret"))
+            {
+                targetList.Add(target.gameObject);
+            }
+        }
+
+        if (targetList.Count <= 0)
+        {
+            chaseTarget = Player;
+        }
+        else
+        {
+            turretDistance(targetList);
+            chaseTarget = targetList[turretIndex].transform;
+        }
+    }
+
+    protected void turretDistance(List<GameObject> array)
+    {
+        float[] distance = new float[array.Count];
         int minIndex = 0;
-        int secondMinIndex = 0;
-        for (int i = 0; i < array.Length; i++)
+        for (int i = 0; i < array.Count; i++)
         {
             distance[i] = Vector3.Distance(array[i].transform.position, bossTr.position);
         }
         float minDistance = distance[0];
-        float secondDistance = distance.Max();
         for (int i = 0; i < distance.Length; i++)
         {
             if (distance[i] < minDistance)
             {
-                secondDistance = minDistance;
-                secondMinIndex = minIndex;
                 minDistance = distance[i];
                 minIndex = i;
             }
-            else if (distance[i] < secondDistance)
-            {
-                secondDistance = distance[i];
-                secondMinIndex = i;
-            }
         }
         turretIndex = minIndex;
-        secondTurretIndex = secondMinIndex;
     }
 
-    protected void TargetingTurret()
-    {
-        Collider[] monster = Physics.OverlapBox(transform.position, new Vector3(5f, 5f, 5f), transform.rotation, monsterLayer);
-        if (monster.Length > 3)
-        {
-            targetingIndex = secondTurretIndex;
-        }
-        else
-        {
-            targetingIndex = turretIndex;
-        }
-    }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position, new Vector3(5f, 5f, 5f));
-    }
+    //protected void TargetingTurret()
+    //{
+    //    Collider[] monster = Physics.OverlapBox(transform.position, new Vector3(5f, 5f, 5f), transform.rotation, monsterLayer);
+    //    if (monster.Length > 3)
+    //    {
+    //        targetingIndex = secondTurretIndex;
+    //    }
+    //    else
+    //    {
+    //        targetingIndex = turretIndex;
+    //    }
+    //}
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireCube(transform.position, new Vector3(5f, 5f, 5f));
+    //}
 
     protected void FreezeVelocity()                     //물리력 제거
     {
@@ -499,7 +520,8 @@ public class BossMonster : MonoBehaviour
             owner.anim.SetBool(owner.hashAttack, true);
             owner.anim.SetTrigger(owner.hashDefaultA);
         }
-    }    protected class DefaultA2State : BaseMonsterState
+    }
+    protected class DefaultA2State : BaseMonsterState
     {
         public DefaultA2State(BossMonster owner) : base(owner) { }
         public override void Enter()
