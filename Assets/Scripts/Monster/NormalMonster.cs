@@ -10,8 +10,10 @@ public class NormalMonster : Monster
         base.Awake();
         defaultTarget = GameObject.FindWithTag("Core").GetComponent<Transform>();
     }
-    private void Start()
+
+    protected override void OnEnable()
     {
+        base.OnEnable();
         ChaseTarget();
     }
 

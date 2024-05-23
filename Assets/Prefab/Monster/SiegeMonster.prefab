@@ -2575,7 +2575,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterName: SiegeMonster
   attackSpeed: 3
-  hp: 200
+  maxHp: 200
   damage: 0
   hitNum: 30
   attackRange: 4

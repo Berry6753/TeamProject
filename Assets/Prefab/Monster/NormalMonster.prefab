@@ -2290,7 +2290,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterName: NormalMonster
   attackSpeed: 1
-  hp: 100
+  maxHp: 100
   damage: 5
   hitNum: 0.5
   attackRange: 2
