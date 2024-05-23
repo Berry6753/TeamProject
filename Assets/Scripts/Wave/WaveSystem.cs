@@ -7,6 +7,8 @@ using TMPro;
 
 public class WaveSystem : MonoBehaviour
 {
+    public static WaveSystem instance;
+
     private static int maxWave = 30;
     private float breakTime = 60.0f;
     [SerializeField] private Wave[] waves = new Wave[maxWave];               //현재 웨이브 정보
@@ -41,7 +43,12 @@ public class WaveSystem : MonoBehaviour
     private int waveCount;  
 
     private void Awake()
-    {    
+    {
+        instance = this;        
+    }
+
+    private void OnEnable()
+    {
         for (int i = 0; i < waves.Length; i++)
         {
             waves[i].spawnTime = 1;
