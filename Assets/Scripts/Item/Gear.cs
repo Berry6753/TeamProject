@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Gear : MonoBehaviour
 {
+    [HideInInspector]
     public Rigidbody body;
+
     [Header("회전 속도")]
     [SerializeField]
     private float rotationSpeed;
@@ -39,8 +41,7 @@ public class Gear : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.GetComponent<Player_Info>().AddGearCount((int)GearCount);
-            transform.gameObject.SetActive(false);
+            QueueObjectPool.instance.Relese(gameObject);
         }
     }
-
 }

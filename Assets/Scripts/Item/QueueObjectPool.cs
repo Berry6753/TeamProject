@@ -10,10 +10,19 @@ public class QueueObjectPool : MonoBehaviour
     [SerializeField]
     private GameObject ObjectPrefab;
 
+    [Header("초기 생성 수")]
+    [SerializeField]
+    private int InitCount;
+
     private Queue<GameObject> pool = new Queue<GameObject>();
     private void Awake()
     {
         instance = this;
+    }
+
+    private void Start()
+    {
+        Init(InitCount);
     }
 
     private GameObject Create()
@@ -23,7 +32,7 @@ public class QueueObjectPool : MonoBehaviour
         return newObject;
     }
 
-    private void Inlit(int count)
+    private void Init(int count)
     {
         for (int i = 0; i < count; i++)
         {

@@ -436,6 +436,7 @@ public abstract class Monster : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         OnDeath?.Invoke(this);
         gameObject.SetActive(false);
+        QueueObjectPool.instance.GetObject();
     }
 
     private void OnDisable()
