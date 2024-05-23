@@ -36,8 +36,12 @@ public class Gear : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        body.useGravity = false;
-        body.velocity = Vector3.zero;
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            body.useGravity = false;
+            body.velocity = Vector3.zero;
+        }
+        
         if (other.CompareTag("Player"))
         {
             other.GetComponent<Player_Info>().AddGearCount((int)GearCount);

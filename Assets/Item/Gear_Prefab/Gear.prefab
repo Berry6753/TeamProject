@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4203720842427110229}
   - component: {fileID: 4203720842427110228}
   - component: {fileID: 4203720842427110234}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: Gear
   m_TagString: Gear
   m_Icon: {fileID: 0}
@@ -113,7 +113,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.08
+  m_Radius: 0.2
   m_Center: {x: 0, y: 0.005522218, z: 0}
 --- !u!114 &4203720842427110234
 MonoBehaviour:
@@ -127,4 +127,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47bb374473468d2499c8f6284ad512dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  body: {fileID: 0}
   rotationSpeed: 50

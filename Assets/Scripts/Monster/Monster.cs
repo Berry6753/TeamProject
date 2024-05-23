@@ -165,7 +165,7 @@ public abstract class Monster : MonoBehaviour
 
     protected virtual void LookAt()
     {
-        Debug.Log(chaseTarget.name);
+        //Debug.Log(chaseTarget.name);
         transform.LookAt(new Vector3(chaseTarget.position.x, transform.position.y, chaseTarget.position.z));
     }
 
@@ -435,8 +435,15 @@ public abstract class Monster : MonoBehaviour
         RandomGear();
         gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         OnDeath?.Invoke(this);
-        gameObject.SetActive(false);
-        QueueObjectPool.instance.GetObject();
+        gameObject.SetActive(false);        
+    }
+
+    protected void GetGear()
+    {
+        GameObject Gear = QueueObjectPool.instance.GetObject();
+        Gear.transform.position = transform.position + (Vector3.up * 2.3f);
+        Rigidbody GearRigid = Gear.GetComponent<Rigidbody>();
+        GearRigid.AddForce(Vector3.up * 1.5f);
     }
 
     private void OnDisable()
@@ -447,29 +454,30 @@ public abstract class Monster : MonoBehaviour
     protected void RandomGear()
     {
         probabilityGetGear = UnityEngine.Random.Range(0, 100);
-        if (probabilityGetGear >= 0 && probabilityGetGear < 65)
+        if (probabilityGetGear < 65)
         {
-            probabilityNum = UnityEngine.Random.Range(0, 100);
-            if (probabilityNum >= 0 && probabilityNum < 60)
-            {
-                dropGearNum = 1;
-            }
-            else if (probabilityNum >= 60 && probabilityNum < 80)
-            {
-                dropGearNum = 2;
-            }
-            else if (probabilityNum >= 80 && probabilityNum < 92)
-            {
-                dropGearNum = 3;
-            }
-            else if (probabilityNum >= 92 && probabilityNum < 97)
-            {
-                dropGearNum = 4;
-            }
-            else
-            {
-                dropGearNum = 5;
-            }
+            //probabilityNum = UnityEngine.Random.Range(0, 100);
+            //if (probabilityNum >= 0 && probabilityNum < 60)
+            //{
+            //    dropGearNum = 1;
+            //}
+            //else if (probabilityNum >= 60 && probabilityNum < 80)
+            //{
+            //    dropGearNum = 2;
+            //}
+            //else if (probabilityNum >= 80 && probabilityNum < 92)
+            //{
+            //    dropGearNum = 3;
+            //}
+            //else if (probabilityNum >= 92 && probabilityNum < 97)
+            //{
+            //    dropGearNum = 4;
+            //}
+            //else
+            //{
+            //    dropGearNum = 5;
+            //}
+            GetGear();
         }
         else
         {

@@ -295,6 +295,7 @@ public class Player_Aiming : MonoBehaviour
             {                
                 Debug.DrawLine(GunFireStartPoint.position, hits.point, Color.red);
 
+                Debug.Log(hits.transform.gameObject.name);
                 //데미지 부여
                 if (hits.transform.gameObject.layer == LayerMask.NameToLayer("Monster"))
                 {

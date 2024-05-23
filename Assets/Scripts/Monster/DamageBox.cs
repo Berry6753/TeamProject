@@ -27,7 +27,7 @@ public class DamageBox : MonoBehaviour
         else if (other.CompareTag("Core"))
         {
             other.GetComponent<Core>().Hurt(monsterScripts.monsterPower);
-            Debug.Log(other.name + "공격 중...");
+            //Debug.Log(other.name + "공격 중...");
         }
         else if (other.CompareTag("Barricade"))
         {

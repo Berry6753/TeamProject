@@ -55,36 +55,36 @@ public class AerialMonster : Monster
 
             if (distance <= attackRange)
             {
-                Debug.Log("AAAAAAAAAAAAAAAAAAA");
+                //Debug.Log("AAAAAAAAAAAAAAAAAAA");
                 Physics.Raycast(firePos.transform.position, chaseTarget.position - firePos.transform.position, out RaycastHit hit, attackRange, ~(ignoreLayer));
                 Debug.DrawRay(monsterTr.position, (chaseTarget.position - monsterTr.position) * 100f, Color.red);
-                Debug.Log(hit.collider.name+"AAAAAAAAAAAAAAAAAA");
+                //Debug.Log(hit.collider.name+"AAAAAAAAAAAAAAAAAA");
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Turret")||hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    Debug.Log("BBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                    //Debug.Log("BBBBBBBBBBBBBBBBBBBBBBBBBBB");
                     FreezeVelocity();
                     if (canAttack)
                     {
-                        Debug.Log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+                        //Debug.Log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
                         stateMachine.ChangeState(State.ATTACK);
                     }
                     else
                     {
-                        Debug.Log("DDDDDDDDDDDDDDDDDDDDDDD");
+                        //Debug.Log("DDDDDDDDDDDDDDDDDDDDDDD");
                         stateMachine.ChangeState(State.IDLE);
                     }
                 }
                 else
                 {
-                    Debug.Log("EEEEEEEEEEEEEEEEEEEEEEEEE");
-                    Debug.Log(hit.collider.gameObject.layer+"EEEEEEEEEEEEEEEEEEE");
+                    //Debug.Log("EEEEEEEEEEEEEEEEEEEEEEEEE");
+                    //Debug.Log(hit.collider.gameObject.layer+"EEEEEEEEEEEEEEEEEEE");
                     stateMachine.ChangeState(State.TRACE);
                 }
                 
             }
             else
             {
-                Debug.Log("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+                //Debug.Log("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
                 stateMachine.ChangeState(State.TRACE);
             }
         }

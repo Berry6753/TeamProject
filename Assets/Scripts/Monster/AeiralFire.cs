@@ -6,6 +6,6 @@ public class AeiralFire : MonoBehaviour
 {
     private void OnParticleCollision(GameObject other)
     {
-        Debug.Log(other.gameObject.name);
+        //Debug.Log(other.gameObject.name);
     }
 }
