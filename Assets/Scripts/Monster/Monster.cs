@@ -5,6 +5,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SocialPlatforms.Impl;
 using static UnityEngine.UI.GridLayoutGroup;
 
 enum PriorityTag
@@ -100,12 +101,15 @@ public abstract class Monster : MonoBehaviour
 
     protected Dictionary<GameObject, int> SearchTarget;
     protected List<GameObject> TurretPriority;
+    protected List<GameObject> BarricadePriority;
 
     public Transform checkChasehaseTarget { get { return chaseTarget; } }
     protected virtual void Awake()
     {
         SearchTarget = new Dictionary<GameObject, int>();
         TurretPriority = new List<GameObject>();
+        BarricadePriority = new List<GameObject>();
+
         capsuleCollider = GetComponent<CapsuleCollider>();
         monsterTr = GetComponent<Transform>();
         rb = GetComponent<Rigidbody>();
@@ -149,6 +153,7 @@ public abstract class Monster : MonoBehaviour
     protected virtual void Update()
     {
         //ReTargeting();
+        Debug.Log($"{gameObject.name}가 노리는 목표 : {chaseTarget.name}");
 
         if (time > 0 && !anim.GetBool("isAttack"))
         {
@@ -226,18 +231,18 @@ public abstract class Monster : MonoBehaviour
         time = attackSpeed;       
     }
 
-    private void ReTargeting()
-    {
-        if (!chaseTarget.gameObject.activeSelf)
-        {
-            chaseTarget = defaultTarget;
-            obstacle.enabled = false;
-            nav.enabled = true;
-            nav.isStopped = false;
-            rb.isKinematic = true;
-            isAttackAble = false;
-        }
-    }
+    //private void ReTargeting()
+    //{
+    //    if (!chaseTarget.gameObject.activeSelf)
+    //    {
+    //        chaseTarget = defaultTarget;
+    //        obstacle.enabled = false;
+    //        nav.enabled = true;
+    //        nav.isStopped = false;
+    //        rb.isKinematic = true;
+    //        isAttackAble = false;
+    //    }
+    //}
 
 
     protected void PriorityTarget()                     //타겟 우선순위 설정
@@ -256,48 +261,73 @@ public abstract class Monster : MonoBehaviour
                     if(!SearchTarget.ContainsKey(c.transform.parent.gameObject))
                         SearchTarget.Add(c.transform.parent.gameObject, (int)PriorityTag.Turret);
                 }
-                else 
+                else if (c.CompareTag("Player"))
                 {
-                    int Score = 0;
-                    if (c.CompareTag("Player"))
-                    {
-                        Score = (int)PriorityTag.Player;
-                    }
-                    else if (c.CompareTag("Core"))
-                    {
-                        Score = (int)PriorityTag.Core;
-                    }
-                    else if (c.CompareTag("Barricade"))
-                    {
-                        Score = (int)PriorityTag.Barricade;
-                    }
-                                       
-                    
-                    if (!SearchTarget.ContainsKey(c.gameObject))
-                             SearchTarget.Add(c.gameObject, Score);
+                    SearchTarget.Add(c.gameObject, (int)PriorityTag.Player);
                 }
-                
+                else if (c.CompareTag("Core"))
+                {
+                    SearchTarget.Add(c.gameObject, (int)PriorityTag.Core);
+                }
+                else
+                {
+                    if (!SearchTarget.ContainsKey(c.transform.parent.gameObject))
+                        SearchTarget.Add(c.transform.gameObject, (int)PriorityTag.Barricade);
+                }
+
+                //int Score = 0;
+                //if (c.CompareTag("Player"))
+                //{
+                //    Score = (int)PriorityTag.Player;
+                //}
+                //else if (c.CompareTag("Core"))
+                //{
+                //    Score = (int)PriorityTag.Core;
+                //}
+                //else if (c.CompareTag("Barricade"))
+                //{
+                //    Score = (int)PriorityTag.Barricade;
+                //}
+
+
+                //if (!SearchTarget.ContainsKey(c.gameObject))
+                //    SearchTarget.Add(c.gameObject, Score);
+
             }
         }
 
         if (SearchTarget.Count > 0)
         {
             TurretPriority.Clear();
-            var sortedData = SearchTarget.OrderBy(x => x.Value);
-            
-            if(sortedData.Last().Value != (int)PriorityTag.Turret)
+            BarricadePriority.Clear();
+            var sortedTurretData = SearchTarget.OrderBy(x => x.Value);
+
+            if (sortedTurretData.Last().Value != (int)PriorityTag.Barricade)
             {
-                //chaseTarget = sortedData.Last().Key.transform;
-                t = sortedData.Last().Key.transform;
+                if (sortedTurretData.Last().Value != (int)PriorityTag.Turret)
+                {
+                    //chaseTarget = sortedData.Last().Key.transform;
+                    t = sortedTurretData.Last().Key.transform;
+                }
+                else
+                {
+
+                    foreach (var d in sortedTurretData)
+                    {
+                        if (d.Value == (int)PriorityTag.Turret && !TurretPriority.Contains(d.Key))
+                        {
+                            TurretPriority.Add(d.Key);
+                        }
+                    }
+                }
             }
             else
             {
-                
-                foreach(var d in sortedData)
+                foreach (var d in sortedTurretData)
                 {
-                    if(d.Value == (int)PriorityTag.Turret && !TurretPriority.Contains(d.Key))
+                    if (d.Value == (int)PriorityTag.Barricade && !BarricadePriority.Contains(d.Key))
                     {
-                        TurretPriority.Add(d.Key);
+                        BarricadePriority.Add(d.Key);
                     }
                 }
             }
@@ -338,6 +368,11 @@ public abstract class Monster : MonoBehaviour
                 //TargetingTurret();
                 //chaseTarget = TurretPriority[targetingIndex].transform;
                 t = TurretPriority[targetingIndex].transform;
+            }
+            else if (BarricadePriority.Count > 0)
+            {
+                turretDistance(BarricadePriority);
+                t = BarricadePriority[targetingIndex].transform;
             }
         }
         else

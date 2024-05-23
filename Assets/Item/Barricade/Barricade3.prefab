@@ -115,7 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c3647f4c36e36a4d89f60170ba2d0f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 5
+  HP: 80
   pushForce: 100
 --- !u!65 &8954336800002907257
 BoxCollider:
