@@ -181,6 +181,7 @@ public class Player_Aiming : MonoBehaviour
 
     private void Update()
     {
+        if (info.isDead) return;
         GameStopping();
         CameraRotation();
         //DecideRecoilBack();        
@@ -192,6 +193,7 @@ public class Player_Aiming : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (info.isDead) return;
         DecideRecoilBack();
         FireGun();
 
@@ -201,6 +203,7 @@ public class Player_Aiming : MonoBehaviour
 
     private void CameraRotation()
     {
+        if (info.isDead) return;
         x_Axis.Update(Time.fixedDeltaTime);
         y_Axis.Update(Time.fixedDeltaTime);
 
@@ -261,6 +264,7 @@ public class Player_Aiming : MonoBehaviour
 
     private void AimingCamera()
     {
+        if (info.isDead) return;
         if (isAiming)
         {
             animator.SetBool(hashZoomOn, true);

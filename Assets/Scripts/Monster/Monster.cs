@@ -400,11 +400,11 @@ public abstract class Monster : MonoBehaviour
     //        targetingIndex = turretIndex;
     //    }
     //}
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position + Vector3.forward * 2.5f, new Vector3(5f, 5f, 5f));
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireCube(transform.position + Vector3.forward * 2.5f, new Vector3(5f, 5f, 5f));
+    //}
 
     protected void FreezeVelocity()                     //물리력 제거
     {

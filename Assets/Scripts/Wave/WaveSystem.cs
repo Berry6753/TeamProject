@@ -12,7 +12,10 @@ public class WaveSystem : MonoBehaviour
     [SerializeField] private Wave[] waves = new Wave[maxWave];               //현재 웨이브 정보
     [SerializeField] private MonsterSpawner monsterSpawner;
 
-    [HideInInspector]
+    //[HideInInspector]
+
+    [Header("Wave Count")]
+    [SerializeField]
     public int currentWaveIndex = 0;
 
     [SerializeField]
@@ -33,6 +36,7 @@ public class WaveSystem : MonoBehaviour
     [Header("Wave Timer UI")]
     [SerializeField]
     private TMP_Text WaveTimer;
+
 
     private int waveCount;  
 

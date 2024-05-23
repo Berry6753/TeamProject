@@ -61,7 +61,7 @@ MonoBehaviour:
     prefab: {fileID: 2719358599205244606, guid: c9c2b9f5ce460f44dbf15593ade6cbca, type: 3}
     size: 1
   - tag: Healing_Item2
-    prefab: {fileID: 1497659366000681694, guid: 52f28ba5b26541a43a711ca11f374a78, type: 3}
+    prefab: {fileID: 6548119424755305983, guid: ad16de613b9e24b4199a22b7f39c18cf, type: 3}
     size: 1
   - tag: Barricade_Item
     prefab: {fileID: 8402480941508049593, guid: b98214da466b6334f94e079f410f10ce, type: 3}

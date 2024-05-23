@@ -104,4 +104,5 @@ public class LookAtAnimationRigging : MonoBehaviour
             ThrowingTargetWeight = 1f;
         }
     }
+
 }

@@ -11,15 +11,27 @@ public class SuicideMonster : Monster
     [SerializeField] private ParticleSystem exlosionEffect;
     [SerializeField] private GameObject form;
 
+    private float defaultSpeed;
+
+    private bool isExplosionAble;
+
     protected override void Awake()
     {
         base.Awake();
         defaultTarget = GameObject.FindWithTag("Player").GetComponent<Transform>();
+        defaultSpeed = 7f;
     }
     private void Start()
     {
         chaseTarget = defaultTarget;
         ChaseTarget();
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        nav.speed = defaultSpeed;
+        isExplosionAble = true;
     }
 
     protected override void Update()
@@ -49,23 +61,54 @@ public class SuicideMonster : Monster
             {
                 //FreezeVelocity();
                 stateMachine.ChangeState(State.IDLE);
-                yield return new WaitForSeconds(explosionTime);
-                stateMachine.ChangeState(State.ATTACK);
-                foreach (Collider c in attack)
+                //yield return new WaitForSeconds(explosionTime);
+                //stateMachine.ChangeState(State.ATTACK);                
+                //Destroy(gameObject);
+                if (isExplosionAble)
                 {
-                    c.enabled = true;
-                }
-                exlosionEffect.Play();
-                form.SetActive(false);
-                yield return new WaitForSeconds(duringExplosion);
-                Destroy(gameObject);
-                yield break;
+                    StartCoroutine(AttackingPlayer());
+                }                
             }
             else
             {
                 stateMachine.ChangeState(State.TRACE);
             }
         }
+    }
+
+    IEnumerator AttackingPlayer()
+    {
+        isExplosionAble = false;
+        nav.speed = 4f;
+        yield return new WaitForSeconds(explosionTime);
+        stateMachine.ChangeState(State.ATTACK);
+        yield break;
+    }
+
+    public void MonsterExplosionAttack()
+    {
+        form.SetActive(false);
+
+        foreach (Collider c in attack)
+        {
+            c.enabled = true;
+        }
+        exlosionEffect.Play();
+        //yield return new WaitForSeconds(duringExplosion);
+        //form.SetActive(false);
+        StartCoroutine(ExplosionEnd());
+    }
+
+    IEnumerator ExplosionEnd()
+    {
+        yield return new WaitForSeconds(duringExplosion);
+        gameObject.SetActive(false);
+        yield break;
+    }
+
+    private void OnDisable()
+    {
+        MonsterObjectPool.ReturnToPool(gameObject);
     }
 
     protected override void UpScaleDamage()

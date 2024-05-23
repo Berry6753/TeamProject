@@ -50,7 +50,8 @@ public class Player_Info : MonoBehaviour
     public float magazineCount;
 
     private Animator animator;
-    private bool isDead;
+
+    public bool isDead {  get; private set; }
 
     private Player_Info_UI UI;
 
@@ -98,7 +99,8 @@ public class Player_Info : MonoBehaviour
 
     public void Hurt(float damage)
     {
-        HP -= damage;
+        if (isDead) return;
+       // HP -= damage;
         UI.PrintPlayerHPBar(HP, maxHp);
         if (HP <= 0)
         {

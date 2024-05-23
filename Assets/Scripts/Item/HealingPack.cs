@@ -48,7 +48,7 @@ public class HealingPack : MonoBehaviour
             yield return new WaitForSeconds(Time.deltaTime);
             totalTimer -= Time.deltaTime;
         }
-        gameObject.SetActive(false);
+        transform.parent.gameObject.SetActive(false);
         yield break;
     }
 
@@ -82,6 +82,6 @@ public class HealingPack : MonoBehaviour
 
     private void OnDisable()
     {
-        ItemObjectPool.ReturnToPool(gameObject);
+        ItemObjectPool.ReturnToPool(transform.parent.gameObject);
     }
 }

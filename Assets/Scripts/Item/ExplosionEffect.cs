@@ -45,6 +45,14 @@ public class ExplosionEffect : MonoBehaviour
             foreach (var target in targets)
             {
                 Debug.Log($"{target.name}에게 {AttackDamage}만큼의 데미지 부여");
+                if (target.CompareTag("Monster"))
+                {
+                    target.GetComponent<Monster>().Hurt(damage);
+                }
+                else if (target.CompareTag("Player"))
+                {
+                    target.GetComponent<Player_Info>().Hurt(damage);
+                }
             }
         }
         yield break;
