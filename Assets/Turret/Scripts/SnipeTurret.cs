@@ -21,8 +21,8 @@ public class SnipeTurret : Turret
     private float snipeTurretRepairCost = 10;
     private float snipeTurretUpgradeCost = 20;
     private float snipeTurretMakingCost = 30;
-    
 
+    
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -32,14 +32,19 @@ public class SnipeTurret : Turret
 
     public override void Attack()
     {
-        Debug.DrawRay(firePos.transform.position, (targetTransform.position - firePos.transform.position) * 100, Color.red, 100);
         if(Physics.Raycast(firePos.transform.position, fireEffectPos.transform.position - firePos.transform.position,out RaycastHit hit, snipeTurretAttackRange,~(ignoreLayer)))
         {
-            Debug.Log(hit.collider.name);
             if (!hit.collider.CompareTag("Monster"))
             {
-                
-                return;
+                if (targetCollider.Length >= 2 && targetCollider[targetIndex + 1] != null)
+                {
+                    targetTransform = targetCollider[targetIndex].transform;
+                    targetIndex++;
+                }
+                else
+                {
+                    return;
+                }
             }
             else
             {
@@ -68,10 +73,20 @@ public class SnipeTurret : Turret
                         hit.collider.gameObject.GetComponent<Barrel>().Hurt();
                     }
                 }
+
+                
+
             }
+
+           
         }
-        
-        
+
+        if (targetCollider[targetIndex].transform == null || !targetCollider[targetIndex].gameObject.activeSelf)
+        {
+            targetIndex = 0;
+        }
+
+
     }
 
 }

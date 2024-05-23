@@ -38,8 +38,16 @@ public class MiniGunTurret : Turret
             
             if (!hit.collider.CompareTag("Monster"))
             {
-                Debug.Log((hit.collider.gameObject.name));
-                return;
+
+                if (targetCollider.Length >= 2 && targetCollider[targetIndex + 1] != null)
+                {
+                    targetTransform = targetCollider[targetIndex].transform;
+                    targetIndex++;
+                }
+                else
+                {
+                    return;
+                }
             }
             else if (hit.collider.CompareTag("Monster"))
             {
@@ -59,6 +67,12 @@ public class MiniGunTurret : Turret
                 //드럼통 폭발시키기도 있어야함
                 hit.collider.gameObject.GetComponent<Barrel>().Hurt();
             }
+            
+        }
+
+        if (targetCollider[targetIndex].transform == null || !targetCollider[targetIndex].gameObject.activeSelf)
+        {
+            targetIndex = 0;
         }
     }
 

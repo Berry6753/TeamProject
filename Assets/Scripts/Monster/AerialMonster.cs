@@ -6,10 +6,14 @@ using UnityEngine.AI;
 public class AerialMonster : Monster
 {
     [SerializeField] private ParticleSystem fireball;
+    [SerializeField] private GameObject firePos;
+    private LayerMask ignoreLayer;
+
 
     protected override void Awake()
     {
         base.Awake();
+        ignoreLayer = 1 << LayerMask.NameToLayer("CheckZone") | 1 << LayerMask.NameToLayer("Ignore Raycast") | 1 << LayerMask.NameToLayer("Item")|1 << LayerMask.NameToLayer("Monster");
         defaultTarget = GameObject.FindWithTag("Core").GetComponent<Transform>();
     }
     protected override void OnEnable()
@@ -51,24 +55,42 @@ public class AerialMonster : Monster
 
             if (distance <= attackRange)
             {
-                FreezeVelocity();
-                if (canAttack)
+                Debug.Log("AAAAAAAAAAAAAAAAAAA");
+                Physics.Raycast(firePos.transform.position, chaseTarget.position - firePos.transform.position, out RaycastHit hit, attackRange, ~(ignoreLayer));
+                Debug.DrawRay(monsterTr.position, (chaseTarget.position - monsterTr.position) * 100f, Color.red);
+                Debug.Log(hit.collider.name+"AAAAAAAAAAAAAAAAAA");
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Turret")||hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    stateMachine.ChangeState(State.ATTACK);
+                    Debug.Log("BBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                    FreezeVelocity();
+                    if (canAttack)
+                    {
+                        Debug.Log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+                        stateMachine.ChangeState(State.ATTACK);
+                    }
+                    else
+                    {
+                        Debug.Log("DDDDDDDDDDDDDDDDDDDDDDD");
+                        stateMachine.ChangeState(State.IDLE);
+                    }
                 }
                 else
                 {
-                    stateMachine.ChangeState(State.IDLE);
+                    Debug.Log("EEEEEEEEEEEEEEEEEEEEEEEEE");
+                    Debug.Log(hit.collider.gameObject.layer+"EEEEEEEEEEEEEEEEEEE");
+                    stateMachine.ChangeState(State.TRACE);
                 }
+                
             }
             else
             {
+                Debug.Log("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
                 stateMachine.ChangeState(State.TRACE);
             }
         }
     }
 
-    private void FreezeVelocity()                     //물리력 제거
+    protected override void FreezeVelocity()                     //물리력 제거
     {
         nav.isStopped = true;
         rb.velocity = Vector3.zero;

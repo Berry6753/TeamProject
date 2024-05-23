@@ -26,6 +26,10 @@ public class TurretMakingState : TurretBaseState
         //turret.sliderGage.transform.LookAt(Camera.main.transform.position); //플레이어 바라보게 아니면 카메라
         if (checkTime > turret.turretMakingTime)
         {
+            turret.OnRenderer();
+            
+            //만드는 이펙트 끄기
+            
             //적찾기 상태로 변환
             turret.turretStatemachine.ChangeState(TurretStateName.SEARCH);
         }
@@ -34,9 +38,7 @@ public class TurretMakingState : TurretBaseState
     public override void Exit()
     {
         checkTime = 0;
-        turret.OnRenderer();
-        turret.sliderGage.gameObject.SetActive(false);
-        //만드는 이펙트 끄기
         turret.makingEfect.SetActive(false);
+        turret.sliderGage.gameObject.SetActive(false);
     }
 }

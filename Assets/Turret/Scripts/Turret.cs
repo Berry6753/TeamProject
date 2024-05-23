@@ -41,6 +41,9 @@ public abstract class Turret : MonoBehaviour
     protected LayerMask monsterLayer;
     private LayerMask turretLayer;
 
+    protected Collider[] targetCollider;
+    protected int targetIndex;
+
     private int nowUpgradeCount;
     private int nowHp;
     private int maxHp;
@@ -265,6 +268,7 @@ public abstract class Turret : MonoBehaviour
 
         Collider[] enemyCollider = Physics.OverlapSphere(transform.position, attackRange, (1 << monsterLayer));//레이어 마스크 몬스터 추가
         Transform nierTargetTransform = null;
+        targetCollider = enemyCollider;
         if (enemyCollider.Length > 0)
         {
             float nierTargetDistance = Mathf.Infinity;

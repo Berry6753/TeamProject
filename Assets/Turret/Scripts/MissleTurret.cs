@@ -55,7 +55,15 @@ public class MissleTurret : Turret
         {
             if (!hit.collider.CompareTag("Monster"))
             {
-                return;
+                if (targetCollider.Length >= 2 && targetCollider[targetIndex + 1] != null)
+                {
+                    targetTransform = targetCollider[targetIndex].transform;
+                    targetIndex++;
+                }
+                else
+                {
+                    return;
+                }
             }
             else
             {
@@ -86,6 +94,12 @@ public class MissleTurret : Turret
                     }
                 }
             }
+            
+        }
+
+        if(targetCollider[targetIndex].transform==null|| !targetCollider[targetIndex].gameObject.activeSelf)
+        {
+            targetIndex = 0;
         }
         
 
