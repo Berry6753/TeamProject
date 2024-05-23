@@ -7727,7 +7727,7 @@ MonoBehaviour:
   aimingrecoilback: 0.3
   ParticleSystem: {fileID: 4887469091206452719}
   shootAudioClip:
-  - {fileID: 8300000, guid: 94367f5b22b1c8445bc7e8595f8f2d28, type: 3}
+  - {fileID: 8300000, guid: c9078c3724d980347b7b29c5e846c2bb, type: 3}
   - {fileID: 8300000, guid: 8c89f6a0dab807c48860e2a110c703d6, type: 3}
 --- !u!114 &4793912332375539875
 MonoBehaviour:
@@ -9151,7 +9151,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7529577957276502998}
   m_LocalRotation: {x: 0.0459591, y: -0.9439075, z: 0.14904465, w: 0.29105353}
-  m_LocalPosition: {x: 0.89000046, y: 1.7000008, z: -3.5000005}
+  m_LocalPosition: {x: 0.88999987, y: 1.7, z: -3.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
