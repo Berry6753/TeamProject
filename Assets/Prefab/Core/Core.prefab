@@ -51,7 +51,7 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 11
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 4359274799335570593}
+  m_LookAt: {fileID: 0}
   m_Follow: {fileID: 4355390579812575503}
   m_Lens:
     FieldOfView: 50
@@ -265,37 +265,6 @@ MonoBehaviour:
   ReloadCoolTimeIcon: {fileID: 0}
   FailText: {fileID: 0}
   tabUI: {fileID: 6552403659167792649}
---- !u!1 &4359274799335570592
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4359274799335570593}
-  m_Layer: 6
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4359274799335570593
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4359274799335570592}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0025, y: 0.01165, z: 0.0356}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4355390579812575503}
-  m_RootOrder: 17
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4359274799608053690
 GameObject:
   m_ObjectHideFlags: 0
