@@ -103,6 +103,11 @@ public class Player_Info : MonoBehaviour
         Spawn();
     }
 
+    private void Update()
+    {
+        
+    }
+
     public void AddGearCount(int gearCount)
     {
         GearCount += gearCount;
@@ -138,15 +143,37 @@ public class Player_Info : MonoBehaviour
 
     public void Spawn()
     {
+        HP = maxHp;
+        equipedBulletCount = maxEquipedBulletCount;
+        magazineCount = maxMagazineCount / 2;
+
+        GearCount -= 20;
+
         transform.position = spawnPos.position;
-        transform.rotation = spawnPos.rotation;        
+        transform.rotation = spawnPos.rotation;
     }
 
     private void Dead()
     {
         isDead = true;
         animator.SetBool(hashDead, true);
+        //StartCoroutine(Respawn());
     }
+
+    //IEnumerator Respawn()
+    //{
+    //    yield return new WaitForSeconds(3f);
+    //    if (GameManager.Instance.GetCore.gameObject.activeSelf)
+    //    {
+    //        Spawn();
+    //    }
+    //    else
+    //    {
+    //        //게임 오버
+
+    //    }  
+    //    yield break;
+    //}
 
     //Dead Animation이 끝나면 실행되는 메서드
     public void GameOver()
