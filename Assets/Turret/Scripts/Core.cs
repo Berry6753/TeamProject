@@ -76,7 +76,6 @@ public class Core : MonoBehaviour
     private Canvas tabUI;
     public float upgradeTime { get { return checkUpgradeTime; } }
 
-
     private int itemKey;
 
     private void Awake()
@@ -210,48 +209,6 @@ public class Core : MonoBehaviour
                 itemKey = i;
                 break;
             }
-            //for (int j = 0; j < Value.Length; j++) 
-            //{
-                
-            //    if(!(Value[j] == playerMovement.commandQueue.ToArray()[j]))
-            //    {
-            //        itemKey = -1;
-            //        checkCount = 0;
-            //        break;
-            //    }
-            //    else
-            //    {
-            //        checkCount++;
-                    
-            //    }
-
-               
-
-            //}
-            //if (checkCount == 4)
-            //{
-            //    itemKey = i;
-            //    checkCount = 0;
-            //    break;
-            //}
-            //if (playerMovement.commandQueue.ToArray()==Value)
-            //{
-            //    itemKey = i;
-            //    Debug.Log(itemKey + "asdad");
-            //    break;
-            //}
-            //else
-            //{
-            //    Debug.Log((playerMovement.commandQueue.ToArray() == Value) + "gggggggggg");
-            //    for (int j = 0; j < Value.Length; j++)
-            //    {
-            //        Debug.Log(Value[j] + $"aaa{j}aaa");
-            //        Debug.Log(playerMovement.commandQueue.ToArray()[j] + $"sssss{j}sssss");
-
-            //    }
-            //    Debug.Log(itemKey + "a");
-                
-            //}
         }
 
         if (itemKey == -1 || itemKey == (int)PlayerSkillName.LAST)
@@ -264,10 +221,6 @@ public class Core : MonoBehaviour
             if(skillObj[itemKey].GetComponent<Skill_Item_Info>().Count <= player.GearCount)
             {
                 GameObject gameObject = ItemObjectPool.SpawnFromPool(skillObj[itemKey].name, itemSpawnPos.transform.position);
-                //GameObject gameObject = skillObjQue[itemKey].Dequeue();
-                //skillObjQue[itemKey].Enqueue(gameObject);
-                //gameObject.SetActive(true);
-                //gameObject.transform.position = itemSpawnPos.transform.position;
                 gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 10, 10));
                 player.UseGear(gameObject.GetComponent<Skill_Item_Info>().Count);
                 return true;
@@ -287,5 +240,12 @@ public class Core : MonoBehaviour
         // Command UI On
         GameManager.Instance.GetCoreUI.SetActive(true);
         GameManager.Instance.isGameStop = 1f;
+    }
+
+
+    public void EndCommandMode()
+    {
+        GameManager.Instance.GetPlayerUI.SetActive(true);
+        player_Command.isCommand = false;
     }
 }

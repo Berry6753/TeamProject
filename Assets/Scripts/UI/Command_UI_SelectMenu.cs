@@ -24,14 +24,22 @@ public class Command_UI_SelectMenu : MonoBehaviour
     private Player_Info player_Info;
     private Player_Command player_Command;
     private Core core;
+    private Animator coreAnime;
+
+    private LayerMask defualtMask;
+
+    private readonly int hashCommand = Animator.StringToHash("Zoom");
 
     private void Awake()
     {
         player = GameManager.Instance.GetPlayer;
         core = GameManager.Instance.GetCore.GetComponent<Core>();
+        coreAnime = core.GetComponent<Animator>();
 
         player_Info = player.GetComponent<Player_Info>();
         player_Command = player.GetComponent<Player_Command>();
+
+        defualtMask = player.GetComponent<Player_Command>().defualtMask;
     }
 
     public void UpgradePlayerSelect()
@@ -100,10 +108,12 @@ public class Command_UI_SelectMenu : MonoBehaviour
         
     }
 
-    public void EndCommandMode()
+    public void CloseCommandUI()
     {
         GameManager.Instance.isGameStop = -1;
-        player_Command.isCommand = false;
-        GameManager.Instance.GetPlayerUI.SetActive(true);
+        GameManager.Instance.GetCoreUI.SetActive(false);
+        
+        Camera.main.cullingMask = defualtMask;
+        coreAnime.SetBool(hashCommand, false);
     }
 }
