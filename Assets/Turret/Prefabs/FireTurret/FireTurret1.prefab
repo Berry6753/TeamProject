@@ -535,6 +535,7 @@ MonoBehaviour:
   turretBody: {fileID: 2895669166751539901}
   fireEffectPos: {fileID: 3576049344284788093}
   firePos: {fileID: 749448269889757224}
+  targetIndex: 0
   sliderGage: {fileID: 2554878842593806632}
   fireAudio: {fileID: 5053506174808912022}
   makeAudio: {fileID: 0}
@@ -1031,16 +1032,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8659987107361928828, guid: 5ca7177a429e1f442be57d792a4ca7d4, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8659987107361928828, guid: 5ca7177a429e1f442be57d792a4ca7d4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.24700098
+      value: -0.247
       objectReference: {fileID: 0}
     - target: {fileID: 8659987107361928828, guid: 5ca7177a429e1f442be57d792a4ca7d4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.19500093
+      value: -0.195
       objectReference: {fileID: 0}
     - target: {fileID: 8659987107361928828, guid: 5ca7177a429e1f442be57d792a4ca7d4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.9720043
+      value: 1.165
       objectReference: {fileID: 0}
     - target: {fileID: 8659987107361928828, guid: 5ca7177a429e1f442be57d792a4ca7d4, type: 3}
       propertyPath: m_LocalRotation.w
