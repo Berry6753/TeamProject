@@ -30,7 +30,7 @@ public class StartCanvas : MonoBehaviour, IPointerEnterHandler
     public TMP_Dropdown resolutionDropdown;
     List<Resolution> resolutions = new List<Resolution>();
     public int resolutionNum;
-    void Start()
+    void Awake()
     {
         InitUI();
     }
@@ -80,10 +80,7 @@ public class StartCanvas : MonoBehaviour, IPointerEnterHandler
 
     #region Exit
 
-    public void ExitGame()
-    { 
-        Application.Quit();
-    }
+
 
     #endregion
 }
