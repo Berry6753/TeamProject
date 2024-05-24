@@ -11,11 +11,17 @@ public class TurretAttackState : TurretBaseState
     public override void Enter()
     {
         turret.turretStateName = TurretStateName.ATTACK;
+        if (turret.turretTargetTransform != null && turret.turretTargetTransform.gameObject.activeSelf)
+            return;
+
         if (attackCheckTime >= 1 / turret.turretAttackSpeed)
         {
+
             turret.Attack();
+
             attackCheckTime = 0;
         }
+
     }
 
     public override void Update()
@@ -65,7 +71,10 @@ public class TurretAttackState : TurretBaseState
 
     public override void Exit()
     {
-        turret.fireAudio.Stop();
+        if (turret.fireAudio.loop == true)
+        {
+            turret.fireAudio.Stop();
+        }
         turret.fireEfect.SetActive(false);
     }
 

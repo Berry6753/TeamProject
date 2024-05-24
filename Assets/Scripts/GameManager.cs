@@ -23,12 +23,6 @@ public class GameManager : Singleton<GameManager>
 
     public float isGameStop;
 
-    [Header("Ω√¿€∏ﬁ¥∫")]
-    [SerializeField] private GameObject StartUI;
-
-    [Header("∏ÿ√Ë¿ª ∂ß UI")]
-    [SerializeField] private GameObject pauseUI;
-
     public GameObject GetPlayer {  get { return Player; } }
     public GameObject GetCore {  get { return core; } }
     public GameObject GetCoreUI { get {  return coreUI; } }
@@ -36,18 +30,12 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
-        isGameStop = 1;
+        isGameStop = -1;
     }
 
     public void OnGameStop(InputAction.CallbackContext context)
     {
-        if (StartUI.activeSelf == true) return;
-        else isGameStop *= -1;
-    }
-
-    public void OnGameStart()
-    {
-        isGameStop = -1;
+        isGameStop *= -1;
     }
 
     private void Update()
@@ -61,20 +49,22 @@ public class GameManager : Singleton<GameManager>
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            pauseUI.SetActive(true);
             Time.timeScale = 0f;
         }
         else
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            pauseUI.SetActive(false);
             Time.timeScale = 1f;
         }
     }
+
+    #region Exit
 
     public void ExitGame()
     {
         Application.Quit();
     }
+
+    #endregion
 }

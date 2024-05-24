@@ -12,12 +12,16 @@ public class Player_Info : MonoBehaviour
     [SerializeField]
     private float maxHp;
 
+    public float GetmaxHP { get { return maxHp; } }
+
     public float HP {  get; private set; }
     public int GearCount { get; private set; }
 
     [Header("공격력")]
     [SerializeField]
     private float ATKDamage;
+
+    public float GetATKDamage { get {  return ATKDamage; } }
 
     [Header("최대 탄 수")]
     [SerializeField]
@@ -42,6 +46,8 @@ public class Player_Info : MonoBehaviour
     [Header("LevelUp Cost")]
     [SerializeField]
     private float LevelUpCost;
+
+    public float GetLevelCost {  get { return LevelUpCost; } }
 
     [Space(10)]
     [Header("LevelUp Cost 증가 수치")]
@@ -151,10 +157,10 @@ public class Player_Info : MonoBehaviour
         Level++;
         maxHp += 20;
         HP = maxHp;
-        ATKDamage += 3;
+        ATKDamage *= 1.2f;
         //이동 속도 증가
-        DefaultSpeed += 1f;
-        RunSpeed += 1f;
+        //DefaultSpeed += 1f;
+        //RunSpeed += 1f;
         //cost 증가
         LevelUpCost *= upCostValue;
     }
@@ -163,7 +169,6 @@ public class Player_Info : MonoBehaviour
     {
         if(GearCount < LevelUpCost)
         {
-            Debug.Log("Gear 부족");
             return false;
         }
         else

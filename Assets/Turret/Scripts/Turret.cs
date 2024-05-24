@@ -97,6 +97,7 @@ public abstract class Turret : MonoBehaviour
     public ParticleSystem firePaticle;
     protected LayerMask ignoreLayer;
     public Transform turretTargetTransform { get { return targetTransform; } set { targetTransform = value; } }
+    public Transform snipeTurretFirePos { get { return firePos.transform; } }
     public List<GameObject> turretTargetList { get { return targetList; } }
     public float turretAttackDamge { get { return nowAttackDamge; } }
     public float turretAttackRange { get { return attackRange; } }
@@ -128,7 +129,7 @@ public abstract class Turret : MonoBehaviour
         repairAudio = GetComponent<AudioSource>();
         turretLayer = LayerMask.NameToLayer("Turret");
         monsterLayer = LayerMask.NameToLayer("Monster");
-        ignoreLayer = 1 << LayerMask.NameToLayer("Item") | 1 << LayerMask.NameToLayer("Ignore Raycast") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("CheckZone");
+        ignoreLayer = 1 << LayerMask.NameToLayer("Item") | 1 << LayerMask.NameToLayer("Ignore Raycast") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("CheckZone") | 1 << LayerMask.NameToLayer("Gear");
     }
 
     protected virtual void OnEnable()

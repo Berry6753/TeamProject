@@ -14,7 +14,7 @@ public class MissleTurret : Turret
     private float missleTurretMakingTime = 15;
     private float missleTurretAttackDamge = 50;
     private float missleTurretAttackSpeed = 0.5f;
-    private float missleTurretAttackRange = 15;
+    private float missleTurretAttackRange = 25;
     private float missleTurretUpgradeTime = 15;
     private float missleTurretRepairTime = 15;
     private float missleTurretAttackRise = 20;

@@ -30,7 +30,7 @@ public class StartCanvas : MonoBehaviour, IPointerEnterHandler
     public TMP_Dropdown resolutionDropdown;
     List<Resolution> resolutions = new List<Resolution>();
     public int resolutionNum;
-    void Awake()
+    void Start()
     {
         InitUI();
     }
@@ -75,12 +75,6 @@ public class StartCanvas : MonoBehaviour, IPointerEnterHandler
         screenMode = isFull ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
         Screen.SetResolution(resolutions[resolutionNum].width, resolutions[resolutionNum].height, screenMode);
     }
-
-    #endregion
-
-    #region Exit
-
-
 
     #endregion
 }

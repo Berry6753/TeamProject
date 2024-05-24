@@ -26,6 +26,8 @@ public class BossMonster : MonoBehaviour
 
     private int _wave = 0;
 
+    public bool isCheckJump = false;
+
     [HideInInspector]
     public int wave
     {
@@ -279,13 +281,17 @@ public class BossMonster : MonoBehaviour
     {
         anim.SetBool(hashJump, true);
     }
+    public void CheckJump()
+    {
+        isCheckJump = true;
+    }
     private IEnumerator JumpAttackMove()
     {
         canJump = false;
         nav.enabled = false;
         float distance = Vector3.Distance(chaseTarget.position, bossTr.position);
         Vector3 attackPos = transform.position + transform.forward * (distance - 2);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitUntil(() => isCheckJump);
         foreach (SkinnedMeshRenderer render in renderer)
         {
             render.enabled = false;
@@ -303,6 +309,7 @@ public class BossMonster : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
         nav.enabled = true;
         canJump = true;
+        isCheckJump = false;
     }
 
     private void DashAttack_backward()

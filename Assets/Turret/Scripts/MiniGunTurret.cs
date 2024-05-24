@@ -12,7 +12,7 @@ public class MiniGunTurret : Turret
     private float miniGunMakingTime = 15;
     private float miniGunAttackDamge = 25;
     private float miniGunAttackSpeed = 2;
-    private float miniGunAttackRange = 12;
+    private float miniGunAttackRange = 23;
     private float miniGunUpgradeTime = 15;
     private float miniGunRepairTime = 15;
     private float miniGunAttackRise = 5;
