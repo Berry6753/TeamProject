@@ -13,7 +13,7 @@ public class AerialMonster : Monster
     protected override void Awake()
     {
         base.Awake();
-        ignoreLayer = 1 << LayerMask.NameToLayer("CheckZone") | 1 << LayerMask.NameToLayer("Ignore Raycast") | 1 << LayerMask.NameToLayer("Item")|1 << LayerMask.NameToLayer("Monster");
+        ignoreLayer = 1 << LayerMask.NameToLayer("CheckZone") | 1 << LayerMask.NameToLayer("Ignore Raycast") | 1 << LayerMask.NameToLayer("Item")|1 << LayerMask.NameToLayer("Monster") | 1 << LayerMask.NameToLayer("Gear");
         defaultTarget = GameObject.FindWithTag("Core").GetComponent<Transform>();
     }
     protected override void OnEnable()

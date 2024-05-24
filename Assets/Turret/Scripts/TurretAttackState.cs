@@ -65,7 +65,10 @@ public class TurretAttackState : TurretBaseState
 
     public override void Exit()
     {
-        turret.fireAudio.Stop();
+        if (turret.fireAudio.loop == true)
+        {
+            turret.fireAudio.Stop();
+        }
         turret.fireEfect.SetActive(false);
     }
 
