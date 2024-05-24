@@ -54,6 +54,11 @@ public class Player_Info : MonoBehaviour
     [SerializeField]
     private float upCostValue;
 
+    [Space(10)]
+    [Header("Spawn Point")]
+    [SerializeField]
+    private Transform spawnPos;
+
     public float runSpeed { get { return RunSpeed; } }
 
     public float Attack { get { return ATKDamage; } }
@@ -94,6 +99,8 @@ public class Player_Info : MonoBehaviour
 
         GearCount = 100;
         UI.InitGearText(GearCount);
+
+        Spawn();
     }
 
     public void AddGearCount(int gearCount)
@@ -131,7 +138,8 @@ public class Player_Info : MonoBehaviour
 
     public void Spawn()
     {
-
+        transform.position = spawnPos.position;
+        transform.rotation = spawnPos.rotation;        
     }
 
     private void Dead()

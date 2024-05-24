@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -116,10 +117,25 @@ public class Player_Aiming : MonoBehaviour
         stopGame = GameManager.Instance.isGameStop;
     }
 
+    private Quaternion initRotation;
+
     private void OnEnable()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        InitRotation();
+    }
+
+    private void InitRotation()
+    {
+        initRotation = CameraLookAt.rotation;
+
+        Vector3 initEulerAngle = initRotation.eulerAngles;
+        x_Axis.Value = initEulerAngle.y;
+        y_Axis.Value = initEulerAngle.x;
+
+        mouseRotation = initRotation;
     }
 
     public void OnAiming(InputAction.CallbackContext context)
@@ -178,12 +194,13 @@ public class Player_Aiming : MonoBehaviour
     {
         if (info.isDead) return;
         //GameStopping();
+
+        //실험 -> 바로 활성화할거임
         CameraRotation();
-        //DecideRecoilBack();        
+
         AimingOnOff();
         AimingCamera();
-        //ShootRay();
-        //Debug.Log(cameraLerftime);
+
     }
 
     private void FixedUpdate()
@@ -208,10 +225,10 @@ public class Player_Aiming : MonoBehaviour
 
         mouseRotation = Quaternion.Euler(y_Axis.Value, x_Axis.Value, 0f);
 
-        CameraLookAt.rotation = Quaternion.Lerp(CameraLookAt.rotation, mouseRotation, cameraLerftime);
-        /*mouseRotation;*/
-        //Quaternion.Lerp(CameraLookAt.rotation, mouseRotation, cameraLerfTime);
+        CameraLookAt.rotation = Quaternion.Lerp(CameraLookAt.rotation, mouseRotation, cameraLerftime);        
     }
+    /*mouseRotation;*/
+    //Quaternion.Lerp(CameraLookAt.rotation, mouseRotation, cameraLerfTime);
 
     //총기 격발 시 카메라 흔들림
     // 총을 격발하면 cameralerftime 가 
