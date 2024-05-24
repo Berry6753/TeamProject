@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Core_ZoomIn : MonoBehaviour
 {
-    private Player_Command player_command;
-    private SkinnedMeshRenderer player_Mesh;
+    //private Player_Command player_command;
+    //private SkinnedMeshRenderer player_Mesh;
     private Animator animator;
 
     private CinemachineVirtualCamera cam;
@@ -17,28 +17,28 @@ public class Core_ZoomIn : MonoBehaviour
     {
         cam = GetComponentInChildren<CinemachineVirtualCamera>();
         animator = GetComponent<Animator>();
-        player_command = GameObject.FindAnyObjectByType<Player_Command>();
-        player_Mesh = player_command.gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
+        //player_command = GameObject.FindAnyObjectByType<Player_Command>();
+        //player_Mesh = player_command.gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
     }
 
     private void Update()
     {
-        if (player_command.isCommand)
-        {
-            player_Mesh.enabled = false;
-            cam.enabled = true;
-            cam.Priority = 12;
-            animator.SetBool(hashZoom, true);
-        }
-        else
-        {
-            animator.SetBool(hashZoom, false);
-        }
+        //if (player_command.isCommand)
+        //{
+        //    player_Mesh.enabled = false;
+        //    cam.enabled = true;
+        //    cam.Priority = 12;
+        //    animator.SetBool(hashZoom, true);
+        //}
+        //else
+        //{
+        //    animator.SetBool(hashZoom, false);
+        //}
     }
 
     public void ZoomOutEnd()
     {
-        player_Mesh.enabled = true;
+        //player_Mesh.enabled = true;
         cam.enabled = false;
         cam.Priority = 9;
     }

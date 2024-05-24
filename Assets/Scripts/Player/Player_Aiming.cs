@@ -14,8 +14,6 @@ public class Player_Aiming : MonoBehaviour
 
     public bool isFire {  get; private set; }
 
-    public float isGameStop {  get; private set; }
-
     private readonly int hashAiming = Animator.StringToHash("Aiming");
     private readonly int hashZoomOn = Animator.StringToHash("ZoomOn");
     private readonly int hashFire = Animator.StringToHash("Fire");
@@ -102,9 +100,10 @@ public class Player_Aiming : MonoBehaviour
 
     private AudioSource audioSource;
 
+    private float stopGame;
+
     private void Awake()
     {
-        isGameStop = -1f;
         animator = GetComponent<Animator>();
         AttackTimer = 0;
         cameraLerftime = 1f;
@@ -114,6 +113,7 @@ public class Player_Aiming : MonoBehaviour
         buildSystem = GetComponent<Player_BuildSystem>();
         UI = GetComponent<Player_Info_UI>();
         audioSource = GetComponent<AudioSource>();
+        stopGame = GameManager.Instance.isGameStop;
     }
 
     private void OnEnable()
@@ -124,19 +124,14 @@ public class Player_Aiming : MonoBehaviour
 
     public void OnAiming(InputAction.CallbackContext context)
     {
-        if (isGameStop > 0) return;
+        if (stopGame > 0) return;
         if (buildSystem.BuildModeOn > 0f) return;
         isAiming = context.ReadValue<float>() > 0.5f;
     }
 
-    public void OnGameStop(InputAction.CallbackContext context)
-    {
-        isGameStop *= -1;
-    }
-
     public void OnReload(InputAction.CallbackContext context)
     {
-        if (isGameStop > 0) return;
+        if (stopGame > 0) return;
         if (buildSystem.BuildModeOn > 0f) return;
 
         if (context.performed)
@@ -152,7 +147,7 @@ public class Player_Aiming : MonoBehaviour
     public void OnFire(InputAction.CallbackContext context)
     {
         if (context.started) return;
-        if (isGameStop > 0) return;
+        if (stopGame > 0) return;
         if (buildSystem.BuildModeOn > 0f)
         {
             if (context.performed)
@@ -182,7 +177,7 @@ public class Player_Aiming : MonoBehaviour
     private void Update()
     {
         if (info.isDead) return;
-        GameStopping();
+        //GameStopping();
         CameraRotation();
         //DecideRecoilBack();        
         AimingOnOff();
@@ -201,12 +196,13 @@ public class Player_Aiming : MonoBehaviour
         ChangeNotAimingDelay();
     }
 
+    //초기 카메라 회전 값이 이상한 이유 중 하나로 추정됨
     private void CameraRotation()
     {
-        x_Axis.Update(Time.deltaTime);
-        y_Axis.Update(Time.deltaTime);
+        x_Axis.Update(Time.fixedDeltaTime);
+        y_Axis.Update(Time.fixedDeltaTime);
 
-        mouseRotation = Quaternion.Euler(y_Axis.Value, x_Axis.Value, transform.rotation.z);
+        mouseRotation = Quaternion.Euler(y_Axis.Value, x_Axis.Value, 0f);
 
         CameraLookAt.rotation = Quaternion.Lerp(CameraLookAt.rotation, mouseRotation, cameraLerftime);
         /*mouseRotation;*/
@@ -232,21 +228,21 @@ public class Player_Aiming : MonoBehaviour
         CameraLookAt.rotation = Quaternion.Euler(CameraLookAt.eulerAngles.x - recoilBackForce, CameraLookAt.eulerAngles.y, 0);
     }
 
-    private void GameStopping()
-    {
-        if (isGameStop > 0)
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            Time.timeScale = 0f;
-        }
-        else
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            Time.timeScale = 1f;
-        }
-    }
+    //private void GameStopping()
+    //{
+    //    if (isGameStop > 0)
+    //    {
+    //        Cursor.visible = true;
+    //        Cursor.lockState = CursorLockMode.None;
+    //        Time.timeScale = 0f;
+    //    }
+    //    else
+    //    {
+    //        Cursor.visible = false;
+    //        Cursor.lockState = CursorLockMode.Locked;
+    //        Time.timeScale = 1f;
+    //    }
+    //}
 
     private void AimingOnOff()
     {

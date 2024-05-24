@@ -8,10 +8,10 @@ public class StartCamera : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.FindWithTag("Player").transform;
+        player = GameManager.Instance.GetPlayer.transform;
     }
     private void OnEnable()
     {
-        transform.position = player.position - player.forward * 3.5f;
+        //transform.position = player.position - player.forward * 3.5f;
     }
 }
