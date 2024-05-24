@@ -3340,7 +3340,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Heal
+  m_text: 'Upgrade
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4509,6 +4511,7 @@ GameObject:
   - component: {fileID: 8725900986419322293}
   - component: {fileID: 8725900986419322292}
   - component: {fileID: 8725900986419322291}
+  - component: {fileID: 1290434130}
   m_Layer: 5
   m_Name: SubUI
   m_TagString: Untagged
@@ -4618,6 +4621,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firstFocus: {fileID: 8725900987157031754}
+--- !u!114 &1290434130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8725900986419322290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28bdcb8b99693224d9daa004e50d6bb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8725900986452380920
 GameObject:
   m_ObjectHideFlags: 0
@@ -5855,7 +5870,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8725900986696048655
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5908,6 +5923,7 @@ MonoBehaviour:
   xImage: {fileID: 21300000, guid: 0dd913f83ec327f429946d02cf33954e, type: 3}
   button: {fileID: 8725900986923083438}
   exit: {fileID: 8725900986517652150}
+  InputCommandLength: 0
 --- !u!1 &8725900986698310050
 GameObject:
   m_ObjectHideFlags: 0
@@ -6824,7 +6840,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8725900986953018949}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1290434130}
+        m_TargetAssemblyTypeName: Command_UI_SelectMenu, Assembly-CSharp
+        m_MethodName: ReloadCoreSelect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8725900987015467704
 GameObject:
   m_ObjectHideFlags: 0
@@ -8983,7 +9011,7 @@ GameObject:
   - component: {fileID: 8725900987739507990}
   - component: {fileID: 8725900987739507989}
   m_Layer: 5
-  m_Name: Heal
+  m_Name: Upgrade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9091,7 +9119,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8725900987739507990}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1290434130}
+        m_TargetAssemblyTypeName: Command_UI_SelectMenu, Assembly-CSharp
+        m_MethodName: UpgradeCoreSelect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8725900987801494277
 GameObject:
   m_ObjectHideFlags: 0
@@ -9289,7 +9329,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8725900987818261409}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1290434130}
+        m_TargetAssemblyTypeName: Command_UI_SelectMenu, Assembly-CSharp
+        m_MethodName: UpgradePlayerSelect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8725900987894827148
 GameObject:
   m_ObjectHideFlags: 0

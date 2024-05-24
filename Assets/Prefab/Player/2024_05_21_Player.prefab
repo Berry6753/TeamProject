@@ -2318,7 +2318,6 @@ GameObject:
   - component: {fileID: 6616003791171540103}
   - component: {fileID: 4887469089994034559}
   - component: {fileID: 6346564362079336785}
-  - component: {fileID: 7783094959445182138}
   m_Layer: 8
   m_Name: 2024_05_21_Player
   m_TagString: Player
@@ -2695,7 +2694,7 @@ MonoBehaviour:
     m_ActionName: Player/RepairTurret[/Keyboard/f]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7783094959445182138}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Player_Command, Assembly-CSharp
         m_MethodName: OnCommand
         m_Mode: 0
@@ -2921,6 +2920,8 @@ MonoBehaviour:
   maxMagazine: 8
   DefaultSpeed: 3
   RunSpeed: 5
+  LevelUpCost: 0
+  upCostValue: 0
   equipedBulletCount: 0
   magazineCount: 0
 --- !u!114 &6616003791171540103
@@ -3055,21 +3056,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &7783094959445182138
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4888278589292910825}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97386abb6051fe242a8c85b4eab290b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LevelUpCost: 50
-  upCostValue: 1.5
-  isCore: 0
 --- !u!1 &4888281182336913851
 GameObject:
   m_ObjectHideFlags: 0

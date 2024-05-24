@@ -95,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
 
         virtualCamera = followcamera.GetComponent<CinemachineVirtualCamera>();
 
-        startRotation = transform.rotation;
+        //startRotation = transform.rotation;
         //Camera.main.transform.rotation = startRotation;
     }
 
@@ -107,8 +107,8 @@ public class PlayerMovement : MonoBehaviour
         //Camera.main.transform.rotation = startRotation;
         //virtualCamera.transform.rotation = startRotation;
 
-        virtualCamera.transform.position = transform.position - transform.forward * 3.5f;
-        Camera.main.transform.position = virtualCamera.transform.position;
+        //virtualCamera.transform.position = transform.position - transform.forward * 3.5f;
+        //Camera.main.transform.position = virtualCamera.transform.position;
         //virtualCamera.transform.rotation = transform.rotation;
     }
 
