@@ -17,6 +17,13 @@ public class SiegeMonster : Monster
         ChaseTarget();
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        ChaseTarget();
+    }
+
+
     protected override void Update()
     {
         base.Update();

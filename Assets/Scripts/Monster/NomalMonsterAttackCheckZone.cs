@@ -17,7 +17,7 @@ public class NomalMonsterAttackCheckZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.layer==LayerMask.NameToLayer("Turret")&& other.gameObject.CompareTag("Barrel")/*|| other.gameObject.layer == LayerMask.NameToLayer("Player")*/)
+        if(other.gameObject.layer==LayerMask.NameToLayer("Turret")&& !other.gameObject.CompareTag("Barrel")/*|| other.gameObject.layer == LayerMask.NameToLayer("Player")*/)
         {
             monster.isAttackAble = true;
             monster.nav.isStopped = true;

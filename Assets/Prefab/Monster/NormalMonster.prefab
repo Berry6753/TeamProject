@@ -2317,8 +2317,9 @@ MonoBehaviour:
   monsterName: NormalMonster
   attackSpeed: 1
   maxHp: 100
-  damage: 0
-  hitNum: 0
+  hp: 0
+  damage: 5
+  hitNum: 1
   attackRange: 2
   upScaleHp: 10
   upScaleDamage: 2.5
@@ -2359,7 +2360,7 @@ NavMeshAgent:
   m_Height: 2.1
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 0
+  m_ObstacleAvoidanceType: 4
 --- !u!208 &5197407611622841621
 NavMeshObstacle:
   m_ObjectHideFlags: 0

@@ -300,9 +300,13 @@ public abstract class Turret : MonoBehaviour
                 targetList.Add(nearTarget.Key);
             }
 
-            targetTransform = targetList[targetIndex].transform;
+            if (targetList.Count > 0)
+            {
+                targetTransform = targetList[targetIndex].transform;
+                turretStatemachine.ChangeState(TurretStateName.ATTACK);
 
-            turretStatemachine.ChangeState(TurretStateName.ATTACK);
+            }
+
         }
 
         
