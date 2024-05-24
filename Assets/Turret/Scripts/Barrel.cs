@@ -143,7 +143,7 @@ public class Barrel : MonoBehaviour
     {
         if (isMakeFinsh)
         {
-            Collider[] enemyCollider = Physics.OverlapSphere(transform.position, range / 2, (1 << monsterLayer));
+            Collider[] enemyCollider = Physics.OverlapSphere(transform.position, range, (1 << monsterLayer));
 
             meshRenderer.enabled = false;
             //ÀÌÆåÆ® »ý¼º

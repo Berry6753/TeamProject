@@ -14,7 +14,7 @@ public class SnipeTurret : Turret
     private float snipeTurretMakingTime = 15;
     private float snipeTurretAttackDamge = 100;
     private float snipeTurretAttackSpeed = 0.35f;
-    private float snipeTurretAttackRange = 20;
+    private float snipeTurretAttackRange = 32;
     private float snipeTurretUpgradeTime = 15;
     private float snipeTurretRepairTime = 15;
     private float snipeTurretAttackRise = 50;

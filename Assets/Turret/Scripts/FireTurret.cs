@@ -18,7 +18,7 @@ public class FireTurret : Turret
     private float fireTurretMakingTime = 15;
     private float fireTurretAttackDamge = 5;
     private float fireTurretAttackSpeed = 5f;
-    private float fireTurretAttackRange = 5;
+    private float fireTurretAttackRange = 8;
     private float fireTurretUpgradeTime = 15;
     private float fireTurretRepairTime = 15;
     private float fireTurretAttackRise = 1.5f;
