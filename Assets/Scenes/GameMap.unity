@@ -15032,6 +15032,7 @@ MonoBehaviour:
   core: {fileID: 4359274799450886921}
   playerUI: {fileID: 51650160}
   coreUI: {fileID: 1290434124}
+  spawnPoint: {fileID: 1653805106}
   isGameStop: 0
 --- !u!114 &2037304014
 MonoBehaviour:
