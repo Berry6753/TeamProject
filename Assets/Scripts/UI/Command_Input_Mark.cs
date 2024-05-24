@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,8 +10,6 @@ using UnityEngine.UI;
 public class Command_Input_Mark : MonoBehaviour
 {
     private Core core;
-
-    private Player_Command player_Command;
 
     [SerializeField] private Image[] inputImage;
     [SerializeField] private Sprite[] directImage;
@@ -23,12 +22,17 @@ public class Command_Input_Mark : MonoBehaviour
     [SerializeField]
     private int InputCommandLength;
 
+    [Header("Command Fail Text")]
+    [SerializeField]
+    private TMP_Text FailText;
+
     public Queue<int> commandQueue;
 
     private void Awake()
     {
         core = GameManager.Instance.GetCore.GetComponent<Core>();
-        player_Command = GameManager.Instance.GetPlayer.GetComponent<Player_Command>();
+        commandQueue = new Queue<int>();
+        FailText.enabled = false;
     }
 
     private void OnEnable()
@@ -110,6 +114,7 @@ public class Command_Input_Mark : MonoBehaviour
     {
         int Count = 0;
         commandQueue.Clear();
+        FailText.enabled = false;
         while (Count < InputCommandLength)
         {
             isPush = true;
@@ -123,12 +128,12 @@ public class Command_Input_Mark : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.A))
             {
                 commandQueue.Enqueue(2);
-                inputImage[Count].sprite = directImage[1];
+                inputImage[Count].sprite = directImage[2];
             }
             else if (Input.GetKeyDown(KeyCode.S))
             {
                 commandQueue.Enqueue(3);
-                inputImage[Count].sprite = directImage[2];
+                inputImage[Count].sprite = directImage[1];
             }
             else if (Input.GetKeyDown(KeyCode.D))
             {
@@ -146,46 +151,59 @@ public class Command_Input_Mark : MonoBehaviour
             Debug.Log("c"+Count);
         }
 
-        if (Count >= InputCommandLength)
-        {
-            yield return new WaitUntil(() => Input.anyKeyDown);
-            if (Input.GetKeyDown(KeyCode.Return))
+
+
+        while (true)
+        {            
+            if (Count >= InputCommandLength)
             {
-                button.interactable = true;
-                exit.interactable = true;
-                Focus(button);
-
-                if (core.CheckeCommand())
+                yield return new WaitUntil(() => Input.anyKeyDown);
+                if (Input.GetKeyDown(KeyCode.Return))
                 {
-                    commandQueue.Clear();
+                    button.interactable = true;
+                    exit.interactable = true;
+                    Focus(button);
 
-                    //커맨드 종료
-                    player_Command.isCommand = false;
-                    //yield break;
+                    if (core.CheckeCommand())
+                    {
+                        FailText.enabled = true;
+                        FailText.text = "Purchase complete.";
+                        FailText.color = Color.yellow;
+
+                        commandQueue.Clear();
+
+                        //커맨드 종료
+                        //player_Command.isCommand = false;
+                        //yield break;
+                    }
+                    else
+                    {
+                        FailText.enabled = true;
+                        FailText.color = Color.red;
+
+                        commandQueue.Clear();
+                        Count = 0;
+                    }
+
+
+
+                    //이미지 초기화////////////                    
+                    foreach (Image item in inputImage)
+                    {
+                        item.sprite = null;
+                    }
+                    //////////////////////////////////
+                    Debug.Log("a" + button.interactable);
+                    yield break;
                 }
-                else
-                {
-                    commandQueue.Clear();
-                    Count = 0;
-                }
-
-
-
-                //이미지 초기화////////////                    
-                foreach (Image item in inputImage)
-                {
-                    item.sprite = null;
-                }
-                //////////////////////////////////
-                Debug.Log("a" + button.interactable);
-                yield break;
-            }           
+                else continue;
+            }
         }
+    }
 
-        //while (true)
-        //{
-
-        //}
+    public void FailTextClear()
+    {
+        FailText.enabled = false;
     }
 
     private void Focus(Button button)

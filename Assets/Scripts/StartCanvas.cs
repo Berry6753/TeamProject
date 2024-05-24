@@ -77,13 +77,4 @@ public class StartCanvas : MonoBehaviour, IPointerEnterHandler
     }
 
     #endregion
-
-    #region Exit
-
-    public void ExitGame()
-    { 
-        Application.Quit();
-    }
-
-    #endregion
 }
