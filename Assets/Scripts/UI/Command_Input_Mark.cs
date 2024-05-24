@@ -29,6 +29,7 @@ public class Command_Input_Mark : MonoBehaviour
     {
         core = GameManager.Instance.GetCore.GetComponent<Core>();
         player_Command = GameManager.Instance.GetPlayer.GetComponent<Player_Command>();
+        commandQueue = new Queue<int>();
     }
 
     private void OnEnable()
@@ -123,12 +124,12 @@ public class Command_Input_Mark : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.A))
             {
                 commandQueue.Enqueue(2);
-                inputImage[Count].sprite = directImage[1];
+                inputImage[Count].sprite = directImage[2];
             }
             else if (Input.GetKeyDown(KeyCode.S))
             {
                 commandQueue.Enqueue(3);
-                inputImage[Count].sprite = directImage[2];
+                inputImage[Count].sprite = directImage[1];
             }
             else if (Input.GetKeyDown(KeyCode.D))
             {
@@ -146,46 +147,47 @@ public class Command_Input_Mark : MonoBehaviour
             Debug.Log("c"+Count);
         }
 
-        if (Count >= InputCommandLength)
+
+
+        while (true)
         {
-            yield return new WaitUntil(() => Input.anyKeyDown);
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (Count >= InputCommandLength)
             {
-                button.interactable = true;
-                exit.interactable = true;
-                Focus(button);
-
-                if (core.CheckeCommand())
+                yield return new WaitUntil(() => Input.anyKeyDown);
+                if (Input.GetKeyDown(KeyCode.Return))
                 {
-                    commandQueue.Clear();
+                    button.interactable = true;
+                    exit.interactable = true;
+                    Focus(button);
 
-                    //커맨드 종료
-                    player_Command.isCommand = false;
-                    //yield break;
+                    if (core.CheckeCommand())
+                    {
+                        commandQueue.Clear();
+
+                        //커맨드 종료
+                        player_Command.isCommand = false;
+                        //yield break;
+                    }
+                    else
+                    {
+                        commandQueue.Clear();
+                        Count = 0;
+                    }
+
+
+
+                    //이미지 초기화////////////                    
+                    foreach (Image item in inputImage)
+                    {
+                        item.sprite = null;
+                    }
+                    //////////////////////////////////
+                    Debug.Log("a" + button.interactable);
+                    yield break;
                 }
-                else
-                {
-                    commandQueue.Clear();
-                    Count = 0;
-                }
-
-
-
-                //이미지 초기화////////////                    
-                foreach (Image item in inputImage)
-                {
-                    item.sprite = null;
-                }
-                //////////////////////////////////
-                Debug.Log("a" + button.interactable);
-                yield break;
-            }           
+                else continue;
+            }
         }
-
-        //while (true)
-        //{
-
-        //}
     }
 
     private void Focus(Button button)

@@ -21,10 +21,6 @@ public class Player_Command : MonoBehaviour
 
     public Queue<int> commandQueue;
 
-    //private bool isPush;
-
-    //private Core core;
-
     private void Awake()
     {
         aim = GetComponent<Player_Aiming>();
@@ -41,7 +37,7 @@ public class Player_Command : MonoBehaviour
             {
                 isCommand = true;
 
-                aim.isGameStop = 1f;
+                GameManager.Instance.isGameStop = 1f;
 
                 Debug.Log("Ä¿¸àµå ON");
 

@@ -27,6 +27,7 @@ public class Player_BuildSystem : MonoBehaviour
 
     private bool isUpgradeAble;
     private bool isRepairAble;
+    private float stopGame;
     public bool isUpgrade { get { return isUpgradeAble; } }
     public bool isRepair { get { return isRepairAble; } }
 
@@ -37,6 +38,7 @@ public class Player_BuildSystem : MonoBehaviour
 
         BuildModeOn = -1f;
         SelectBuildTurretIndex = 0;
+        stopGame = GameManager.Instance.isGameStop;
     }
 
     private void Start()
@@ -62,7 +64,7 @@ public class Player_BuildSystem : MonoBehaviour
 
     public void OnSelectTurret(InputAction.CallbackContext context)
     {
-        if (aiming.isGameStop > 0) return;
+        if (stopGame > 0) return;
         if (context.performed)
         {
             if (context.ReadValue<float>() > 0.5f)
@@ -97,7 +99,7 @@ public class Player_BuildSystem : MonoBehaviour
 
     public void OnChangeBuildMode(InputAction.CallbackContext callback)
     {
-        if (aiming.isGameStop > 0) return;
+        if (stopGame > 0) return;
 
         BuildModeOn *= -1;
 
@@ -132,7 +134,7 @@ public class Player_BuildSystem : MonoBehaviour
         if (context.started) return;
         if (context.performed)
         {
-            if (aiming.isGameStop > 0) return;
+            if (stopGame > 0) return;
             if (BuildModeOn < 0f) return;
             if (!isRepairAble) return;
 

@@ -83,6 +83,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isGround;
 
+    private float stopGame;
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -94,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
         _velocity = 0f;
 
         virtualCamera = followcamera.GetComponent<CinemachineVirtualCamera>();
-
+        stopGame = GameManager.Instance.isGameStop;
         //startRotation = transform.rotation;
         //Camera.main.transform.rotation = startRotation;
     }
@@ -130,14 +131,14 @@ public class PlayerMovement : MonoBehaviour
     public void OnMovement(InputAction.CallbackContext context)
     {
         if (info.isDead) return;
-        if (aiming.isGameStop > 0) return;
+        if (stopGame > 0) return;
         InputDir = context.ReadValue<Vector2>();
     }
 
     public void OnRun(InputAction.CallbackContext context)
     {
         if (info.isDead) return;
-        if (aiming.isGameStop > 0) return;
+        if (stopGame > 0) return;
         InputBool = context.ReadValue<float>() > 0.5f;
     }
 
@@ -145,7 +146,7 @@ public class PlayerMovement : MonoBehaviour
     public void OnJump(InputAction.CallbackContext context)
     {
         if (info.isDead) return;
-        if (aiming.isGameStop > 0) return;
+        if (stopGame > 0) return;
         if (colliders.Length <= 0) return;
         if (context.performed)
         {
@@ -232,7 +233,7 @@ public class PlayerMovement : MonoBehaviour
     private void Rotation()
     {
         if (info.isDead) return;
-        if (aiming.isGameStop > 0)
+        if (stopGame > 0)
         {
             Vector3 cameraPos = Camera.main.transform.position;
             Quaternion cameraRotation = Camera.main.transform.rotation;

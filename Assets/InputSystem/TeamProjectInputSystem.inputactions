@@ -33,15 +33,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "GameStop",
-                    "type": "Button",
-                    "id": "bcd9081d-7b89-4bd8-85a5-8657540db2b2",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Fire",
                     "type": "Button",
                     "id": "0e67701f-93db-4238-bdf2-3f2dea67f165",
@@ -248,17 +239,6 @@
                 },
                 {
                     "name": "",
-                    "id": "7e339d14-9d66-4ea6-9d40-1346dd21b64b",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "GameStop",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "af466a89-a8e6-4ba5-9704-6b5a1a322bb6",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
@@ -408,6 +388,34 @@
                     "processors": "",
                     "groups": "",
                     "action": "Command",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "GameStop",
+            "id": "bc390bf7-0031-4572-a50e-961bc296e561",
+            "actions": [
+                {
+                    "name": "GameStop",
+                    "type": "Button",
+                    "id": "9fab3ec2-6db2-4dbd-920d-f99996de31db",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c154307c-bcfc-49ce-9b73-eb9b3b0a1f94",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GameStop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

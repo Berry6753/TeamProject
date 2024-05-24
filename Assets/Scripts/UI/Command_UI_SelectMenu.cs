@@ -7,7 +7,8 @@ public class Command_UI_SelectMenu : MonoBehaviour
 {
     private GameObject player;
 
-    private Player_Info Player_Info;
+    private Player_Info player_Info;
+    private Player_Command player_Command;
     private Core core;
 
     private void Awake()
@@ -15,13 +16,13 @@ public class Command_UI_SelectMenu : MonoBehaviour
         player = GameManager.Instance.GetPlayer;
         core = GameManager.Instance.GetCore.GetComponent<Core>();
 
-        Player_Info = player.GetComponent<Player_Info>();
-        
+        player_Info = player.GetComponent<Player_Info>();
+        player_Command = player.GetComponent<Player_Command>();
     }
 
     public void UpgradePlayerSelect()
     {
-        if (!Player_Info.UpgradePlayer())
+        if (!player_Info.UpgradePlayer())
         {
             //실패 문구 On
 
@@ -31,7 +32,7 @@ public class Command_UI_SelectMenu : MonoBehaviour
 
     public void UpgradeCoreSelect()
     {
-        if(Player_Info.GearCount < core.upgradeCost)
+        if(player_Info.GearCount < core.upgradeCost)
             core.isUpgrading = true;
     }
 
@@ -40,5 +41,10 @@ public class Command_UI_SelectMenu : MonoBehaviour
         core.Reloading();
     }
 
-
+    public void EndCommandMode()
+    {
+        GameManager.Instance.isGameStop = -1;
+        player_Command.isCommand = false;
+        GameManager.Instance.GetPlayerUI.SetActive(true);
+    }
 }
