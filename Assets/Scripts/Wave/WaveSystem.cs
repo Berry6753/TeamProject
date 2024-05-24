@@ -128,7 +128,7 @@ public class WaveSystem : MonoBehaviour
         WaveTimer.transform.parent.gameObject.SetActive(false);
         isWave = true;
         waveCount++;
-        WaveCount_Text.text = $"{waveCount}";
+        WaveCount_Text.text = $"{waveCount} Wave";
         if (monsterSpawner.MonsterList.Count == 0 && currentWaveIndex < waves.Length)
         {
             monsterSpawner.StartWave(waves[currentWaveIndex]);
