@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class FadeScript : MonoBehaviour
 {
     [SerializeField] private GameObject startMenu;
-    [SerializeField] private GameObject start;
     [SerializeField] private GameObject playScreen;
 
     [SerializeField] private Image panel;
@@ -35,7 +34,8 @@ public class FadeScript : MonoBehaviour
 
         yield return new WaitForSeconds(1.0f);
         playScreen.SetActive(true);
-        start.SetActive(false);
+        panel.gameObject.SetActive(false);
+        startMenu.SetActive(false);
 
         while (alpha.a > 0f)
         {
@@ -45,11 +45,7 @@ public class FadeScript : MonoBehaviour
             yield return null;
         }
 
-        panel.gameObject.SetActive(false);
-
         yield return new WaitForSeconds(1.0f);
-
-        startMenu.SetActive(false);
 
         yield return null;
     }
