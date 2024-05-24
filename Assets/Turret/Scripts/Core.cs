@@ -107,6 +107,7 @@ public class Core : MonoBehaviour
     void Start()
     {
         nowHp = maxHp;
+        StartCoroutine(Repair());
     }
 
     // Update is called once per frame
@@ -172,11 +173,15 @@ public class Core : MonoBehaviour
         //CoreHPText.text = $"{nowHp} / {maxHp}";
     }
 
-    public void Repair()
+    public IEnumerator Repair()
     {
-        nowHp = maxHp;
-        CoreHPBar.fillAmount = nowHp / maxHp;
-        //CoreHPText.text = $"{nowHp} / {maxHp}";
+        while (true)
+        {
+            yield return new WaitUntil(() => nowHp < maxHp);
+            yield return new WaitForSeconds(10);
+            nowHp += 1;
+            CoreHPBar.fillAmount = nowHp / maxHp;
+        }
     }
 
     public void Upgrade()
