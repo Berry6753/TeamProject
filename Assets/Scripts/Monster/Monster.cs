@@ -27,7 +27,7 @@ public abstract class Monster : MonoBehaviour
     protected float time = 0;
     [SerializeField] protected float attackSpeed;       //공격 속도
     [SerializeField] protected float maxHp;             //체력
-    protected float hp;
+    [SerializeField] protected float hp;
     [SerializeField] protected float damage;            //공격력
     public float monsterDamage {  get { return damage; } }
     [SerializeField] protected int hitNum;            //타격 횟수
