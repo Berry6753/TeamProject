@@ -129,6 +129,11 @@ public class Player_Info : MonoBehaviour
         }
     }
 
+    public void Spawn()
+    {
+
+    }
+
     private void Dead()
     {
         isDead = true;
