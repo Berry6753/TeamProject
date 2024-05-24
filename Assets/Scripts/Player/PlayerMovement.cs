@@ -233,6 +233,7 @@ public class PlayerMovement : MonoBehaviour
     private void Rotation()
     {
         if (info.isDead) return;
+        if (GameManager.Instance.isGameStop > 0) return;
         if (stopGame > 0)
         {
             Vector3 cameraPos = Camera.main.transform.position;
