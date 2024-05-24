@@ -14,7 +14,7 @@ public class Player_Aiming : MonoBehaviour
 
     public bool isFire {  get; private set; }
 
-    public float isGameStop {  get; private set; }
+    public float isGameStop;
 
     private readonly int hashAiming = Animator.StringToHash("Aiming");
     private readonly int hashZoomOn = Animator.StringToHash("ZoomOn");
@@ -201,12 +201,13 @@ public class Player_Aiming : MonoBehaviour
         ChangeNotAimingDelay();
     }
 
+    //초기 카메라 회전 값이 이상한 이유 중 하나로 추정됨
     private void CameraRotation()
     {
         x_Axis.Update(Time.deltaTime);
         y_Axis.Update(Time.deltaTime);
 
-        mouseRotation = Quaternion.Euler(y_Axis.Value, x_Axis.Value, transform.rotation.z);
+        mouseRotation = Quaternion.Euler(y_Axis.Value, x_Axis.Value, 0f);
 
         CameraLookAt.rotation = Quaternion.Lerp(CameraLookAt.rotation, mouseRotation, cameraLerftime);
         /*mouseRotation;*/

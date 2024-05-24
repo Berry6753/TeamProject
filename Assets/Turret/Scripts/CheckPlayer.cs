@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class CheckPlayer : MonoBehaviour
 {
+    private Core core;
+
+    private void Awake()
+    {
+        core = GameManager.Instance.GetCore.GetComponent<Core>();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Core.instance.isPlayer = true;
-            Core.instance.player_Command.isCore = true;
+            core.isPlayer = true;
+            core.player_Command.isCore = true;
         }
     }
 
@@ -17,8 +24,8 @@ public class CheckPlayer : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Core.instance.isPlayer = false;
-            Core.instance.player_Command.isCore = false;
+            core.isPlayer = false;
+            core.player_Command.isCore = false;
         }
     }
 }

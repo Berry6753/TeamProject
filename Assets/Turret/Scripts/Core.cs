@@ -20,8 +20,6 @@ public enum PlayerSkillName
 
 public class Core : MonoBehaviour
 {
-    public static Core instance;
-
     public int repairCost = 100;
     public int upgradeCost = 50;
     public bool isUpgrade = true;
@@ -74,7 +72,13 @@ public class Core : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        player = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Info>();
+        player_Command = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Command>();
+        checkReloadingTime = realoadCoolTime;
+        ReloadCoolTimeIcon.fillAmount = 0;
+        CoreHPBar.fillAmount = 1;
+        InitCommandDic();
+
         tabUI.enabled = false;
         //for (int i = 0; i < (int)PlayerSkillName.LAST; i++)
         //{
@@ -87,16 +91,6 @@ public class Core : MonoBehaviour
 
         //    }
         //}
-    }
-
-    private void OnEnable()
-    {
-        player = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Info>();
-        player_Command = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Command>();
-        checkReloadingTime = realoadCoolTime;
-        ReloadCoolTimeIcon.fillAmount = 0;
-        CoreHPBar.fillAmount = 1;
-        InitCommandDic();
     }
 
     // Start is called before the first frame update

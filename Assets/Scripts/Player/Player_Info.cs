@@ -37,6 +37,17 @@ public class Player_Info : MonoBehaviour
     [Header("달리기 이동 속도")]
     [SerializeField]
     private float RunSpeed;
+
+    [Space(10)]
+    [Header("LevelUp Cost")]
+    [SerializeField]
+    private float LevelUpCost;
+
+    [Space(10)]
+    [Header("LevelUp Cost 증가 수치")]
+    [SerializeField]
+    private float upCostValue;
+
     public float runSpeed { get { return RunSpeed; } }
 
     public float Attack { get { return ATKDamage; } }
@@ -134,7 +145,7 @@ public class Player_Info : MonoBehaviour
         }
     }
 
-    public void UpgradePlayer()
+    private void PlayerUpgradeComplete()
     {
         Debug.Log("업그레이드 완료");
         Level++;
@@ -144,7 +155,22 @@ public class Player_Info : MonoBehaviour
         //이동 속도 증가
         DefaultSpeed += 1f;
         RunSpeed += 1f;
+        //cost 증가
+        LevelUpCost *= upCostValue;
     }
 
-
+    public bool UpgradePlayer()
+    {
+        if(GearCount < LevelUpCost)
+        {
+            Debug.Log("Gear 부족");
+            return false;
+        }
+        else
+        {
+            UseGear((int)Mathf.Round(LevelUpCost));
+            PlayerUpgradeComplete();
+            return true;
+        }
+    }
 }
