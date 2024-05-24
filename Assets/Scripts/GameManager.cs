@@ -58,4 +58,13 @@ public class GameManager : Singleton<GameManager>
             Time.timeScale = 1f;
         }
     }
+
+    #region Exit
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    #endregion
 }

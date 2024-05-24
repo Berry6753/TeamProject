@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,8 +10,6 @@ using UnityEngine.UI;
 public class Command_Input_Mark : MonoBehaviour
 {
     private Core core;
-
-    private Player_Command player_Command;
 
     [SerializeField] private Image[] inputImage;
     [SerializeField] private Sprite[] directImage;
@@ -23,13 +22,17 @@ public class Command_Input_Mark : MonoBehaviour
     [SerializeField]
     private int InputCommandLength;
 
+    [Header("Command Fail Text")]
+    [SerializeField]
+    private TMP_Text FailText;
+
     public Queue<int> commandQueue;
 
     private void Awake()
     {
         core = GameManager.Instance.GetCore.GetComponent<Core>();
-        player_Command = GameManager.Instance.GetPlayer.GetComponent<Player_Command>();
         commandQueue = new Queue<int>();
+        FailText.enabled = false;
     }
 
     private void OnEnable()
@@ -111,6 +114,7 @@ public class Command_Input_Mark : MonoBehaviour
     {
         int Count = 0;
         commandQueue.Clear();
+        FailText.enabled = false;
         while (Count < InputCommandLength)
         {
             isPush = true;
@@ -150,7 +154,7 @@ public class Command_Input_Mark : MonoBehaviour
 
 
         while (true)
-        {
+        {            
             if (Count >= InputCommandLength)
             {
                 yield return new WaitUntil(() => Input.anyKeyDown);
@@ -162,14 +166,21 @@ public class Command_Input_Mark : MonoBehaviour
 
                     if (core.CheckeCommand())
                     {
+                        FailText.enabled = true;
+                        FailText.text = "Purchase complete.";
+                        FailText.color = Color.yellow;
+
                         commandQueue.Clear();
 
                         //커맨드 종료
-                        player_Command.isCommand = false;
+                        //player_Command.isCommand = false;
                         //yield break;
                     }
                     else
                     {
+                        FailText.enabled = true;
+                        FailText.color = Color.red;
+
                         commandQueue.Clear();
                         Count = 0;
                     }
@@ -188,6 +199,11 @@ public class Command_Input_Mark : MonoBehaviour
                 else continue;
             }
         }
+    }
+
+    public void FailTextClear()
+    {
+        FailText.enabled = false;
     }
 
     private void Focus(Button button)

@@ -199,6 +199,10 @@ public class Player_Aiming : MonoBehaviour
     //초기 카메라 회전 값이 이상한 이유 중 하나로 추정됨
     private void CameraRotation()
     {
+        if (GameManager.Instance.isGameStop > 0)
+        {
+            return;
+        }
         x_Axis.Update(Time.fixedDeltaTime);
         y_Axis.Update(Time.fixedDeltaTime);
 

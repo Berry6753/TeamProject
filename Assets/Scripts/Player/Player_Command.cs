@@ -19,12 +19,9 @@ public class Player_Command : MonoBehaviour
     public bool isCommand;
     public bool isCore;
 
-    public Queue<int> commandQueue;
-
     private void Awake()
     {
         aim = GetComponent<Player_Aiming>();
-        commandQueue = new Queue<int>();
         //core = GameManager.Instance.GetCore.GetComponent<Core>();
     }
 
@@ -43,8 +40,13 @@ public class Player_Command : MonoBehaviour
 
                 //player UI off
                 GameManager.Instance.GetPlayerUI.SetActive(false);
+
+                //Core 카메라 애니메이션 실행
+
+
+                //애니메이션 이벤트로 처리
                 // Command UI On
-                GameManager.Instance.GetCoreUI.SetActive(true);
+                //GameManager.Instance.GetCoreUI.SetActive(true);
             }
         }
     }

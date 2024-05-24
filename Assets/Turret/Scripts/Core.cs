@@ -30,12 +30,15 @@ public class Core : MonoBehaviour
     private GameObject itemSpawnPos;
 
     private int upgradeCoolTimeRise = 10;
-    private int nowHp;
+    public int nowHp {  get; private set; }
     private int maxHp = 100;
+    public int GetMaxHP { get { return maxHp; }  }
     private int hpRise = 30;
+    public int GetHPRise { get { return hpRise; } }
     private int realoadCoolTime = 30;
     private int upgradeCoolTime = 30;
     private int upgradeCostRise = 2;
+    public int getupgradeCostRise {  get { return upgradeCostRise; } }
     private int nowUpgradeCount;
     private int maxUpgradeCount = 5;
     private float checkReloadingTime;
@@ -43,6 +46,7 @@ public class Core : MonoBehaviour
     private int checkCount;
     public Player_Info player;
     public Player_Command player_Command;
+    private Command_Input_Mark commandInput;
     public bool isPlayer;
 
     private Dictionary<int, int[]> commandDic = new Dictionary<int, int[]>();
@@ -63,6 +67,11 @@ public class Core : MonoBehaviour
     [SerializeField]
     private Image ReloadCoolTimeIcon;
 
+    [Header("Command Fail Text")]
+    [SerializeField]
+    private TMP_Text FailText;
+
+    [Header("Command UI")]
     [SerializeField]
     private Canvas tabUI;
     public float upgradeTime { get { return checkUpgradeTime; } }
@@ -74,6 +83,7 @@ public class Core : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Info>();
         player_Command = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Command>();
+        commandInput = GameManager.Instance.GetCoreUI.GetComponentInChildren<Command_Input_Mark>(includeInactive:true);
         checkReloadingTime = realoadCoolTime;
         ReloadCoolTimeIcon.fillAmount = 0;
         CoreHPBar.fillAmount = 1;
@@ -116,6 +126,8 @@ public class Core : MonoBehaviour
 
         if (isUpgrading)
         {
+            // 보여주는 HP
+
             checkUpgradeTime += Time.deltaTime;
             if (checkUpgradeTime >= upgradeCoolTime)
             {
@@ -189,7 +201,7 @@ public class Core : MonoBehaviour
         foreach (int i in commandDic.Keys)
         {
             commandDic.TryGetValue(i, out int[] Value);
-            if (!Enumerable.SequenceEqual(Value, player_Command.commandQueue.ToArray()))
+            if (!Enumerable.SequenceEqual(Value, commandInput.commandQueue.ToArray()))
             {
                 itemKey = -1;
             }
@@ -244,19 +256,27 @@ public class Core : MonoBehaviour
 
         if (itemKey == -1 || itemKey == (int)PlayerSkillName.LAST)
         {
-            Debug.Log("커맨드 틀림");
+            FailText.text = "Invalid input value.";
             return false;
         }
         else
         {            
-            GameObject gameObject = ItemObjectPool.SpawnFromPool(skillObj[itemKey].name, itemSpawnPos.transform.position);
-            //GameObject gameObject = skillObjQue[itemKey].Dequeue();
-            //skillObjQue[itemKey].Enqueue(gameObject);
-            //gameObject.SetActive(true);
-            //gameObject.transform.position = itemSpawnPos.transform.position;
-            gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 10, 10));
-            player.UseGear(gameObject.GetComponent<Skill_Item_Info>().Count);
-            return true;
+            if(skillObj[itemKey].GetComponent<Skill_Item_Info>().Count <= player.GearCount)
+            {
+                GameObject gameObject = ItemObjectPool.SpawnFromPool(skillObj[itemKey].name, itemSpawnPos.transform.position);
+                //GameObject gameObject = skillObjQue[itemKey].Dequeue();
+                //skillObjQue[itemKey].Enqueue(gameObject);
+                //gameObject.SetActive(true);
+                //gameObject.transform.position = itemSpawnPos.transform.position;
+                gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 10, 10));
+                player.UseGear(gameObject.GetComponent<Skill_Item_Info>().Count);
+                return true;
+            }
+            else
+            {
+                FailText.text = "Be short of gear.";
+                return false;
+            }
         }
     }
 
