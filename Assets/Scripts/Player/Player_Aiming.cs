@@ -316,7 +316,8 @@ public class Player_Aiming : MonoBehaviour
                 }
                 else if (hits.transform.CompareTag("Barrel"))
                 {
-                    hit.transform.GetComponent<Barrel>().Hurt();
+                    Debug.Log(hit.transform.gameObject.name);
+                    hits.transform.GetComponent<Barrel>().Hurt();
                 }
             }
 

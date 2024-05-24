@@ -47,7 +47,7 @@ public class SnipeTurretBullet : MonoBehaviour
         {
             if (other.gameObject != turret.gameObject)
             {
-                if (other.gameObject.layer != LayerMask.NameToLayer("Monster"))
+                if (other.gameObject.layer != LayerMask.NameToLayer("Monster") && !other.CompareTag("Barrel"))
                 {
                     gameObject.SetActive(false);
                 }
