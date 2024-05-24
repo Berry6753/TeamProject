@@ -102,8 +102,11 @@ public class Player_Aiming : MonoBehaviour
 
     private AudioSource audioSource;
 
+    public bool isStart;
+
     private void Awake()
     {
+        isStart = false;
         isGameStop = -1f;
         animator = GetComponent<Animator>();
         AttackTimer = 0;
@@ -114,12 +117,19 @@ public class Player_Aiming : MonoBehaviour
         buildSystem = GetComponent<Player_BuildSystem>();
         UI = GetComponent<Player_Info_UI>();
         audioSource = GetComponent<AudioSource>();
+        Invoke("GameStart", 1);
     }
 
     private void OnEnable()
     {
         Cursor.visible = false;
+        //mouseRotation= Quaternion.Euler(y_Axis.Value, 0f, 0f);
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    public void GameStart()
+    {
+        isStart = true;
     }
 
     public void OnAiming(InputAction.CallbackContext context)
@@ -182,6 +192,7 @@ public class Player_Aiming : MonoBehaviour
     private void Update()
     {
         if (info.isDead) return;
+        if (!isStart) return;
         GameStopping();
         CameraRotation();
         //DecideRecoilBack();        
