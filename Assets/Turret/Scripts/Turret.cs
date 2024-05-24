@@ -12,7 +12,9 @@ public enum TurretStateName
 
 public abstract class Turret : MonoBehaviour
 {
-    
+    [SerializeField]
+    private GameObject hpEffects;
+
     private float attackTime;
 
     [SerializeField]
@@ -156,7 +158,29 @@ public abstract class Turret : MonoBehaviour
             }
         }   
     }
-
+    private void HpEffect()
+    {
+        if(turretStateName==TurretStateName.ATTACK|| turretStateName == TurretStateName.SEARCH|| turretStateName == TurretStateName.REPAIR)
+        {
+            if(nowHp > maxHp * 0.75f)
+            {
+                for (int i = 0; i < hpEffects.transform.childCount; i--)
+                {
+                    hpEffects.transform.GetChild(i).gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                for (int i = hpEffects.transform.childCount; i > 0; i--)
+                {
+                    if (nowHp <= maxHp * (0.25f * i))
+                    {
+                        hpEffects.transform.GetChild(i - 1).gameObject.SetActive(true);
+                    }
+                }
+            }
+        }
+    }
     private void SetState()
     {
         turretStatemachine.AddState(TurretStateName.BLUESCREEN,new TurretBlueScreenState(this));
