@@ -280,4 +280,12 @@ public class Core : MonoBehaviour
         }
     }
 
+
+    public void OpenCommandUI()
+    {
+        //애니메이션 이벤트로 처리
+        // Command UI On
+        GameManager.Instance.GetCoreUI.SetActive(true);
+        GameManager.Instance.isGameStop = 1f;
+    }
 }

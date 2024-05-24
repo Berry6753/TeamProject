@@ -10907,6 +10907,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1485439155, guid: d3b6abaa5a2a49243b6970409f474bce, type: 3}
+      propertyPath: commandModeCameraLayerMask.m_Bits
+      value: 28887
+      objectReference: {fileID: 0}
     - target: {fileID: 4793912332375539876, guid: d3b6abaa5a2a49243b6970409f474bce, type: 3}
       propertyPath: aim
       value: 
@@ -15696,13 +15700,48 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 13
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4359274798521350112, guid: 2841551abc539a044a0c2bc9787df937, type: 3}
+    - {fileID: 4408675865471676263, guid: 2841551abc539a044a0c2bc9787df937, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2841551abc539a044a0c2bc9787df937, type: 3}
 --- !u!1 &4359274799450886921 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4359274798616428226, guid: 2841551abc539a044a0c2bc9787df937, type: 3}
   m_PrefabInstance: {fileID: 4359274799450886920}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4359274799450886927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4359274799450886921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17786945fcc490b4f8505fdd8cdff52e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &4359274799450886928
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4359274799450886921}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 4d7cc98ae5cab2947a8d9fa3c15e4fa8, type: 3}
+  m_Controller: {fileID: 9100000, guid: 3c460e97e00b9f447bf5dd0183c0a29f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &6548119423260028134
 PrefabInstance:
   m_ObjectHideFlags: 0

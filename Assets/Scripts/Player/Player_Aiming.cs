@@ -280,6 +280,8 @@ public class Player_Aiming : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
         if(Physics.Raycast(ray, out RaycastHit hit, 30f, aimColliderLayerMask))
         {
+            Debug.DrawLine(GunFireStartPoint.position, hit.point, Color.blue);
+
             float errorFloat;
             if (!animator.GetBool(hashZoomOn)) errorFloat = attackAccuracy;
             else errorFloat = 0;
@@ -290,7 +292,7 @@ public class Player_Aiming : MonoBehaviour
 
             debugTransform.position = hit.point;
 
-            if (Physics.Raycast(GunFireStartPoint.position, (hit.point - GunFireStartPoint.position + new Vector3(errorRange_x, errorRange_y, errorRange_z)).normalized, out RaycastHit hits, 30f, FireColliderLayerMask))
+            if (Physics.Raycast(GunFireStartPoint.position, (hit.point - GunFireStartPoint.position + new Vector3(errorRange_x, errorRange_y, errorRange_z)).normalized, out RaycastHit hits, 30f, 1 << FireColliderLayerMask))
             {                
                 Debug.DrawLine(GunFireStartPoint.position, hits.point, Color.red);
 
@@ -316,7 +318,7 @@ public class Player_Aiming : MonoBehaviour
                 }
                 else if (hits.transform.CompareTag("Barrel"))
                 {
-                    hit.transform.GetComponent<Barrel>().Hurt();
+                    hits.transform.GetComponent<Barrel>().Hurt();
                 }
             }
 
