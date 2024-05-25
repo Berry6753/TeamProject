@@ -15373,6 +15373,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6600677998296883118, guid: eacc439775080c84aa1f35eba9be770c, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6600677998296883118, guid: eacc439775080c84aa1f35eba9be770c, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 6600677998296883118, guid: eacc439775080c84aa1f35eba9be770c, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 600
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eacc439775080c84aa1f35eba9be770c, type: 3}
 --- !u!1 &1951961949
@@ -15505,9 +15517,25 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 2037304013}
+    - target: {fileID: 1786982130744155873, guid: f22eb33820eadd742a1f8da3df65da75, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1786982130744155873, guid: f22eb33820eadd742a1f8da3df65da75, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 1786982130744155873, guid: f22eb33820eadd742a1f8da3df65da75, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 600
+      objectReference: {fileID: 0}
     - target: {fileID: 1786982130744155875, guid: f22eb33820eadd742a1f8da3df65da75, type: 3}
       propertyPath: m_Name
       value: StartMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 1786982130744155875, guid: f22eb33820eadd742a1f8da3df65da75, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1786982130744155887, guid: f22eb33820eadd742a1f8da3df65da75, type: 3}
       propertyPath: m_Pivot.x
@@ -15847,6 +15875,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2050108425}
   - component: {fileID: 2050108424}
+  - component: {fileID: 2050108426}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -15873,6 +15902,7 @@ MonoBehaviour:
   - {fileID: 1425337744}
   - {fileID: 217565844}
   - {fileID: 755770896}
+  volume: 0
 --- !u!4 &2050108425
 Transform:
   m_ObjectHideFlags: 0
@@ -15888,6 +15918,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2050108426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050108423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e5c9a1e836b98644983e593245aa656, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2059627235
 PrefabInstance:
   m_ObjectHideFlags: 0
