@@ -69,6 +69,8 @@ public class MiniGunTurret : Turret
                 }
                 Debug.Log("연사 터렛 공격");
 
+                BloodEffectManger.Instance.UsingEffect(hit.point);
+
             }
             else if (hit.collider.CompareTag("Barrel"))
             {
