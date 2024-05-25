@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.IO;
+using Unity.VisualScripting;
+using TMPro;
+using Newtonsoft.Json;
+using System.Linq;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -31,17 +36,31 @@ public class GameManager : Singleton<GameManager>
     [Header("Pause UI")]
     [SerializeField] private GameObject pauseUI;
 
+    [Header("WaveSystem")]
+    [SerializeField]
+    private WaveSystem waveSystem;
+
+    [Header("Record Text")]
+    [SerializeField]
+    private List<TMP_Text> RecordText;
+
     public float isGameStop;
+    public bool isGameOver { get; private set; }
+    private Player_Info playerInfo;
 
     public GameObject GetPlayer {  get { return Player; } }
     public GameObject GetCore {  get { return core; } }
     public GameObject GetCoreUI { get {  return coreUI; } }
     public GameObject GetPlayerUI { get { return playerUI; } }
     public Transform GetSpawnPoint {  get { return spawnPoint; } }
+    public WaveSystem WaveSystem { get { return waveSystem; } }
+
 
     private void Awake()
     {
         isGameStop = 1;
+        isGameOver = false;
+        playerInfo = Player.GetComponent<Player_Info>();        
     }
 
     public void OnGameStop(InputAction.CallbackContext context)
@@ -58,6 +77,85 @@ public class GameManager : Singleton<GameManager>
     private void Update()
     {
         GameStopping();
+
+        //if (isGameOver)
+        //{
+        //    //데이터 저장
+        //    SaveDataToJson();
+
+        //    //게임 오버 화면
+
+        //}
+    }
+
+    public void ShowRecord()
+    {
+        LoadRankingData();
+
+        int index = 0;
+        foreach (var texts in RecordText)
+        {
+            if (dataList.Count < index+1) continue;
+            texts.text = $"Wave : {dataList[index].waveCount}, timer : {dataList[index].playTime}";
+            index++;
+        }
+    }
+
+    private void Start()
+    {
+        path = Path.Combine(Application.persistentDataPath, "waveData.json");
+
+        LoadRankingData();
+    }
+
+    string path;
+    
+    class SaveData
+    {
+        public int waveCount;
+        public float playTime;
+    }
+    
+    List<SaveData> dataList = new List<SaveData>();
+
+    public void SaveDataToJson()
+    {
+        if(File.Exists(path))
+        {
+            LoadRankingData();
+        }
+
+        SaveData data = new SaveData();
+        data.waveCount = waveSystem.waveCount;
+        data.playTime = waveSystem.PlayTimer;
+
+        dataList.Add(data);
+        dataList = dataList.OrderByDescending(x => x.waveCount).ThenByDescending(x => x.playTime).ToList();
+
+        Debug.Log(dataList.Count);
+
+        string jsonData = JsonConvert.SerializeObject(dataList);/*JsonUtility.ToJson(dataList);*/
+
+        File.WriteAllText(path, jsonData);
+    }
+
+    public void LoadRankingData()
+    {
+        if(!File.Exists(path))
+        {
+            SaveDataToJson();
+        }
+
+        string jsonData = File.ReadAllText(path);
+        dataList = JsonConvert.DeserializeObject<List<SaveData>>(jsonData);/*JsonUtility.FromJson<List<SaveData>>(jsonData);*/
+        
+
+        //int index = 0;
+        //foreach(var texts in RecordText)
+        //{
+        //    texts.text = $"{dataList[index]}";
+        //    index++;
+        //}
     }
 
     private void GameStopping()
@@ -86,4 +184,13 @@ public class GameManager : Singleton<GameManager>
     }
 
     #endregion
+
+    private void CheckGameOver()
+    {
+        if(!core.activeSelf && playerInfo.isDead)
+        {
+            isGameOver = true;
+        }
+    }
+
 }

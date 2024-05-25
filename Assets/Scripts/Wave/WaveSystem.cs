@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Threading;
 
 public class WaveSystem : MonoBehaviour
 {
-    public static WaveSystem instance;
-
     private static int maxWave = 30;
     private float breakTime = 60.0f;
     [SerializeField] private Wave[] waves = new Wave[maxWave];               //현재 웨이브 정보
@@ -39,13 +38,9 @@ public class WaveSystem : MonoBehaviour
     [SerializeField]
     private TMP_Text WaveTimer;
 
+    public int waveCount { get; private set; }
 
-    private int waveCount;  
-
-    private void Awake()
-    {
-        instance = this;        
-    }
+    public float PlayTimer { get; private set; }
 
     private void OnEnable()
     {
@@ -94,8 +89,14 @@ public class WaveSystem : MonoBehaviour
         currentWaveIndex = 0;
         checkTime = breakTime;
         waveCount = 0;
+        PlayTimer = 0;
         isWave = true;
         monsterSpawner.MonsterList.Clear();
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.SaveDataToJson();
     }
 
     //private void Start()
@@ -143,7 +144,15 @@ public class WaveSystem : MonoBehaviour
 
     private void Update()
     {
-        if(GameManager.Instance.GetPlayer.activeSelf == false) return;
+        if (GameManager.Instance.isGameOver)
+        {
+            //게임 오버 화면
+
+            return;
+        }
+
+        PlayTimer += Time.deltaTime;
+
         if (!isWave)
         {
             StartWave();
