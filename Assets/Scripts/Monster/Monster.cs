@@ -252,6 +252,11 @@ public abstract class Monster : MonoBehaviour
 
         Transform t = null;
 
+        if (defaultTarget.gameObject.activeSelf == false)
+        {
+            defaultTarget = GameManager.Instance.GetPlayer.transform;
+        }
+
         foreach (Collider c in turret)
         {            
             if (c.CompareTag("Player") || c.CompareTag("Turret") || c.CompareTag("Core") || c.CompareTag("Barricade"))
