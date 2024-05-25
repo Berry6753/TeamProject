@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.TextCore.Text;
@@ -75,18 +76,31 @@ public class Player_Info : MonoBehaviour
     public bool isDead {  get; private set; }
 
     private Player_Info_UI UI;
+    private Player_Aiming aim;
     private CinemachineVirtualCamera camera;
 
+    private readonly int hashAiming = Animator.StringToHash("Aiming");
+    private readonly int hashZoomIn = Animator.StringToHash("ZoomOn");
     private readonly int hashHurt = Animator.StringToHash("Hurt");
     private readonly int hashDead = Animator.StringToHash("Die");
 
     private float timer;
+
+    private GameObject cameraParents;
+
+    [Header("Ä«¸Þ¶ó LookAt")]
+    [SerializeField]
+    private Transform cameraLookAt;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
         UI = GetComponent<Player_Info_UI>();
+        aim = GetComponent<Player_Aiming>();
         camera = GetComponentInChildren<CinemachineVirtualCamera>();
         character = GetComponent<CharacterController>();
+
+        cameraParents = camera.transform.parent.gameObject;
     }
 
     private void OnEnable()
@@ -99,11 +113,13 @@ public class Player_Info : MonoBehaviour
 
         Level = 0;
         HP = maxHp;
+        UI.PrintPlayerHPBar(HP, maxHp);
+
+        isDead = false;
+        animator.SetBool(hashDead, false);
 
         GearCount = 100;
-        UI.InitGearText(GearCount);
 
-        camera.enabled = true;
         Spawn();
     }
 
@@ -168,10 +184,18 @@ public class Player_Info : MonoBehaviour
     private void Dead()
     {
         isDead = true;
-        animator.SetBool(hashDead, true);
-        camera.enabled = false;
+        //Quaternion dir = transform.rotation * Quaternion.Euler(0,0,0);
+        Vector3 dir = transform.eulerAngles + new Vector3(15f, -10f, 0);
 
-        //StartCoroutine(Respawn());
+        aim.isAiming = false;
+        animator.SetBool(hashAiming, false);
+        animator.SetBool(hashZoomIn, false);
+        animator.SetBool(hashDead, true);
+        
+        camera.transform.parent = null;
+        camera.Follow = null;
+
+        camera.transform.eulerAngles = dir;
     }
 
     private void Respawn()
@@ -182,12 +206,18 @@ public class Player_Info : MonoBehaviour
             animator.SetBool(hashDead, false);
 
             HP = maxHp;
+            UI.PrintPlayerHPBar(HP, maxHp);
+
             equipedBulletCount = maxEquipedBulletCount;
             magazineCount = maxMagazineCount / 2;
 
             GearCount -= 20;
 
+            camera.transform.parent = cameraParents.transform;
+            camera.Follow = cameraLookAt;
+
             Spawn();
+            aim.InitRotation();
             timer = 0;
             isDead = false;
         }

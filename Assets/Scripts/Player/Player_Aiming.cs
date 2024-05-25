@@ -11,7 +11,7 @@ using UnityEngine.Windows;
 public class Player_Aiming : MonoBehaviour
 {
     private Animator animator;
-    private bool isAiming;
+    public bool isAiming;
 
     public bool isFire {  get; private set; }
 
@@ -133,6 +133,9 @@ public class Player_Aiming : MonoBehaviour
 
     private void InitRotation()
     {
+        x_Axis.Value = 0;
+        y_Axis.Value = 0;
+
         initRotation = CameraLookAt.rotation;
 
         Vector3 initEulerAngle = initRotation.eulerAngles;

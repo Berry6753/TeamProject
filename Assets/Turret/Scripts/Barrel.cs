@@ -59,6 +59,7 @@ public class Barrel : MonoBehaviour
 
     //현재 태그와 레이어 설정안함 0512기준
 
+    private Player_BuildSystem buildSystem;
     private void Awake()
     {
         meshRenderer = GetComponent<MeshRenderer>();
@@ -67,6 +68,7 @@ public class Barrel : MonoBehaviour
         monsterLayer = LayerMask.NameToLayer("Monster");
         sliderGage.maxValue = makingTime;
         makingAudio=makingEffect.GetComponent<AudioSource>();
+        buildSystem = GameManager.Instance.GetPlayer.GetComponent<Player_BuildSystem>();
     }
 
     private void OnEnable()
@@ -115,7 +117,7 @@ public class Barrel : MonoBehaviour
         Collider[] turretColliders = Physics.OverlapSphere(transform.position, 5, (1 << turretLayer));
 
 
-        if (turretColliders.Length > 0)
+        if (turretColliders.Length > 0 || !buildSystem.isGearCountOk)
         {
             isMake = false;
             meshRenderer.material.color = Color.red;

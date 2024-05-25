@@ -31,7 +31,7 @@ public class Player_BuildSystem : MonoBehaviour
     public bool isUpgrade { get { return isUpgradeAble; } }
     public bool isRepair { get { return isRepairAble; } }
 
-    public bool isGearCountOk;
+    public bool isGearCountOk = true;
     private void Awake()
     {
         aiming = GetComponent<Player_Aiming>();
@@ -191,15 +191,29 @@ public class Player_BuildSystem : MonoBehaviour
                         build.transform.rotation = transform.rotation;
                     }
 
-                    if (info.GearCount < build.transform.GetComponent<Turret>().turretMakingCost) 
+                    if (build.transform.gameObject.GetComponentInChildren<Turret>() != null)
                     {
-                        isGearCountOk = false;
+                        if (info.GearCount < build.transform.GetComponentInChildren<Turret>().turretMakingCost)
+                        {
+                            isGearCountOk = false;
+                        }
+                        else
+                        {
+                            isGearCountOk = true;
+                        }
                     }
-                    else
+                    else if (build.transform.gameObject.GetComponentInChildren<Barrel>() != null)
                     {
-                        isGearCountOk = true;
+                        if (info.GearCount < build.transform.GetComponentInChildren<Barrel>().makingCost)
+                        {
+                            isGearCountOk = false;
+                        }
+                        else
+                        {
+                            isGearCountOk = true;
+                        }
                     }
-                    
+
                 }
                 else
                 {

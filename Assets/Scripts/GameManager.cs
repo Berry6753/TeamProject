@@ -44,9 +44,17 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private List<TMP_Text> RecordText;
 
+    [Header("BossMonster")]
+    [SerializeField]
+    private BossMonster boss;
+
+    [Header("Sound Manager")]
+    [SerializeField] private GameObject sound;
+
     public float isGameStop;
     public bool isGameOver { get; private set; }
     private Player_Info playerInfo;
+    private Player_Command Player_Command;
 
     public GameObject GetPlayer {  get { return Player; } }
     public GameObject GetCore {  get { return core; } }
@@ -54,19 +62,26 @@ public class GameManager : Singleton<GameManager>
     public GameObject GetPlayerUI { get { return playerUI; } }
     public Transform GetSpawnPoint {  get { return spawnPoint; } }
     public WaveSystem WaveSystem { get { return waveSystem; } }
-
+    public BossMonster Boss { get { return boss; } }
+    public GameObject Sound { get { return sound; } }
 
     private void Awake()
     {
         isGameStop = 1;
         isGameOver = false;
-        playerInfo = Player.GetComponent<Player_Info>();        
+        playerInfo = Player.GetComponent<Player_Info>();
+        Player_Command = Player.GetComponent<Player_Command>();
     }
 
     public void OnGameStop(InputAction.CallbackContext context)
     {
         if (startUI.activeSelf == true) return;
-        else isGameStop *= -1;
+        if (context.started) return;
+        if (context.performed)
+        {
+            if (Player_Command.isCommand) return;
+            isGameStop *= -1;
+        }        
     }
 
     public void OnGameStart()
@@ -130,7 +145,7 @@ public class GameManager : Singleton<GameManager>
         data.playTime = waveSystem.PlayTimer;
 
         dataList.Add(data);
-        dataList = dataList.OrderByDescending(x => x.waveCount).ThenByDescending(x => x.playTime).ToList();
+        dataList = dataList.OrderByDescending(x => x.waveCount).ThenBy(x => x.playTime).ToList();
 
         Debug.Log(dataList.Count);
 
@@ -164,14 +179,20 @@ public class GameManager : Singleton<GameManager>
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            pauseUI.SetActive(true);
+            if (!Player_Command.isCommand)
+            {
+                pauseUI.SetActive(true);
+            }            
             Time.timeScale = 0f;
         }
         else
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            pauseUI.SetActive(false);
+            if (!Player_Command.isCommand)
+            {
+                pauseUI.SetActive(false);
+            }
             Time.timeScale = 1f;
         }
     }
