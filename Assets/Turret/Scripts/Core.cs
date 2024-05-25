@@ -167,6 +167,7 @@ public class Core : MonoBehaviour
 
             if (nowHp <= 0)
             {
+                StopCoroutine(Repair());
                 chargeEffect.SetActive(true);
                 isDestroy = true;
             }
@@ -213,7 +214,7 @@ public class Core : MonoBehaviour
             yield return new WaitUntil(() => nowHp < maxHp);
             yield return new WaitForSeconds(10);
             nowHp += 1;
-            CoreHPBar.fillAmount = nowHp / maxHp;
+            CoreHPBar.fillAmount = (float)((float)nowHp / (float)maxHp);
         }
     }
 
