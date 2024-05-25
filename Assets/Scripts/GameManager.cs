@@ -31,6 +31,10 @@ public class GameManager : Singleton<GameManager>
     [Header("Pause UI")]
     [SerializeField] private GameObject pauseUI;
 
+    [Header("사운드 매니저")]
+    [SerializeField] private GameObject sound;
+
+    [Header("")]
     public float isGameStop;
 
     public GameObject GetPlayer {  get { return Player; } }
@@ -38,6 +42,7 @@ public class GameManager : Singleton<GameManager>
     public GameObject GetCoreUI { get {  return coreUI; } }
     public GameObject GetPlayerUI { get { return playerUI; } }
     public Transform GetSpawnPoint {  get { return spawnPoint; } }
+    public GameObject Sound { get { return sound; } }
 
     private void Awake()
     {
