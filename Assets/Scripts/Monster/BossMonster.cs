@@ -161,7 +161,7 @@ public class BossMonster : MonoBehaviour
                 StartCoroutine(JumpAttackMove());
             }
         }
-        wave = WaveSystem.instance.currentWaveIndex - 1;
+        wave = GameManager.Instance.WaveSystem.currentWaveIndex - 1;
     }
 
     protected virtual void LookAt()

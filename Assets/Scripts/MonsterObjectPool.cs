@@ -165,6 +165,15 @@ public class MultiObjectPool : MonoBehaviour
                 Debug.LogError($"{pool.tag}에 ReturnToPool이 중복됩니다");
         }
     }
+    private void OnDisable()
+    {
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+        spawnObjects.Clear();
+        poolDictionary.Clear();
+    }
 
     GameObject CreateNewObject(string tag, GameObject prefab)
     {
@@ -174,26 +183,48 @@ public class MultiObjectPool : MonoBehaviour
         return obj;
     }
 
+    //void ArrangePool(GameObject obj)
+    //{
+    //    // 추가된 오브젝트 묶어서 정렬
+    //    bool isFind = false;
+    //    for (int i = 0; i < transform.childCount; i++)
+    //    {
+    //        if (i == transform.childCount - 1)
+    //        {
+    //            obj.transform.SetSiblingIndex(i);
+    //            spawnObjects.Insert(i, obj);
+    //            break;
+    //        }
+    //        else if (transform.GetChild(i).name == obj.name)
+    //            isFind = true;
+    //        else if (isFind)
+    //        {
+    //            obj.transform.SetSiblingIndex(i);
+    //            spawnObjects.Insert(i, obj);
+    //            break;
+    //        }
+    //    }
+    //}
     void ArrangePool(GameObject obj)
     {
-        // 추가된 오브젝트 묶어서 정렬
         bool isFind = false;
+        int targetIndex = transform.childCount;
+
         for (int i = 0; i < transform.childCount; i++)
         {
-            if (i == transform.childCount - 1)
-            {
-                obj.transform.SetSiblingIndex(i);
-                spawnObjects.Insert(i, obj);
-                break;
-            }
-            else if (transform.GetChild(i).name == obj.name)
+            if (transform.GetChild(i).name == obj.name)
                 isFind = true;
             else if (isFind)
             {
-                obj.transform.SetSiblingIndex(i);
-                spawnObjects.Insert(i, obj);
+                targetIndex = i;
                 break;
             }
         }
+
+        if (targetIndex > spawnObjects.Count)
+            targetIndex = spawnObjects.Count;
+
+        obj.transform.SetSiblingIndex(targetIndex);
+        spawnObjects.Insert(targetIndex, obj);
     }
 }

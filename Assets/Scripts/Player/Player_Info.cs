@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.XR;
+using UnityEngine.TextCore.Text;
 
 public class Player_Info : MonoBehaviour
 {
+    private CharacterController character;
+
     //Level
     private int Level;
 
@@ -69,11 +71,11 @@ public class Player_Info : MonoBehaviour
     public float magazineCount;
 
     private Animator animator;
-    private CharacterController controller;
 
     public bool isDead {  get; private set; }
 
     private Player_Info_UI UI;
+    private CinemachineVirtualCamera camera;
 
     private readonly int hashHurt = Animator.StringToHash("Hurt");
     private readonly int hashDead = Animator.StringToHash("Die");
@@ -82,8 +84,9 @@ public class Player_Info : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        controller = GetComponent<CharacterController>();
-        UI = GetComponent<Player_Info_UI>();        
+        UI = GetComponent<Player_Info_UI>();
+        camera = GetComponent<CinemachineVirtualCamera>();
+        character = GetComponent<CharacterController>();
     }
 
     private void OnEnable()
@@ -100,6 +103,7 @@ public class Player_Info : MonoBehaviour
         GearCount = 100;
         UI.InitGearText(GearCount);
 
+        camera.enabled = true;
         Spawn();
     }
 
@@ -108,8 +112,8 @@ public class Player_Info : MonoBehaviour
         if (isDead)
         {
             timer += Time.deltaTime;
-            if (timer >= 8f)
-            {
+            if(timer >= 8f)
+            {                               
                 Respawn();
             }
         }
@@ -153,33 +157,31 @@ public class Player_Info : MonoBehaviour
 
     public void Spawn()
     {
-        controller.enabled = false;
+        character.enabled = false;
 
         transform.position = GameManager.Instance.GetSpawnPoint.position;
         transform.rotation = GameManager.Instance.GetSpawnPoint.rotation;
 
-        controller.enabled = true;
-
-        Debug.Log("플레이어 부활");
+        character.enabled = true;
     }
 
     private void Dead()
     {
         isDead = true;
         animator.SetBool(hashDead, true);
+        camera.enabled = false;
+
         //StartCoroutine(Respawn());
     }
 
     private void Respawn()
     {
-        if (GameManager.Instance.GetCore.activeSelf)
+        if (GameManager.Instance.GetCore.gameObject.activeSelf)
         {
             Debug.Log("리스폰 중...");
             animator.SetBool(hashDead, false);
 
             HP = maxHp;
-            UI.PrintPlayerHPBar(HP, maxHp);
-
             equipedBulletCount = maxEquipedBulletCount;
             magazineCount = maxMagazineCount / 2;
 
