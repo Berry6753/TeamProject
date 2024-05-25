@@ -24,13 +24,23 @@ public class FireTurretAttackZone : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if ( other.gameObject.CompareTag("Monster")) 
+        if ( other.gameObject.layer==LayerMask.NameToLayer("Monster")) 
         {
             checkTime += Time.deltaTime;
             if (checkTime >= 1 / turret.turretAttackSpeed) 
             {
+                if (other.gameObject.CompareTag("Monster"))
+                {
+                    other.gameObject.GetComponent<Monster>().Hurt(turret.turretAttackDamge);
+
+                }
+
+                if (other.gameObject.CompareTag("Boss"))
+                {
+                    other.gameObject.GetComponent<BossMonster>().Hurt(turret.turretAttackDamge);
+                }
+
                 checkTime = 0;
-                other.gameObject.GetComponent<Monster>().Hurt(turret.turretAttackDamge);
             }
             
         }

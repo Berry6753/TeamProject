@@ -56,6 +56,7 @@ public class SnipeTurretBullet : MonoBehaviour
                     if (other.gameObject.CompareTag("Boss"))
                     {
                         //µ¥¹ÌÁö
+                        other.gameObject.GetComponent<BossMonster>().Hurt(turret.turretAttackDamge);
                     }
                     else if (other.gameObject.CompareTag("Monster"))
                     {

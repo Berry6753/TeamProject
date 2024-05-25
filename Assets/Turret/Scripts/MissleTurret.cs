@@ -86,6 +86,13 @@ public class MissleTurret : Turret
                         Debug.Log("범위 터렛 공격");
 
                     }
+                    if (target.CompareTag("Boss"))
+                    {
+                        //몬스터 데미지주는 부분
+                        target.gameObject.GetComponent<BossMonster>().Hurt(base.turretAttackDamge);
+                        Debug.Log("범위 터렛 공격");
+
+                    }
                     //드럼통 터지는 부분
                     if (target.CompareTag("Barrel"))//드럼통일경우
                     {

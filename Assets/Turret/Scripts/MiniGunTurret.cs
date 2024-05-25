@@ -48,16 +48,25 @@ public class MiniGunTurret : Turret
                 targetIndex++;
                 return;
             }
-            else if (hit.collider.CompareTag("Monster"))
+            else if (hit.collider.gameObject.layer==LayerMask.NameToLayer("Monster"))
             {
                 fireEfect.SetActive(true);
                 if (!fireAudio.isPlaying)
                 {
                     fireAudio.Play();
                 }
-                //몬스터 데미지 주는 부분
-                //몬스터 함수 불러온단 소리
-                hit.collider.gameObject.GetComponent<Monster>().Hurt(base.turretAttackDamge);
+
+                if (hit.collider.CompareTag("Monster"))
+                {
+                    //몬스터 데미지 주는 부분
+                    //몬스터 함수 불러온단 소리
+                    hit.collider.gameObject.GetComponent<Monster>().Hurt(base.turretAttackDamge);
+                }
+
+                if(hit.collider.CompareTag("Boss"))
+                {
+                    hit.collider.gameObject.GetComponent<BossMonster>().Hurt(base.turretAttackDamge);
+                }
                 Debug.Log("연사 터렛 공격");
 
             }

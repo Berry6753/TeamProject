@@ -302,7 +302,7 @@ public abstract class Turret : MonoBehaviour
             //float nierTargetDistance = Mathf.Infinity;
             foreach (Collider collider in enemyCollider)
             {
-                if (collider.CompareTag("Monster") && !targetCollider.ContainsKey(collider.gameObject))
+                if ((collider.CompareTag("Monster")|| collider.CompareTag("Boss")) && !targetCollider.ContainsKey(collider.gameObject))
                 {
                     float distance = Vector3.SqrMagnitude(transform.position - collider.transform.position);
 

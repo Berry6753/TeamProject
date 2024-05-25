@@ -27,6 +27,13 @@ public class Core : MonoBehaviour
     public bool isReloading = true;
 
     [SerializeField]
+    private GameObject chargeEffect;
+    [SerializeField]
+    private GameObject destroyEffect;
+
+    [SerializeField]
+    private MeshRenderer coreRederer;
+    [SerializeField]
     private GameObject itemSpawnPos;
 
     private int upgradeCoolTimeRise = 10;
@@ -78,6 +85,8 @@ public class Core : MonoBehaviour
 
     private int itemKey;
 
+    private bool isDestroy;
+
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Info>();
@@ -87,7 +96,9 @@ public class Core : MonoBehaviour
         ReloadCoolTimeIcon.fillAmount = 0;
         CoreHPBar.fillAmount = 1;
         InitCommandDic();
-
+        chargeEffect.SetActive(false);
+        destroyEffect.SetActive(false);
+        isDestroy = false;
         tabUI.enabled = false;
         //for (int i = 0; i < (int)PlayerSkillName.LAST; i++)
         //{
@@ -112,45 +123,68 @@ public class Core : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isReloading)
+        if (!isDestroy)
         {
-            checkReloadingTime -= Time.deltaTime;            
-            if (checkReloadingTime <= 0)
+            if (!isReloading)
             {
-                isReloading = true;
-                checkReloadingTime = realoadCoolTime;
-                ReloadCoolTimeIcon.fillAmount = 0;
+                checkReloadingTime -= Time.deltaTime;
+                if (checkReloadingTime <= 0)
+                {
+                    isReloading = true;
+                    checkReloadingTime = realoadCoolTime;
+                    ReloadCoolTimeIcon.fillAmount = 0;
+                }
+                else ReloadCoolTimeIcon.fillAmount = checkReloadingTime / realoadCoolTime;
             }
-            else ReloadCoolTimeIcon.fillAmount = checkReloadingTime / realoadCoolTime;            
-        }
 
-        if (isUpgrading)
-        {
-            // 보여주는 HP
-
-            checkUpgradeTime += Time.deltaTime;
-            if (checkUpgradeTime >= upgradeCoolTime)
+            if (isUpgrading)
             {
-                Upgrade();
-                checkUpgradeTime = 0;
-                isUpgrading = false;
+                // 보여주는 HP
+
+                checkUpgradeTime += Time.deltaTime;
+                if (checkUpgradeTime >= upgradeCoolTime)
+                {
+                    Upgrade();
+                    checkUpgradeTime = 0;
+                    isUpgrading = false;
+                }
             }
-        }
 
-        if (nowUpgradeCount >= maxUpgradeCount)
-        {
-            isUpgrade = false;
-        }
+            if (nowUpgradeCount >= maxUpgradeCount)
+            {
+                isUpgrade = false;
+            }
 
-        if (isPlayer)
-        {
-            tabUI.enabled = true;
+            if (isPlayer)
+            {
+                tabUI.enabled = true;
+            }
+            else
+            {
+                tabUI.enabled = false;
+            }
+            //파괴될시 게임매니저의 코어가있음을 뜻하는 변수를 false로
+
+            if (nowHp <= 0)
+            {
+                chargeEffect.SetActive(true);
+                isDestroy = true;
+            }
         }
         else
         {
-            tabUI.enabled = false;
+            if (chargeEffect.activeSelf == false)
+            {
+                coreRederer.enabled = false;
+                destroyEffect.SetActive(true);
+                if (destroyEffect.GetComponent<ParticleSystem>().time >= 1.0f)
+                {
+                    gameObject.SetActive(false);
+                    return;
+                }
+            }
+            
         }
-        //파괴될시 게임매니저의 코어가있음을 뜻하는 변수를 false로
     }
 
     public void Reloading()
