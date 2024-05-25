@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.TextCore.Text;
 
 public class Player_Info : MonoBehaviour
 {
+    private CharacterController character;
+
     //Level
     private int Level;
 
@@ -79,7 +82,8 @@ public class Player_Info : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        UI = GetComponent<Player_Info_UI>();        
+        UI = GetComponent<Player_Info_UI>();    
+        character = GetComponent<CharacterController>();
     }
 
     private void OnEnable()
@@ -149,8 +153,12 @@ public class Player_Info : MonoBehaviour
 
     public void Spawn()
     {
+        character.enabled = false;
+
         transform.position = GameManager.Instance.GetSpawnPoint.position;
         transform.rotation = GameManager.Instance.GetSpawnPoint.rotation;
+
+        character.enabled = true;
     }
 
     private void Dead()

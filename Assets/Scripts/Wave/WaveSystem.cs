@@ -55,10 +55,6 @@ public class WaveSystem : MonoBehaviour
             waves[i].maxMonsterCount = new int[4];
             waves[i].monsterPrefab = new GameObject[4];
         }
-    }
-
-    private void Start()
-    {
         normal = monster[0].GetComponent<NormalMonster>();
         aerial = monster[1].GetComponent<AerialMonster>();
         siege = monster[2].GetComponent<SiegeMonster>();
@@ -66,7 +62,7 @@ public class WaveSystem : MonoBehaviour
         for (int i = 0; i < monster.Length; i++)
         {
             for (int k = 0; k < waves.Length; k++)
-            { 
+            {
                 waves[k].monsterPrefab[i] = monster[i];
                 if (k >= 0 && k < 10)
                 {
@@ -95,13 +91,59 @@ public class WaveSystem : MonoBehaviour
                 }
             }
         }
+        currentWaveIndex = 0;
         checkTime = breakTime;
         waveCount = 0;
         isWave = true;
+        monsterSpawner.MonsterList.Clear();
     }
+
+    //private void Start()
+    //{
+    //    normal = monster[0].GetComponent<NormalMonster>();
+    //    aerial = monster[1].GetComponent<AerialMonster>();
+    //    siege = monster[2].GetComponent<SiegeMonster>();
+    //    suicide = monster[3].GetComponent<SuicideMonster>();
+    //    for (int i = 0; i < monster.Length; i++)
+    //    {
+    //        for (int k = 0; k < waves.Length; k++)
+    //        { 
+    //            waves[k].monsterPrefab[i] = monster[i];
+    //            if (k >= 0 && k < 10)
+    //            {
+    //                waves[k].maxMonsterCount[0] = normal.startSpawnNum;
+    //                waves[k].maxMonsterCount[1] = aerial.startSpawnNum;
+    //                waves[k].maxMonsterCount[2] = 0;
+    //                waves[k].maxMonsterCount[3] = suicide.startSpawnNum;
+    //                if (k >= 5)
+    //                {
+    //                    waves[k].maxMonsterCount[2] = siege.startSpawnNum;
+    //                }
+    //            }
+    //            else if (k >= 10 && k < 20)
+    //            {
+    //                waves[k].maxMonsterCount[0] = normal.startSpawnNum + normal.upScaleSpwanNum;
+    //                waves[k].maxMonsterCount[1] = aerial.startSpawnNum + aerial.upScaleSpwanNum;
+    //                waves[k].maxMonsterCount[2] = siege.startSpawnNum + siege.upScaleSpwanNum;
+    //                waves[k].maxMonsterCount[3] = suicide.startSpawnNum + siege.upScaleSpwanNum;
+    //            }
+    //            else if (k >= 20 && k < waves.Length)
+    //            {
+    //                waves[k].maxMonsterCount[0] = normal.startSpawnNum + normal.upScaleSpwanNum * 2;
+    //                waves[k].maxMonsterCount[1] = aerial.startSpawnNum + aerial.upScaleSpwanNum * 2;
+    //                waves[k].maxMonsterCount[2] = siege.startSpawnNum + siege.upScaleSpwanNum * 2;
+    //                waves[k].maxMonsterCount[3] = suicide.startSpawnNum + siege.upScaleSpwanNum * 2;
+    //            }
+    //        }
+    //    }
+    //    checkTime = breakTime;
+    //    waveCount = 0;
+    //    isWave = true;
+    //}
 
     private void Update()
     {
+        if(GameManager.Instance.GetPlayer.activeSelf == false) return;
         if (!isWave)
         {
             StartWave();
