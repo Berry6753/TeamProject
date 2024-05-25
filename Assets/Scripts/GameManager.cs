@@ -34,6 +34,9 @@ public class GameManager : Singleton<GameManager>
     [Header("사운드 매니저")]
     [SerializeField] private GameObject sound;
 
+    [Header("보스")]
+    [SerializeField] private BossMonster boss;
+
     [Header("")]
     public float isGameStop;
 
@@ -43,6 +46,9 @@ public class GameManager : Singleton<GameManager>
     public GameObject GetPlayerUI { get { return playerUI; } }
     public Transform GetSpawnPoint {  get { return spawnPoint; } }
     public GameObject Sound { get { return sound; } }
+    public BossMonster Boss { get { return boss; } }
+
+
 
     private void Awake()
     {
