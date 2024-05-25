@@ -10944,6 +10944,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1951961950}
     - target: {fileID: 4793912332375539876, guid: d3b6abaa5a2a49243b6970409f474bce, type: 3}
+      propertyPath: effect
+      value: 
+      objectReference: {fileID: 1026642433091512, guid: ed67c2cb8e3a7fb418c6fbb1b001dce2, type: 3}
+    - target: {fileID: 4793912332375539876, guid: d3b6abaa5a2a49243b6970409f474bce, type: 3}
       propertyPath: debugTransform
       value: 
       objectReference: {fileID: 1951961950}
@@ -11051,7 +11055,8 @@ PrefabInstance:
       propertyPath: useGearCount
       value: 
       objectReference: {fileID: 760339714}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 841228819, guid: d3b6abaa5a2a49243b6970409f474bce, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d3b6abaa5a2a49243b6970409f474bce, type: 3}
 --- !u!1 &1485439141 stripped
 GameObject:
@@ -12389,7 +12394,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1653805106}
   m_Layer: 0
-  m_Name: SpwanPoint
+  m_Name: playerSpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14484,6 +14489,10 @@ PrefabInstance:
     - target: {fileID: 4195915032650567363, guid: 8f341e995984166449b69c22ac948f25, type: 3}
       propertyPath: m_Layer
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4195915032650567363, guid: 8f341e995984166449b69c22ac948f25, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4195934475214829279, guid: 8f341e995984166449b69c22ac948f25, type: 3}
       propertyPath: m_Layer

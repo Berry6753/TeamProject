@@ -1,7 +1,9 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 
 public class Player_Info : MonoBehaviour
 {
@@ -67,6 +69,7 @@ public class Player_Info : MonoBehaviour
     public float magazineCount;
 
     private Animator animator;
+    private CharacterController controller;
 
     public bool isDead {  get; private set; }
 
@@ -79,6 +82,7 @@ public class Player_Info : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        controller = GetComponent<CharacterController>();
         UI = GetComponent<Player_Info_UI>();        
     }
 
@@ -104,8 +108,8 @@ public class Player_Info : MonoBehaviour
         if (isDead)
         {
             timer += Time.deltaTime;
-            if(timer >= 8f)
-            {                               
+            if (timer >= 8f)
+            {
                 Respawn();
             }
         }
@@ -149,8 +153,14 @@ public class Player_Info : MonoBehaviour
 
     public void Spawn()
     {
+        controller.enabled = false;
+
         transform.position = GameManager.Instance.GetSpawnPoint.position;
         transform.rotation = GameManager.Instance.GetSpawnPoint.rotation;
+
+        controller.enabled = true;
+
+        Debug.Log("플레이어 부활");
     }
 
     private void Dead()
@@ -162,12 +172,14 @@ public class Player_Info : MonoBehaviour
 
     private void Respawn()
     {
-        if (GameManager.Instance.GetCore.gameObject.activeSelf)
+        if (GameManager.Instance.GetCore.activeSelf)
         {
             Debug.Log("리스폰 중...");
             animator.SetBool(hashDead, false);
 
             HP = maxHp;
+            UI.PrintPlayerHPBar(HP, maxHp);
+
             equipedBulletCount = maxEquipedBulletCount;
             magazineCount = maxMagazineCount / 2;
 
