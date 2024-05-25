@@ -119,6 +119,7 @@ public class Player_Info : MonoBehaviour
         animator.SetBool(hashDead, false);
 
         GearCount = 100;
+        UI.InitGearText(GearCount);
 
         Spawn();
     }
@@ -217,7 +218,7 @@ public class Player_Info : MonoBehaviour
             camera.Follow = cameraLookAt;
 
             Spawn();
-            aim.InitRotation();
+            
             timer = 0;
             isDead = false;
         }
