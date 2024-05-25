@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -74,6 +75,7 @@ public class Player_Info : MonoBehaviour
     public bool isDead {  get; private set; }
 
     private Player_Info_UI UI;
+    private CinemachineVirtualCamera camera;
 
     private readonly int hashHurt = Animator.StringToHash("Hurt");
     private readonly int hashDead = Animator.StringToHash("Die");
@@ -82,7 +84,8 @@ public class Player_Info : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        UI = GetComponent<Player_Info_UI>();    
+        UI = GetComponent<Player_Info_UI>();
+        camera = GetComponent<CinemachineVirtualCamera>();
         character = GetComponent<CharacterController>();
     }
 
@@ -100,6 +103,7 @@ public class Player_Info : MonoBehaviour
         GearCount = 100;
         UI.InitGearText(GearCount);
 
+        camera.enabled = true;
         Spawn();
     }
 
@@ -165,6 +169,8 @@ public class Player_Info : MonoBehaviour
     {
         isDead = true;
         animator.SetBool(hashDead, true);
+        camera.enabled = false;
+
         //StartCoroutine(Respawn());
     }
 
