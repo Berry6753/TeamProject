@@ -26,7 +26,7 @@ public abstract class Turret : MonoBehaviour
     private MeshRenderer headRenderer;
     private MeshRenderer bodyRenderer;
 
-
+    private Player_BuildSystem player;
 
     [SerializeField]
     private GameObject turretHead;
@@ -117,6 +117,7 @@ public abstract class Turret : MonoBehaviour
 
     protected virtual void Awake()
     {
+        player=GameManager.Instance.GetPlayer.transform.GetComponent<Player_BuildSystem>();
         bodyMeshFilter = turretBody.GetComponent<MeshFilter>();
         headMeshFilter = turretHead.GetComponent<MeshFilter>();
         bodyRenderer = turretBody.GetComponent<MeshRenderer>();
@@ -262,7 +263,7 @@ public abstract class Turret : MonoBehaviour
     {
         Collider[] turretColliders = Physics.OverlapSphere(transform.position, 5, (1 << turretLayer));
 
-        if (turretColliders.Length > 0) 
+        if (turretColliders.Length > 0 || !player.isGearCountOk)  
         {
             isMake = false;
             bodyRenderer.material.color = Color.red;
