@@ -25,6 +25,12 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private Transform spawnPoint;
 
+    [Header("시작 메뉴")]
+    [SerializeField] private GameObject startUI;
+
+    [Header("Pause UI")]
+    [SerializeField] private GameObject pauseUI;
+
     public float isGameStop;
 
     public GameObject GetPlayer {  get { return Player; } }
@@ -35,12 +41,18 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
-        isGameStop = -1;
+        isGameStop = 1;
     }
 
     public void OnGameStop(InputAction.CallbackContext context)
     {
-        isGameStop *= -1;
+        if (startUI.activeSelf == true) return;
+        else isGameStop *= -1;
+    }
+
+    public void OnGameStart()
+    {
+        isGameStop = -1;
     }
 
     private void Update()
@@ -54,12 +66,14 @@ public class GameManager : Singleton<GameManager>
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
+            pauseUI.SetActive(true);
             Time.timeScale = 0f;
         }
         else
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+            pauseUI.SetActive(false);
             Time.timeScale = 1f;
         }
     }

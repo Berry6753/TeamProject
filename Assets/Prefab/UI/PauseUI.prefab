@@ -2069,8 +2069,8 @@ MonoBehaviour:
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 21300000, guid: 969555911475f254bb6b81e1f26e7694, type: 3}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 21300000, guid: 969555911475f254bb6b81e1f26e7694, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 969555911475f254bb6b81e1f26e7694, type: 3}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -3209,8 +3209,8 @@ MonoBehaviour:
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 21300000, guid: 969555911475f254bb6b81e1f26e7694, type: 3}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 21300000, guid: 969555911475f254bb6b81e1f26e7694, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 969555911475f254bb6b81e1f26e7694, type: 3}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -3383,8 +3383,8 @@ MonoBehaviour:
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 21300000, guid: 969555911475f254bb6b81e1f26e7694, type: 3}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 21300000, guid: 969555911475f254bb6b81e1f26e7694, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 969555911475f254bb6b81e1f26e7694, type: 3}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -3397,18 +3397,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 828412838563122035}
-        m_TargetAssemblyTypeName: StartCanvas, Assembly-CSharp
-        m_MethodName: ExitGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: ExitGame
@@ -3621,6 +3609,7 @@ GameObject:
   - component: {fileID: 828412838563122031}
   - component: {fileID: 828412838563122028}
   - component: {fileID: 828412838563122035}
+  - component: {fileID: 1172069478}
   m_Layer: 5
   m_Name: PauseUI
   m_TagString: Untagged
@@ -3728,6 +3717,20 @@ MonoBehaviour:
   fullScreenBtn: {fileID: 828412838612766026}
   resolutionDropdown: {fileID: 828412838144927405}
   resolutionNum: 0
+--- !u!114 &1172069478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 828412838563122029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d92d384aaea44a4783fd319c4b51fbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainUI: {fileID: 828412838259584930}
+  optionUI: {fileID: 828412836923306950}
 --- !u!1 &828412838612766024
 GameObject:
   m_ObjectHideFlags: 0
@@ -4280,8 +4283,8 @@ MonoBehaviour:
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 21300000, guid: 969555911475f254bb6b81e1f26e7694, type: 3}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 21300000, guid: 969555911475f254bb6b81e1f26e7694, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 969555911475f254bb6b81e1f26e7694, type: 3}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
