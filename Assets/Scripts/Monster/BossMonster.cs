@@ -24,6 +24,9 @@ public class BossMonster : MonoBehaviour
     [Header("스탯 성장치")]
     [SerializeField] protected float upScaleHp;         //체력 성장치
 
+    [Header("보스 HP UI")]
+    [SerializeField] protected GameObject boss_HP_UI;
+
     private float dashSpeed;
     private float dashTime;
     private float time;
@@ -61,6 +64,8 @@ public class BossMonster : MonoBehaviour
     private BoxCollider jumpAttackC;
     private Vector3 dashDir;
 
+  
+
    [SerializeField] private CapsuleCollider dashAttackC;
     [SerializeField] protected LayerMask turretLayer;   //터렛레이어
     [SerializeField] protected LayerMask monsterLayer;  //몬스터레이어
@@ -68,7 +73,7 @@ public class BossMonster : MonoBehaviour
     private int turretIndex = 0;                      //가장 가까운 터렛인덱스
     //private int secondTurretIndex = 0;                //두 번째 가까운 터렛인덱스
     //private int targetingIndex = 0;                   //타겟으로 삼을 터렛인덱스
-    private Transform defaultPos;
+    [SerializeField] private Transform defaultPos;
 
     private StateMachine stateMachine;
 
@@ -96,7 +101,6 @@ public class BossMonster : MonoBehaviour
 
     private void Awake()
     {
-        defaultPos = gameObject.transform;
         targetList = new List<GameObject>();
         anim = GetComponent<Animator>();
         nav = GetComponent<NavMeshAgent>();
@@ -126,6 +130,7 @@ public class BossMonster : MonoBehaviour
 
         stateMachine.ChangeState(State.IDLE);
         hp = maxHp;
+        boss_HP_UI.SetActive(false);
     }
     private void Start()
     {
@@ -134,7 +139,11 @@ public class BossMonster : MonoBehaviour
 
     private void Update()
     {
-
+        if (Vector3.Distance(transform.position, Player.transform.position) <= sensingRange && !Player.gameObject.GetComponent<Player_Info>().isDead)
+        {
+            boss_HP_UI.SetActive(true);
+        }
+    
         //일시적으로 주석처리
 
         if (time > 0 && !anim.GetBool("isAttack"))
@@ -184,7 +193,11 @@ public class BossMonster : MonoBehaviour
         {           
             yield return new WaitForSeconds(0.3f);
             if (Player.gameObject.GetComponent<Player_Info>().isDead)
+            {
                 chaseTarget = null;
+                boss_HP_UI.SetActive(false);
+                continue;
+            }
 
             PriorityTarget();
 
@@ -198,8 +211,10 @@ public class BossMonster : MonoBehaviour
 
             if (chaseTarget == null)
             {
-                if (transform.position == defaultPos.position)
+                if (Vector3.Distance(transform.position, defaultPos.position) < 0.7f) 
+                {
                     stateMachine.ChangeState(State.IDLE);
+                }
                 else
                 {
                     nav.SetDestination(defaultPos.position);
@@ -409,7 +424,21 @@ public class BossMonster : MonoBehaviour
         targetList.Clear();
         Collider[] Targets = Physics.OverlapSphere(transform.position, sensingRange, turretLayer);
 
-        if (Targets.Length <= 0) return;
+        if (Targets.Length <= 0)
+        { 
+            return; 
+        }
+        //foreach (Collider target in Targets)
+        //{
+        //    if (target.gameObject.layer == LayerMask.NameToLayer("Player"))
+        //    {
+        //        boss_HP_UI.SetActive(true);
+        //    }
+        //    else
+        //    {
+        //        boss_HP_UI.SetActive(false);
+        //    }
+        //}
 
         foreach (Collider target in Targets)
         {
