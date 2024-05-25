@@ -11,17 +11,14 @@ public class SettingSound : MonoBehaviour
     {
         own = GetComponent<Slider>();
     }
-    private void OnEnable()
-    {
-        own.value = other.value;
-    }
-    //private void Update()
-    //{
-    //    SliderSetting();
-    //}
 
-    //private void SliderSetting()
-    //{
-    //    other.value = own.value;
-    //}
+    private void Update()
+    {
+        SliderSetting();
+    }
+
+    private void SliderSetting()
+    {
+        other.value = own.value;
+    }
 }

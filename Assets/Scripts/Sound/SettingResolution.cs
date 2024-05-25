@@ -12,17 +12,13 @@ public class SettingResolution : MonoBehaviour
         own = GetComponent<TMP_Dropdown>();
     }
 
-    private void OnEnable()
+    private void Update()
     {
-        if (own.options.Count == other.options.Count) own.value = other.value;
+        Setting();
     }
-    //private void Update()
-    //{
-    //    Setting();
-    //}
 
-    //private void Setting()
-    //{
-    //    if (own.options.Count == other.options.Count) other.value = own.value;
-    //}
+    private void Setting()
+    {
+        if (own.options.Count == other.options.Count) other.value = own.value;
+    }
 }
