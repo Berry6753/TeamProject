@@ -141,6 +141,7 @@ public abstract class Turret : MonoBehaviour
         fireEfect.SetActive(false);
         sliderGage.gameObject.SetActive(false);
         deathEffect.SetActive(false);
+        HpEffect();
     }
 
    
@@ -151,6 +152,7 @@ public abstract class Turret : MonoBehaviour
         {
             UpgradeCheck();
             RepairCheck();
+            HpEffect();
 
             if (nowHp <= 0)
             {
@@ -160,11 +162,12 @@ public abstract class Turret : MonoBehaviour
     }
     private void HpEffect()
     {
+
         if(turretStateName==TurretStateName.ATTACK|| turretStateName == TurretStateName.SEARCH|| turretStateName == TurretStateName.REPAIR)
         {
             if(nowHp > maxHp * 0.75f)
             {
-                for (int i = 0; i < hpEffects.transform.childCount; i--)
+                for (int i = 0; i < hpEffects.transform.childCount; i++)
                 {
                     hpEffects.transform.GetChild(i).gameObject.SetActive(false);
                 }
@@ -178,6 +181,13 @@ public abstract class Turret : MonoBehaviour
                         hpEffects.transform.GetChild(i - 1).gameObject.SetActive(true);
                     }
                 }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < hpEffects.transform.childCount; i++)
+            {
+                hpEffects.transform.GetChild(i).gameObject.SetActive(false);
             }
         }
     }

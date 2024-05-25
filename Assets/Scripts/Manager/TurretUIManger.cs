@@ -18,7 +18,7 @@ public class TurretUIManger : MonoBehaviour
         //Debug.Log(canvesPrefab.name);
         canvesPrefab.enabled = false;
         
-        player = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_BuildSystem>();
+        player = GameManager.Instance.GetPlayer.GetComponent<Player_BuildSystem>();
     }
     private void Start()
     {
@@ -28,9 +28,8 @@ public class TurretUIManger : MonoBehaviour
     {
         if (player.selectBuild != null && player.selectBuild.CompareTag("Turret"))
         {
-            if (player.selectBuild.GetComponent<Turret>().turretStateName != TurretStateName.MAKING &&
-                player.selectBuild.GetComponent<Turret>().turretStateName != TurretStateName.UPGRADE &&
-                player.selectBuild.GetComponent<Turret>().turretStateName != TurretStateName.REPAIR) 
+            if (player.selectBuild.GetComponent<Turret>().turretStateName == TurretStateName.SEARCH ||
+                player.selectBuild.GetComponent<Turret>().turretStateName == TurretStateName.ATTACK )
             {
                 canvesPrefab.enabled = true;
                 canvesPrefab.transform.forward = Camera.main.transform.forward;
