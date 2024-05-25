@@ -10,9 +10,13 @@ public class BossMonster : MonoBehaviour
 {
     [Header("스탯")]
     [SerializeField] private float maxHp;                //체력
-    private float hp;
+    public float MaxHp { get { return maxHp; } }
+    [SerializeField] private float hp;
+    public float Hp { get { return hp; } }
     [SerializeField] private float damage;            //공격력
-    [SerializeField] private float hitNum;            //타격 횟수
+    public float BossDamage { get { return damage; } }
+    [SerializeField] private int hitNum;            //타격 횟수
+    public int BossPower { get { return hitNum; } }
     [SerializeField] private float attackRange;       //사거리
     [SerializeField] private float specialAttackRange;//특수 공격 사거리
     private float amongRange;
@@ -64,6 +68,7 @@ public class BossMonster : MonoBehaviour
     private int turretIndex = 0;                      //가장 가까운 터렛인덱스
     //private int secondTurretIndex = 0;                //두 번째 가까운 터렛인덱스
     //private int targetingIndex = 0;                   //타겟으로 삼을 터렛인덱스
+    private Transform defaultPos;
 
     private StateMachine stateMachine;
 
@@ -91,6 +96,7 @@ public class BossMonster : MonoBehaviour
 
     private void Awake()
     {
+        defaultPos = gameObject.transform;
         targetList = new List<GameObject>();
         anim = GetComponent<Animator>();
         nav = GetComponent<NavMeshAgent>();
@@ -116,7 +122,7 @@ public class BossMonster : MonoBehaviour
     private void OnEnable()
     {
         Core = GameObject.FindWithTag("Core").GetComponent<Transform>();
-        Player = GameObject.FindWithTag("Player").transform;
+        Player = GameManager.Instance.GetPlayer.transform;
 
         stateMachine.ChangeState(State.IDLE);
         hp = maxHp;
@@ -166,8 +172,10 @@ public class BossMonster : MonoBehaviour
 
     protected virtual void LookAt()
     {
-        if(chaseTarget != null)
-             transform.LookAt(new Vector3(chaseTarget.position.x, transform.position.y, chaseTarget.position.z));
+        if (chaseTarget != null)
+            transform.LookAt(new Vector3(chaseTarget.position.x, transform.position.y, chaseTarget.position.z));
+        else
+            transform.LookAt(new Vector3(GameManager.Instance.GetCore.gameObject.transform.position.x, transform.position.y, GameManager.Instance.GetCore.gameObject.transform.position.z));
     }
 
     private IEnumerator BossState()
@@ -175,12 +183,28 @@ public class BossMonster : MonoBehaviour
         while (!isDead)
         {           
             yield return new WaitForSeconds(0.3f);
+            if (Player.gameObject.GetComponent<Player_Info>().isDead)
+                chaseTarget = null;
 
             PriorityTarget();
 
+            if (hp <= 0)
+            { 
+                hp = 0;
+                isDie();
+                stateMachine.ChangeState(State.DIE);
+                chaseTarget = null;
+            }
+
             if (chaseTarget == null)
             {
-                stateMachine.ChangeState(State.IDLE);
+                if (transform.position == defaultPos.position)
+                    stateMachine.ChangeState(State.IDLE);
+                else
+                {
+                    nav.SetDestination(defaultPos.position);
+                    hp = maxHp;
+                }
             }
             else
             {
@@ -373,7 +397,10 @@ public class BossMonster : MonoBehaviour
 
         if (wave == lastWave && chaseTarget == null)
         {
-            chaseTarget = Core;
+            if (Core.gameObject.activeSelf)
+                chaseTarget = Core;
+            else 
+                chaseTarget = GameManager.Instance.GetPlayer.gameObject.transform;
         }
     }
 
@@ -449,7 +476,8 @@ public class BossMonster : MonoBehaviour
 
     private void UpScaleHp()                          //체력 증가량
     {
-        maxHp += upScaleHp * wave;
+        if (wave >= 0)
+            maxHp += upScaleHp * wave;
     }
 
     public void Hurt(float damage)                   //플레이어에게 데미지 입을 시
@@ -542,6 +570,7 @@ public class BossMonster : MonoBehaviour
         public DieState(BossMonster owner) : base(owner) { }
         public override void Enter()
         {
+            owner.nav.isStopped = true;
             owner.anim.SetTrigger(owner.hashDie);
         }
     }
