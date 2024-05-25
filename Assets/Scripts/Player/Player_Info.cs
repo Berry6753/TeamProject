@@ -85,7 +85,7 @@ public class Player_Info : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         UI = GetComponent<Player_Info_UI>();
-        camera = GetComponent<CinemachineVirtualCamera>();
+        camera = GetComponentInChildren<CinemachineVirtualCamera>();
         character = GetComponent<CharacterController>();
     }
 
