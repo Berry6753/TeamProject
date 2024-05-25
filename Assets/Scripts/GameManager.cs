@@ -21,12 +21,17 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private GameObject coreUI;
 
+    [Header("PlayerSpawnPoint")]
+    [SerializeField]
+    private Transform spawnPoint;
+
     public float isGameStop;
 
     public GameObject GetPlayer {  get { return Player; } }
     public GameObject GetCore {  get { return core; } }
     public GameObject GetCoreUI { get {  return coreUI; } }
     public GameObject GetPlayerUI { get { return playerUI; } }
+    public Transform GetSpawnPoint {  get { return spawnPoint; } }
 
     private void Awake()
     {

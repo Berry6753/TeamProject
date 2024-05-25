@@ -99,6 +99,10 @@ public class Player_Aiming : MonoBehaviour
     [SerializeField]
     private List<AudioClip> shootAudioClip;
 
+    [Header("ÃÑ ÇÇ°Ý Effect")]
+    [SerializeField]
+    private GameObject effect;
+
     private AudioSource audioSource;
 
     private float stopGame;

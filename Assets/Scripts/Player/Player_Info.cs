@@ -1,7 +1,9 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 
 public class Player_Info : MonoBehaviour
 {
@@ -54,11 +56,6 @@ public class Player_Info : MonoBehaviour
     [SerializeField]
     private float upCostValue;
 
-    [Space(10)]
-    [Header("Spawn Point")]
-    [SerializeField]
-    private Transform spawnPos;
-
     public float runSpeed { get { return RunSpeed; } }
 
     public float Attack { get { return ATKDamage; } }
@@ -72,6 +69,7 @@ public class Player_Info : MonoBehaviour
     public float magazineCount;
 
     private Animator animator;
+    private CharacterController controller;
 
     public bool isDead {  get; private set; }
 
@@ -80,9 +78,11 @@ public class Player_Info : MonoBehaviour
     private readonly int hashHurt = Animator.StringToHash("Hurt");
     private readonly int hashDead = Animator.StringToHash("Die");
 
+    private float timer;
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        controller = GetComponent<CharacterController>();
         UI = GetComponent<Player_Info_UI>();        
     }
 
@@ -105,7 +105,14 @@ public class Player_Info : MonoBehaviour
 
     private void Update()
     {
-        
+        if (isDead)
+        {
+            timer += Time.deltaTime;
+            if (timer >= 8f)
+            {
+                Respawn();
+            }
+        }
     }
 
     public void AddGearCount(int gearCount)
@@ -129,7 +136,7 @@ public class Player_Info : MonoBehaviour
     public void Hurt(float damage)
     {
         if (isDead) return;
-       // HP -= damage;
+        HP -= damage;
         UI.PrintPlayerHPBar(HP, maxHp);
         if (HP <= 0)
         {
@@ -137,20 +144,23 @@ public class Player_Info : MonoBehaviour
         }
         else
         {
-            animator.SetTrigger(hashHurt);
+            if(Random.Range(0,100) < 20)
+            {
+                animator.SetTrigger(hashHurt);
+            }
         }
     }
 
     public void Spawn()
     {
-        HP = maxHp;
-        equipedBulletCount = maxEquipedBulletCount;
-        magazineCount = maxMagazineCount / 2;
+        controller.enabled = false;
 
-        GearCount -= 20;
+        transform.position = GameManager.Instance.GetSpawnPoint.position;
+        transform.rotation = GameManager.Instance.GetSpawnPoint.rotation;
 
-        transform.position = spawnPos.position;
-        transform.rotation = spawnPos.rotation;
+        controller.enabled = true;
+
+        Debug.Log("플레이어 부활");
     }
 
     private void Dead()
@@ -158,6 +168,32 @@ public class Player_Info : MonoBehaviour
         isDead = true;
         animator.SetBool(hashDead, true);
         //StartCoroutine(Respawn());
+    }
+
+    private void Respawn()
+    {
+        if (GameManager.Instance.GetCore.activeSelf)
+        {
+            Debug.Log("리스폰 중...");
+            animator.SetBool(hashDead, false);
+
+            HP = maxHp;
+            UI.PrintPlayerHPBar(HP, maxHp);
+
+            equipedBulletCount = maxEquipedBulletCount;
+            magazineCount = maxMagazineCount / 2;
+
+            GearCount -= 20;
+
+            Spawn();
+            timer = 0;
+            isDead = false;
+        }
+        else
+        {
+            //게임 오버
+            GameOver();
+        }
     }
 
     //IEnumerator Respawn()
@@ -187,6 +223,7 @@ public class Player_Info : MonoBehaviour
         if (context.started) return;
         if (context.performed)
         {
+            Debug.Log("데미지 받음");
             Hurt(50);
         }
     }

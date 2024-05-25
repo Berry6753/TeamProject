@@ -123,8 +123,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!command.isCommand)
-            Movement();
+        if (command.isCommand) return;
+        Movement();
     }
 
     // InputSystem 무브먼트
@@ -183,7 +183,11 @@ public class PlayerMovement : MonoBehaviour
     private void Movement()
     {
         //if (!isGround) return;
-        if (info.isDead) return;
+        if (info.isDead)
+        {
+            InputDir = Vector3.zero;
+            return;
+        }
         inputMoveDir = new Vector3(InputDir.x, 0, InputDir.y).normalized;
 
         if (inputMoveDir.magnitude >= 0.1f)

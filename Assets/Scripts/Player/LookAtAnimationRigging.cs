@@ -49,7 +49,7 @@ public class LookAtAnimationRigging : MonoBehaviour
 
     private void ChangeWeight()
     {
-        if (animator.GetBool(hashAiming) && !animator.GetBool(hashDead))
+        if (animator.GetBool(hashAiming))
         {
             aimingTargetWeight = 1f;
         }
@@ -61,7 +61,7 @@ public class LookAtAnimationRigging : MonoBehaviour
 
     private void ReloadWeight()
     {
-        if (animator.GetBool(hashReload))
+        if (animator.GetBool(hashReload) || animator.GetBool(hashDead))
         {
             reloadTargetWeight = 0f;
         }
