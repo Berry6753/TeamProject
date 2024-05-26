@@ -252,10 +252,9 @@ public class GameManager : Singleton<GameManager>
                 startUI.SetActive(true);
                 time = 0;
                 isGameClear = false;
-                isGameEnd = true; 
-                
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
+                isGameEnd = true;
+
+                isGameStop = 1;
             }
         }
     }
@@ -277,8 +276,7 @@ public class GameManager : Singleton<GameManager>
                 isGameOver = false;
                 isGameEnd = true;
 
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
+                isGameStop = 1;
             }
         }
     }
