@@ -84,6 +84,8 @@ public class GameManager : Singleton<GameManager>
     public GameObject Sound { get { return sound; } }
     public MonsterSpawner MonsterSpawner { get { return monsterSpawner; } }
 
+    public List<MonsterSpawnCrystal> MonsterCrystal {  get { return monsterCrystal; } }
+
     float time = 0.0f;
     bool isGameEnd;
     private void Awake()

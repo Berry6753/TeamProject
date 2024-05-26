@@ -538,9 +538,18 @@ public class BossMonster : MonoBehaviour
 
     public void Hurt(float damage)                   //플레이어에게 데미지 입을 시
     {
+        int count = 0;
         if (isSkillAttacking) return;
-        hp -= damage;
-        hp = Mathf.Clamp(hp, 0, maxHp);
+        foreach (var item in GameManager.Instance.MonsterCrystal)
+        {
+            if (!item.gameObject.activeSelf)
+                count ++;
+        }
+        if (count >= GameManager.Instance.MonsterCrystal.Count)
+        {
+            hp -= damage;
+            hp = Mathf.Clamp(hp, 0, maxHp);
+        }
     }
 
     public void isDie()                              //죽었을 시
