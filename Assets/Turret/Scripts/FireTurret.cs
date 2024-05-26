@@ -12,7 +12,7 @@ public class FireTurret : Turret
     private Vector3 attackBoxPos;
     private int nowFireTurretUpgradeCount = 0;
     private int nowFireTurretHp;
-    private int maxFireTurretHp = 8;
+    private int maxFireTurretHp = 15;
     private int fireTurretHpRise = 5;
     private float attackRangeX = 2;
     private float fireTurretMakingTime = 15;

@@ -7,7 +7,7 @@ public class MiniGunTurret : Turret
 
     private int nowMiniGunUpgradeCount = 0;
     private int nowMiniGunHp;
-    private int maxMiniGunHp = 5;
+    private int maxMiniGunHp = 11;
     private int miniGunhpRise = 3;
     private float miniGunMakingTime = 15;
     private float miniGunAttackDamge = 25;
@@ -69,7 +69,6 @@ public class MiniGunTurret : Turret
                 }
                 Debug.Log("연사 터렛 공격");
 
-                BloodEffectManger.Instance.UsingEffect(hit.point);
 
             }
             else if (hit.collider.CompareTag("Barrel"))

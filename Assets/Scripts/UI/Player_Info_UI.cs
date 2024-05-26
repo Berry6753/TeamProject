@@ -32,11 +32,44 @@ public class Player_Info_UI : MonoBehaviour
 
     private Animator UseGearTextAnimator;
 
+    [Header("Core UI")]
+    [SerializeField]
+    private RawImage coreView;
+    [SerializeField]
+    private Image coreViewBG;
+    private float coreDistance = 20.0f;
+    private GameObject core;
+
     private readonly int hashTrigger = Animator.StringToHash("Get");
 
     private void Awake()
     {
         UseGearTextAnimator = useGearCount.transform.parent.GetComponent<Animator>();
+        core = GameManager.Instance.GetCore;
+        coreView.enabled = false;
+        coreViewBG.enabled = false;
+    }
+
+    private void Update()
+    {
+        if (!core.activeSelf)
+        {
+            coreView.enabled = false;
+            coreViewBG.enabled = false;
+            return;
+        }
+
+        if (coreDistance <= Vector3.Distance(transform.position, core.transform.position))
+        {
+            coreViewBG.enabled = true;
+            coreView.enabled = true;
+        }
+        else
+        {
+            coreViewBG.enabled = false;
+            coreView.enabled = false;
+        }
+        
     }
 
     public void PrintPlayerHPBar(float hp, float maxHP)
