@@ -92,7 +92,7 @@ public class WaveSystem : MonoBehaviour
         checkTime = breakTime;
         waveCount = 0;
         PlayTimer = 0;
-        //isWave = true;
+        isWave = false;
         monsterSpawner.MonsterList.Clear();
     }
 

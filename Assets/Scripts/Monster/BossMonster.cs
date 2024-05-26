@@ -144,11 +144,8 @@ public class BossMonster : MonoBehaviour
 
         stateMachine.ChangeState(State.IDLE);
         hp = maxHp;
+        isDead = false;
         boss_HP_UI.SetActive(false);
-    }
-
-    private void Start()
-    {
         StartCoroutine(BossState());
     }
 
@@ -222,6 +219,7 @@ public class BossMonster : MonoBehaviour
                 isDie();
                 stateMachine.ChangeState(State.DIE);
                 chaseTarget = null;
+                yield break;
             }
 
             if (chaseTarget == null && !isDead)

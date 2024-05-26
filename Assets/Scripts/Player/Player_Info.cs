@@ -122,6 +122,8 @@ public class Player_Info : MonoBehaviour
         UI.InitGearText(GearCount);
 
         Spawn();
+
+        UI.Reload(equipedBulletCount, magazineCount);
     }
 
     private void Update()

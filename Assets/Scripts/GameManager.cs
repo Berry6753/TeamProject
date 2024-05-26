@@ -65,7 +65,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject over;
 
     [Header("몬스터 스포너")]
-    [SerializeField] private MonsterSpawnerCrystal_Last monsterCrystal;
+    [SerializeField] private MonsterSpawnerCrystal_Last monsterCrystalLast;
+    [SerializeField] private List<MonsterSpawnCrystal> monsterCrystal;
 
     public float isGameStop;
     public bool isGameOver { get; private set; }
@@ -109,6 +110,17 @@ public class GameManager : Singleton<GameManager>
     {
         isGameStop = -1;
         isGameEnd = false;
+        core.gameObject.SetActive(true);
+        monsterCrystalLast.gameObject.SetActive(true);
+        foreach (var item in monsterCrystal)
+        { 
+            item.gameObject.SetActive(true);
+        }
+    }
+
+    public void OnContinue()
+    {
+        isGameStop = -1;
     }
 
     public void ReturnToStartUI()
@@ -238,7 +250,7 @@ public class GameManager : Singleton<GameManager>
     private void CheckGaemClear()
     {
         if (isGameEnd) return;
-        if (!monsterCrystal.gameObject.activeSelf)
+        if (!monsterCrystalLast.gameObject.activeSelf)
         {
             isGameClear = true;
             clear.SetActive(true);

@@ -37,15 +37,16 @@ public class Core : MonoBehaviour
     private GameObject itemSpawnPos;
 
     private int upgradeCoolTimeRise = 10;
-    public int nowHp {  get; private set; }
-    private int maxHp = 100;
-    public int GetMaxHP { get { return maxHp; }  }
+    public int nowHp { get; private set; }
+    private int hp = 100;
+    private int maxHp;
+    public int GetMaxHP { get { return maxHp; } }
     private int hpRise = 30;
     public int GetHPRise { get { return hpRise; } }
     private int realoadCoolTime = 30;
     private int upgradeCoolTime = 30;
     private int upgradeCostRise = 2;
-    public int getupgradeCostRise {  get { return upgradeCostRise; } }
+    public int getupgradeCostRise { get { return upgradeCostRise; } }
     private int nowUpgradeCount;
     private int maxUpgradeCount = 5;
     private float checkReloadingTime;
@@ -91,15 +92,8 @@ public class Core : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Info>();
         player_Command = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Command>();
-        commandInput = GameManager.Instance.GetCoreUI.GetComponentInChildren<Command_Input_Mark>(includeInactive:true);
-        checkReloadingTime = realoadCoolTime;
-        ReloadCoolTimeIcon.fillAmount = 0;
-        CoreHPBar.fillAmount = 1;
+        commandInput = GameManager.Instance.GetCoreUI.GetComponentInChildren<Command_Input_Mark>(includeInactive: true);
         InitCommandDic();
-        chargeEffect.SetActive(false);
-        destroyEffect.SetActive(false);
-        isDestroy = false;
-        tabUI.enabled = false;
         //for (int i = 0; i < (int)PlayerSkillName.LAST; i++)
         //{
         //    skillObjQue[i] = new Queue<GameObject>();
@@ -113,10 +107,18 @@ public class Core : MonoBehaviour
         //}
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
-        nowHp = maxHp;
+        nowHp = hp;
+        maxHp = hp;
+        checkReloadingTime = realoadCoolTime;
+        ReloadCoolTimeIcon.fillAmount = 0;
+        CoreHPBar.fillAmount = 1;
+        coreRederer.enabled = true;
+        chargeEffect.SetActive(false);
+        destroyEffect.SetActive(false);
+        isDestroy = false;
+        tabUI.enabled = false;
         StartCoroutine(Repair());
     }
 
@@ -184,7 +186,7 @@ public class Core : MonoBehaviour
                     return;
                 }
             }
-            
+
         }
     }
 
@@ -232,7 +234,7 @@ public class Core : MonoBehaviour
         commandDic.Add((int)PlayerSkillName.BARRICATE, new int[4] { 2, 4, 2, 4 });
         commandDic.Add((int)PlayerSkillName.HEALLING, new int[4] { 2, 2, 2, 1 });
         commandDic.Add((int)PlayerSkillName.NUKE, new int[4] { 1, 1, 1, 2 });
-        
+
     }
 
     public bool CheckeCommand()
@@ -257,8 +259,8 @@ public class Core : MonoBehaviour
             return false;
         }
         else
-        {            
-            if(skillObj[itemKey].GetComponent<Skill_Item_Info>().Count <= player.GearCount)
+        {
+            if (skillObj[itemKey].GetComponent<Skill_Item_Info>().Count <= player.GearCount)
             {
                 GameObject gameObject = ItemObjectPool.SpawnFromPool(skillObj[itemKey].name, itemSpawnPos.transform.position);
                 gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 10, 10));
