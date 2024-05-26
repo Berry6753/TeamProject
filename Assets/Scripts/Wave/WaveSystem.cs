@@ -26,6 +26,8 @@ public class WaveSystem : MonoBehaviour
     AerialMonster aerial;
     SiegeMonster siege;
     SuicideMonster suicide;
+
+    [SerializeField]
     private bool isWave = false;
 
     private float checkTime;
@@ -90,7 +92,7 @@ public class WaveSystem : MonoBehaviour
         checkTime = breakTime;
         waveCount = 0;
         PlayTimer = 0;
-        isWave = true;
+        //isWave = true;
         monsterSpawner.MonsterList.Clear();
     }
 

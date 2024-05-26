@@ -73,6 +73,8 @@ public class BossMonster : MonoBehaviour
     private int turretIndex = 0;                      //∞°¿Â ∞°±ÓøÓ ≈Õ∑ø¿Œµ¶Ω∫
     //private int secondTurretIndex = 0;                //µŒ π¯¬∞ ∞°±ÓøÓ ≈Õ∑ø¿Œµ¶Ω∫
     //private int targetingIndex = 0;                   //≈∏∞Ÿ¿∏∑Œ ªÔ¿ª ≈Õ∑ø¿Œµ¶Ω∫
+    
+    [Header("Monster Start Point")]
     [SerializeField] private Transform defaultPos;
 
     private StateMachine stateMachine;
@@ -127,6 +129,9 @@ public class BossMonster : MonoBehaviour
     {
         Core = GameObject.FindWithTag("Core").GetComponent<Transform>();
         Player = GameManager.Instance.GetPlayer.transform;
+
+        transform.position = defaultPos.position;
+        transform.rotation = defaultPos.rotation;
 
         stateMachine.ChangeState(State.IDLE);
         hp = maxHp;
@@ -218,6 +223,8 @@ public class BossMonster : MonoBehaviour
                 else
                 {
                     nav.SetDestination(defaultPos.position);
+                    transform.LookAt(defaultPos.forward);
+
                     hp = maxHp;
                 }
             }
