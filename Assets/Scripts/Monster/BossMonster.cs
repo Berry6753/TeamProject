@@ -22,10 +22,19 @@ public class BossMonster : MonoBehaviour
     private float amongRange;
 
     [Header("스탯 성장치")]
-    [SerializeField] protected float upScaleHp;         //체력 성장치
+    [SerializeField] private float upScaleHp;         //체력 성장치
 
     [Header("보스 HP UI")]
-    [SerializeField] protected GameObject boss_HP_UI;
+    [SerializeField] private GameObject boss_HP_UI;
+
+    [Header("사운드 클립")]
+    [SerializeField] private AudioClip roar;
+    [SerializeField] private AudioClip dash;
+
+    [Header("파티클")]
+    [SerializeField] private ParticleSystem smash;
+    [SerializeField] private ParticleSystem dashParticle;
+
 
     private float dashSpeed;
     private float dashTime;
@@ -63,10 +72,9 @@ public class BossMonster : MonoBehaviour
     private SphereCollider[] attackC;
     private BoxCollider jumpAttackC;
     private Vector3 dashDir;
+    private AudioSource audio;
 
-  
-
-   [SerializeField] private CapsuleCollider dashAttackC;
+    [SerializeField] private CapsuleCollider dashAttackC;
     [SerializeField] protected LayerMask turretLayer;   //터렛레이어
     [SerializeField] protected LayerMask monsterLayer;  //몬스터레이어
     [SerializeField] protected float sensingRange;      //감지 범위
@@ -96,7 +104,7 @@ public class BossMonster : MonoBehaviour
     private bool isBackward = false;
 
     public enum State
-    { IDLE, TRACE, JumpA, DashA, DefaultA, DefaultA2, DIE }
+    { IDLE, TRACE, JumpA, DashA, DefaultA, DefaultA2, DIE, Back }
     public State state = State.IDLE;
 
     private List<GameObject> targetList;
@@ -109,6 +117,7 @@ public class BossMonster : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         renderer = GetComponentsInChildren<SkinnedMeshRenderer>();
         bossTr = GetComponent<Transform>();
+        audio = GetComponent<AudioSource>();
 
         attackC = GetComponentsInChildren<SphereCollider>();
         jumpAttackC = GetComponentInChildren<BoxCollider>();
@@ -121,6 +130,7 @@ public class BossMonster : MonoBehaviour
         stateMachine.AddState(State.DefaultA, new DefaultAState(this));
         stateMachine.AddState(State.DefaultA2, new DefaultA2State(this));
         stateMachine.AddState(State.DIE, new DieState(this));
+        stateMachine.AddState(State.Back, new BackState(this));
         stateMachine.InitState(State.IDLE);
 
         amongRange = (attackRange + specialAttackRange) / 2;
@@ -216,15 +226,13 @@ public class BossMonster : MonoBehaviour
 
             if (chaseTarget == null)
             {
-                if (Vector3.Distance(transform.position, defaultPos.position) < 0.7f) 
+                if (Vector3.Distance(transform.position, defaultPos.position) < 2f) 
                 {
                     stateMachine.ChangeState(State.IDLE);
                 }
                 else
                 {
-                    nav.SetDestination(defaultPos.position);
-                    transform.LookAt(defaultPos.forward);
-
+                    stateMachine.ChangeState(State.Back);
                     hp = maxHp;
                 }
             }
@@ -312,6 +320,7 @@ public class BossMonster : MonoBehaviour
         {
             case 0:
                 stateMachine.ChangeState(State.JumpA);
+                SoundPlay(roar);
                 break;
             case 1:
                 stateMachine.ChangeState(State.DashA);
@@ -353,6 +362,7 @@ public class BossMonster : MonoBehaviour
         anim.SetBool(hashJump, false);
         jumpAttackC.enabled = true;
         yield return new WaitForSeconds(2.0f);
+        smash.Play();
         nav.enabled = true;
         canJump = true;
         isCheckJump = false;
@@ -361,6 +371,7 @@ public class BossMonster : MonoBehaviour
     private void DashAttack_backward()
     {
         isBackward = true;
+        dashParticle.Play();
     }
     private void BackWards()
     {
@@ -377,6 +388,9 @@ public class BossMonster : MonoBehaviour
 
     private void DashAttackMove()
     {
+        dashParticle.Stop();
+        SoundPlay(dash);
+        audio.loop = true;
         dashAttackC.enabled = true;
         float speed = 0f;
         isDash = true;
@@ -399,6 +413,7 @@ public class BossMonster : MonoBehaviour
                 anim.SetBool(hashDash, false);
                 isDash = false;
                 FreezeVelocity();
+                audio.loop = false;
             }
         }
     }
@@ -526,6 +541,12 @@ public class BossMonster : MonoBehaviour
         isDead = true;
     }
 
+    private void SoundPlay(AudioClip clip)
+    {
+        audio.clip = clip;
+        audio.Play();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Turret") || other.gameObject.CompareTag("Monster"))
@@ -533,6 +554,7 @@ public class BossMonster : MonoBehaviour
             if (isDash)
             {
                 isDash = false;
+                audio.loop = false;
                 anim.SetBool(hashDash, false);
                 FreezeVelocity();
             }
@@ -608,6 +630,16 @@ public class BossMonster : MonoBehaviour
         {
             owner.nav.isStopped = true;
             owner.anim.SetTrigger(owner.hashDie);
+        }
+    }
+    protected class BackState : BaseMonsterState
+    {
+        public BackState(BossMonster owner) : base(owner) { }
+        public override void Enter()
+        {
+            owner.nav.SetDestination(owner.defaultPos.position);
+            owner.nav.isStopped = false;
+            owner.anim.SetBool(owner.hashTrace, true);
         }
     }
 }
