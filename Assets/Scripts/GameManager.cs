@@ -14,7 +14,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private GameObject Player;
 
-    [Header("Player")]
+    [Header("Core")]
     [SerializeField]
     private GameObject core;
 
@@ -40,6 +40,10 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private WaveSystem waveSystem;
 
+    [Header("MonsterSpawner")]
+    [SerializeField]
+    private MonsterSpawner monsterSpawner;  
+
     [Header("Record Text")]
     [SerializeField]
     private List<TMP_Text> RecordText;
@@ -64,6 +68,7 @@ public class GameManager : Singleton<GameManager>
     public WaveSystem WaveSystem { get { return waveSystem; } }
     public BossMonster Boss { get { return boss; } }
     public GameObject Sound { get { return sound; } }
+    public MonsterSpawner MonsterSpawner { get { return monsterSpawner; } }
 
     private void Awake()
     {
