@@ -15,6 +15,7 @@ TagManager:
   - MonsterHead
   - Barricade
   - Boss
+  - MonsterSpawner
   layers:
   - Default
   - TransparentFX
@@ -33,7 +34,7 @@ TagManager:
   - Gear
   - Boss
   - Bullet
-  - 
+  - MonsterSpawner
   - 
   - 
   - 

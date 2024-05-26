@@ -21,6 +21,7 @@ public class MonsterSpawnCrystal : MonoBehaviour
         if(HP <= 0)
         {
             monsterSpawner.DestorySpawner(this.transform);
+            gameObject.SetActive(false);
         }        
     }
 

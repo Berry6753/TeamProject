@@ -349,6 +349,10 @@ public class Player_Aiming : MonoBehaviour
                     Debug.Log(hit.transform.gameObject.name);
                     hits.transform.GetComponent<Barrel>().Hurt();
                 }
+                else if (hits.transform.CompareTag("MonsterSpawner"))
+                {
+                    hits.transform.GetComponent<MonsterSpawnCrystal>().Hurt(info.Attack);
+                }
             }
 
         }
