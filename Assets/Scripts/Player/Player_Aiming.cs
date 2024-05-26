@@ -362,6 +362,7 @@ public class Player_Aiming : MonoBehaviour
     {
         if (buildSystem.BuildModeOn > 0f) return;
         if (animator.GetBool(hashReload)) return;
+        
         if (isFire && AttackAble)
         {            
             AttackAble = false;

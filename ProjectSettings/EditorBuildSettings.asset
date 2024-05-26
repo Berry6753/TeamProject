@@ -8,7 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Player.unity
     guid: 0fe0574681c417e46aba6afbedd9fca6
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/GameMap.unity
     guid: 0339a3005e2867049aa87cca755b02b5
+  - enabled: 1
+    path: Assets/Scenes/GMT.unity
+    guid: da1c9d641de3780468d2250a7cdb67bf
   m_configObjects: {}
