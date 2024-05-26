@@ -224,7 +224,7 @@ public class BossMonster : MonoBehaviour
                 chaseTarget = null;
             }
 
-            if (chaseTarget == null)
+            if (chaseTarget == null && !isDead)
             {
                 if (Vector3.Distance(transform.position, defaultPos.position) < 2f) 
                 {
@@ -362,7 +362,7 @@ public class BossMonster : MonoBehaviour
         anim.SetBool(hashJump, false);
         jumpAttackC.enabled = true;
         yield return new WaitForSeconds(2.0f);
-        smash.Play();
+        smash.gameObject.SetActive(true);
         nav.enabled = true;
         canJump = true;
         isCheckJump = false;
@@ -371,7 +371,7 @@ public class BossMonster : MonoBehaviour
     private void DashAttack_backward()
     {
         isBackward = true;
-        dashParticle.Play();
+        dashParticle.gameObject.SetActive(true);
     }
     private void BackWards()
     {

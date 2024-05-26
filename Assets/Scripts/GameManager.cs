@@ -33,6 +33,9 @@ public class GameManager : Singleton<GameManager>
     [Header("시작 메뉴")]
     [SerializeField] private GameObject startUI;
 
+    [Header("Play Object")]
+    [SerializeField] private GameObject playOj;
+
     [Header("Pause UI")]
     [SerializeField] private GameObject pauseUI;
 
@@ -55,8 +58,18 @@ public class GameManager : Singleton<GameManager>
     [Header("Sound Manager")]
     [SerializeField] private GameObject sound;
 
+    [Header("Game Clear")]
+    [SerializeField] private GameObject clear;
+
+    [Header("Game Over")]
+    [SerializeField] private GameObject over;
+
+    [Header("몬스터 스포너")]
+    [SerializeField] private MonsterSpawnerCrystal_Last monsterCrystal;
+
     public float isGameStop;
     public bool isGameOver { get; private set; }
+    public bool isGameClear { get; private set; }
     private Player_Info playerInfo;
     private Player_Command Player_Command;
 
@@ -69,6 +82,8 @@ public class GameManager : Singleton<GameManager>
     public BossMonster Boss { get { return boss; } }
     public GameObject Sound { get { return sound; } }
     public MonsterSpawner MonsterSpawner { get { return monsterSpawner; } }
+
+    float time = 0.0f;
 
     private void Awake()
     {
@@ -106,6 +121,8 @@ public class GameManager : Singleton<GameManager>
         //    //게임 오버 화면
 
         //}
+        CheckGaemClear();
+        CheckGameOver();
     }
 
     public void ShowRecord()
@@ -211,11 +228,43 @@ public class GameManager : Singleton<GameManager>
 
     #endregion
 
+    private void CheckGaemClear()
+    {
+        if (!monsterCrystal.gameObject.activeSelf)
+        {
+            isGameClear = true;
+            clear.SetActive(true);
+            Time.timeScale = 0.0f;
+            time += Time.unscaledDeltaTime;
+            if (time >= 3)
+            {
+                Time.timeScale = 1.0f;
+                clear.SetActive(false);
+                playOj.SetActive(false);
+                startUI.SetActive(true);
+                time = 0;
+                isGameClear = false;
+            }
+        }
+    }
+
     private void CheckGameOver()
     {
-        if(!core.activeSelf && playerInfo.isDead)
+        if (!core.activeSelf && playerInfo.isDead)
         {
             isGameOver = true;
+            over.SetActive(true);
+            Time.timeScale = 0.0f;
+            time += Time.unscaledDeltaTime;
+            if (time >= 3)
+            {
+                Time.timeScale = 1.0f;
+                over.SetActive(false);
+                playOj.SetActive(false);
+                startUI.SetActive(true);
+                time = 0.0f;
+                isGameOver = false;
+            }
         }
     }
 
