@@ -6,7 +6,7 @@ public class MissleTurret : Turret
 {
     private int nowMissleTurretUpgradeCount = 0;
     private int nowMissleTurretHp;
-    private int maxMissleTurretHp = 5;
+    private int maxMissleTurretHp = 10;
     private int missleTurretHpRise = 2;
     private float missleTurretAttackRadius = 3;
     private float missleTurretNowAttackRadius;

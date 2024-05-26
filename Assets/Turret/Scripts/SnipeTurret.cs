@@ -9,7 +9,7 @@ public class SnipeTurret : Turret
 
     private int nowSnipeTurretUpgradeCount = 0;
     private int nowSnipeTurretHp;
-    private int maxSnipeTurretHp = 5;
+    private int maxSnipeTurretHp = 8;
     private int snipeTurretHpRise = 1;
     private float snipeTurretMakingTime = 15;
     private float snipeTurretAttackDamge = 100;

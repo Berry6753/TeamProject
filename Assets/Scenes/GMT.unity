@@ -610,6 +610,7 @@ MonoBehaviour:
   - {fileID: 7408092878229374756, guid: 3a009058bf79d904d881c0a387e43a9a, type: 3}
   - {fileID: 1963476244292297367, guid: 1f9d41e2cc4a48e49b48aa960b1fb49e, type: 3}
   - {fileID: 7942864211657280271, guid: 9f563251ac99ad74f93f56d4ee4b5ab0, type: 3}
+  isWave: 0
   WaveCount_Text: {fileID: 1257360954}
   WaveTimer: {fileID: 1893216601}
 --- !u!4 &54409678
@@ -6956,6 +6957,7 @@ MonoBehaviour:
   - {fileID: 1708846938}
   - {fileID: 2139318370}
   - {fileID: 465994862}
+  spawnRange: 0
 --- !u!4 &745813445
 Transform:
   m_ObjectHideFlags: 0
@@ -11620,6 +11622,51 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4622174422392604, guid: 334c81842ca94b2c9a232dec1de21515, type: 3}
   m_PrefabInstance: {fileID: 1348314039}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1349282468
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1349282470}
+  - component: {fileID: 1349282469}
+  m_Layer: 0
+  m_Name: BloodEffectPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1349282469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349282468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06d8d37455e9a7f4aa02de2be1e73893, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPrefab: {fileID: 1026642433091512, guid: ed67c2cb8e3a7fb418c6fbb1b001dce2, type: 3}
+--- !u!4 &1349282470
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349282468}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 17.72877, y: 20.06375, z: -23.986414}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1357901575
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16997,6 +17044,7 @@ MonoBehaviour:
   startUI: {fileID: 1795878657}
   pauseUI: {fileID: 1172069472}
   waveSystem: {fileID: 54409677}
+  monsterSpawner: {fileID: 0}
   RecordText:
   - {fileID: 1975740464}
   - {fileID: 1975740463}
