@@ -84,13 +84,14 @@ public class GameManager : Singleton<GameManager>
     public MonsterSpawner MonsterSpawner { get { return monsterSpawner; } }
 
     float time = 0.0f;
-
+    bool isGameEnd;
     private void Awake()
     {
         isGameStop = 1;
         isGameOver = false;
         playerInfo = Player.GetComponent<Player_Info>();
         Player_Command = Player.GetComponent<Player_Command>();
+        isGameEnd = true;
     }
 
     public void OnGameStop(InputAction.CallbackContext context)
@@ -107,6 +108,12 @@ public class GameManager : Singleton<GameManager>
     public void OnGameStart()
     {
         isGameStop = -1;
+        isGameEnd = false;
+    }
+
+    public void ReturnToStartUI()
+    {
+        isGameEnd = true;
     }
 
     private void Update()
@@ -196,7 +203,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     private void GameStopping()
-    {
+    {        
         if (isGameStop > 0)
         {
             Cursor.visible = true;
@@ -230,6 +237,7 @@ public class GameManager : Singleton<GameManager>
 
     private void CheckGaemClear()
     {
+        if (isGameEnd) return;
         if (!monsterCrystal.gameObject.activeSelf)
         {
             isGameClear = true;
@@ -244,28 +252,34 @@ public class GameManager : Singleton<GameManager>
                 startUI.SetActive(true);
                 time = 0;
                 isGameClear = false;
+                isGameEnd = true; 
+                
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
             }
         }
     }
 
     private void CheckGameOver()
     {
+        if (isGameEnd) return;
         if (!core.activeSelf && playerInfo.isDead)
         {
             isGameOver = true;
             over.SetActive(true);
-            Time.timeScale = 0.0f;
             time += Time.unscaledDeltaTime;
             if (time >= 3)
             {
-                Time.timeScale = 1.0f;
                 over.SetActive(false);
                 playOj.SetActive(false);
                 startUI.SetActive(true);
                 time = 0.0f;
                 isGameOver = false;
+                isGameEnd = true;
+
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
             }
         }
     }
-
 }

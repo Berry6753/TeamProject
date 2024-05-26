@@ -35,14 +35,13 @@ public class BossMonster : MonoBehaviour
     [SerializeField] private ParticleSystem smash;
     [SerializeField] private ParticleSystem dashParticle;
 
-
     private float dashSpeed;
     private float dashTime;
     private float time;
 
     private int _wave = 0;
-
     public bool isCheckJump = false;
+    private bool isSkillAttacking = false;
 
     [HideInInspector]
     public int wave
@@ -147,6 +146,7 @@ public class BossMonster : MonoBehaviour
         hp = maxHp;
         boss_HP_UI.SetActive(false);
     }
+
     private void Start()
     {
         StartCoroutine(BossState());
@@ -226,7 +226,7 @@ public class BossMonster : MonoBehaviour
 
             if (chaseTarget == null && !isDead)
             {
-                if (Vector3.Distance(transform.position, defaultPos.position) < 2f) 
+                if (Vector3.Distance(transform.position, defaultPos.position) < 10f) 
                 {
                     stateMachine.ChangeState(State.IDLE);
                 }
@@ -236,7 +236,7 @@ public class BossMonster : MonoBehaviour
                     hp = maxHp;
                 }
             }
-            else
+            else if(chaseTarget != null && !isDead)
             {
                 float distance = Vector3.Distance(chaseTarget.position, bossTr.position);
 
@@ -342,6 +342,8 @@ public class BossMonster : MonoBehaviour
     }
     private IEnumerator JumpAttackMove()
     {
+        isSkillAttacking = true;
+
         canJump = false;
         nav.enabled = false;
         float distance = Vector3.Distance(chaseTarget.position, bossTr.position);
@@ -366,6 +368,8 @@ public class BossMonster : MonoBehaviour
         nav.enabled = true;
         canJump = true;
         isCheckJump = false;
+
+        isSkillAttacking = false;
     }
 
     private void DashAttack_backward()
@@ -388,6 +392,7 @@ public class BossMonster : MonoBehaviour
 
     private void DashAttackMove()
     {
+        isSkillAttacking = true;
         dashParticle.Stop();
         SoundPlay(dash);
         audio.loop = true;
@@ -414,6 +419,8 @@ public class BossMonster : MonoBehaviour
                 isDash = false;
                 FreezeVelocity();
                 audio.loop = false;
+
+                isSkillAttacking = false;
             }
         }
     }
@@ -533,7 +540,9 @@ public class BossMonster : MonoBehaviour
 
     public void Hurt(float damage)                   //플레이어에게 데미지 입을 시
     {
+        if (isSkillAttacking) return;
         hp -= damage;
+        hp = Mathf.Clamp(hp, 0, maxHp);
     }
 
     public void isDie()                              //죽었을 시
@@ -628,6 +637,7 @@ public class BossMonster : MonoBehaviour
         public DieState(BossMonster owner) : base(owner) { }
         public override void Enter()
         {
+            owner.nav.enabled = true;
             owner.nav.isStopped = true;
             owner.anim.SetTrigger(owner.hashDie);
         }

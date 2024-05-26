@@ -15,6 +15,7 @@ public class MonsterSpawnerCrystal_Last : MonsterSpawnCrystal
     {
         if (!bossMonster.isDead) return;
 
+        StopCoroutine(Repair());
         HP -= damage;
         if (HP <= 0)
         {
