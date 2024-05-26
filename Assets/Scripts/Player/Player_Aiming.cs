@@ -337,10 +337,8 @@ public class Player_Aiming : MonoBehaviour
                         {
                             hits.transform.GetComponent<BossMonster>().Hurt(info.Attack);
                         }
-
                         hits.transform.GetComponent<BossMonster>().Hurt(info.Attack);
                     }
-
                     BloodEffectManger.Instance.UsingEffect(hits.point);
 
                 }

@@ -38,7 +38,8 @@ public class Core : MonoBehaviour
 
     private int upgradeCoolTimeRise = 10;
     public int nowHp {  get; private set; }
-    private int maxHp = 100;
+    private int hp = 100;
+    private int maxHp;
     public int GetMaxHP { get { return maxHp; }  }
     private int hpRise = 30;
     public int GetHPRise { get { return hpRise; } }
@@ -92,14 +93,7 @@ public class Core : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Info>();
         player_Command = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Command>();
         commandInput = GameManager.Instance.GetCoreUI.GetComponentInChildren<Command_Input_Mark>(includeInactive:true);
-        checkReloadingTime = realoadCoolTime;
-        ReloadCoolTimeIcon.fillAmount = 0;
-        CoreHPBar.fillAmount = 1;
         InitCommandDic();
-        chargeEffect.SetActive(false);
-        destroyEffect.SetActive(false);
-        isDestroy = false;
-        tabUI.enabled = false;
         //for (int i = 0; i < (int)PlayerSkillName.LAST; i++)
         //{
         //    skillObjQue[i] = new Queue<GameObject>();
@@ -112,6 +106,21 @@ public class Core : MonoBehaviour
         //    }
         //}
     }
+
+    private void OnEnable()
+    {
+        nowHp = hp;
+        maxHp = hp;
+        checkReloadingTime = realoadCoolTime;
+        ReloadCoolTimeIcon.fillAmount = 0;
+        CoreHPBar.fillAmount = 1;
+        coreRederer.enabled = true;
+        chargeEffect.SetActive(false);
+        destroyEffect.SetActive(false);
+        isDestroy = false;
+        tabUI.enabled = false;
+    }
+
 
     // Start is called before the first frame update
     void Start()

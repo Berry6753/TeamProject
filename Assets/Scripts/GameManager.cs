@@ -92,6 +92,7 @@ public class GameManager : Singleton<GameManager>
     public void OnGameStart()
     {
         isGameStop = -1;
+        core.gameObject.SetActive(true);
     }
 
     private void Update()
