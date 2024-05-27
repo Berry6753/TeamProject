@@ -45,7 +45,12 @@ public class Gear : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.GetComponent<Player_Info>().AddGearCount((int)GearCount);
-            QueueObjectPool.instance.Relese(gameObject);
+            gameObject.SetActive(false);            
         }
+    }
+
+    private void OnDisable()
+    {
+        QueueObjectPool.instance.Relese(gameObject);
     }
 }

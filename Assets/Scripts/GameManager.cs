@@ -114,6 +114,7 @@ public class GameManager : Singleton<GameManager>
         isGameEnd = false;
         core.gameObject.SetActive(true);
         monsterCrystalLast.gameObject.SetActive(true);
+
         foreach (var item in monsterCrystal)
         { 
             item.gameObject.SetActive(true);

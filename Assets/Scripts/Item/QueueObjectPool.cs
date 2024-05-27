@@ -14,7 +14,7 @@ public class QueueObjectPool : MonoBehaviour
     [SerializeField]
     private int InitCount;
 
-    private Queue<GameObject> pool = new Queue<GameObject>();
+    public Queue<GameObject> pool = new Queue<GameObject>();
     private void Awake()
     {
         instance = this;
