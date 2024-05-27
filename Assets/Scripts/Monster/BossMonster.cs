@@ -57,7 +57,7 @@ public class BossMonster : MonoBehaviour
         }
 
     }
-    private int lastWave = 30;
+    private int lastWave = 29;
 
     private Transform Core;
     private Transform Player;
@@ -437,7 +437,7 @@ public class BossMonster : MonoBehaviour
     {
         Targeting();
 
-        if (wave == lastWave && chaseTarget == null)
+        if (wave >= lastWave && chaseTarget == null)
         {
             if (Core.gameObject.activeSelf)
                 chaseTarget = Core;

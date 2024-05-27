@@ -143,7 +143,10 @@ public abstract class Monster : MonoBehaviour
         isDead = false;
         rb.isKinematic = true;
         hp = maxHp;
-        chaseTarget = defaultTarget;
+        if (defaultTarget.gameObject.activeSelf)
+            chaseTarget = defaultTarget;
+        else
+            chaseTarget = GameManager.Instance.GetPlayer.transform;
         isAttackAble = false;
         obstacle.enabled = false;
         nav.enabled = true;

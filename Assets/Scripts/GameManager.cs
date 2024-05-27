@@ -184,7 +184,7 @@ public class GameManager : Singleton<GameManager>
         }
 
         SaveData data = new SaveData();
-        data.waveCount = waveSystem.waveCount;
+        data.waveCount = waveSystem.currentWaveIndex;
         data.playTime = waveSystem.PlayTimer;
 
         dataList.Add(data);
@@ -292,6 +292,28 @@ public class GameManager : Singleton<GameManager>
 
                 isGameStop = 1;
             }
+        }
+    }
+
+    public void OnWaveSkip(InputAction.CallbackContext context)
+    {
+        if (context.started) return;
+        if (context.canceled) return;
+        if (waveSystem.currentWaveIndex >= 30) return;
+        if( context.performed)
+        {
+            //waveSystem.currentWaveIndex++;
+            //waveSystem.WaveCount_Text.text = $"{waveSystem.currentWaveIndex} Wave";          
+            foreach(var monster in waveSystem.monsterSpawner.MonsterList)
+            {
+                monster.GetComponent<Monster>().Hurt(1000);
+            }
+            waveSystem.monsterSpawner.MonsterList.Clear();
+            waveSystem.currentWaveIndex = Mathf.Clamp(waveSystem.currentWaveIndex += 10, 0, 29);
+            waveSystem.isWave = true;
+            waveSystem.checkTime = 1.0f;
+            waveSystem.StartWave();
+            Debug.Log(waveSystem.currentWaveIndex + "asdfasfesafasefasef");
         }
     }
 }

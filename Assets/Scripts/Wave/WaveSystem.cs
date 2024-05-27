@@ -8,10 +8,10 @@ using System.Threading;
 
 public class WaveSystem : MonoBehaviour
 {
-    private static int maxWave = 30;
-    private float breakTime = 60.0f;
+    private static int maxWave = 29;
+    public float breakTime = 60.0f;
     [SerializeField] private Wave[] waves = new Wave[maxWave];               //현재 웨이브 정보
-    [SerializeField] private MonsterSpawner monsterSpawner;
+    public MonsterSpawner monsterSpawner;
 
     //[HideInInspector]
 
@@ -27,20 +27,16 @@ public class WaveSystem : MonoBehaviour
     SiegeMonster siege;
     SuicideMonster suicide;
 
-    [SerializeField]
-    private bool isWave = false;
+    public bool isWave = false;
 
-    private float checkTime;
+    public float checkTime;
 
     [Header("Wave Count UI")]
-    [SerializeField]
-    private TMP_Text WaveCount_Text;
+    public TMP_Text WaveCount_Text;
 
     [Header("Wave Timer UI")]
     [SerializeField]
     private TMP_Text WaveTimer;
-
-    public int waveCount { get; private set; }
 
     public float PlayTimer { get; private set; }
 
@@ -90,9 +86,8 @@ public class WaveSystem : MonoBehaviour
         }
         currentWaveIndex = 0;
         checkTime = breakTime;
-        waveCount = 0;
         PlayTimer = 0;
-        isWave = false;
+        isWave = true;
         monsterSpawner.MonsterList.Clear();
     }
 
@@ -180,8 +175,7 @@ public class WaveSystem : MonoBehaviour
     {
         WaveTimer.transform.parent.gameObject.SetActive(false);
         isWave = true;
-        waveCount++;
-        WaveCount_Text.text = $"{waveCount} Wave";
+        WaveCount_Text.text = $"{currentWaveIndex + 1} Wave";
         if (monsterSpawner.MonsterList.Count == 0 && currentWaveIndex < waves.Length)
         {
             monsterSpawner.StartWave(waves[currentWaveIndex]);
