@@ -303,8 +303,9 @@ public class GameManager : Singleton<GameManager>
         if( context.performed)
         {
             //waveSystem.currentWaveIndex++;
-            //waveSystem.WaveCount_Text.text = $"{waveSystem.currentWaveIndex} Wave";          
-            foreach(var monster in waveSystem.monsterSpawner.MonsterList)
+            //waveSystem.WaveCount_Text.text = $"{waveSystem.currentWaveIndex} Wave";
+            StopCoroutine(waveSystem.monsterSpawner.SpawnMonster());
+            foreach (var monster in waveSystem.monsterSpawner.MonsterList)
             {
                 monster.GetComponent<Monster>().Hurt(1000);
             }

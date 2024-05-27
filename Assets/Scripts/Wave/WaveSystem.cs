@@ -89,6 +89,7 @@ public class WaveSystem : MonoBehaviour
         PlayTimer = 0;
         isWave = true;
         monsterSpawner.MonsterList.Clear();
+        WaveCount_Text.text = $"{currentWaveIndex + 1} Wave";
     }
 
     private void OnDisable()

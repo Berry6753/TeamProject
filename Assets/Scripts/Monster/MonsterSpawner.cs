@@ -37,7 +37,7 @@ public class MonsterSpawner : MonoBehaviour
         StartCoroutine(SpawnMonster());
     }
         
-    private IEnumerator SpawnMonster()
+    public IEnumerator SpawnMonster()
     {
         int[] spawnMonsterCount = new int[currentWave.maxMonsterCount.Length];
 
